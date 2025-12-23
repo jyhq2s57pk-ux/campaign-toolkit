@@ -1,0 +1,21 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 12px;
+  border-radius: 33.90px;
+  font-size: 14px;
+  font-weight: 400;
+  color: white;
+}
+
+.badge-new {
+  background-color: var(--tier-new);
+}
+
+.badge-premium {
+  background-color: var(--tier-premium);
+}
+
+.badge-executive {
+  background-color: var(--tier-executive);
+}

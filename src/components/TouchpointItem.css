@@ -1,0 +1,39 @@
+.touchpoint-item {
+  margin-bottom: 64px;
+}
+
+.touchpoint-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.touchpoint-title {
+  color: var(--text-primary);
+  font-size: 30px;
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+}
+
+.touchpoint-description {
+  color: #e2e2e2;
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.touchpoint-optional {
+  color: var(--text-muted);
+  font-size: 14px;
+  font-style: italic;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.touchpoint-badges {
+  display: flex;
+  gap: 6px;
+}

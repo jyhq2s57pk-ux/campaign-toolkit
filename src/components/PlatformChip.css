@@ -1,0 +1,72 @@
+.platform-chip {
+  padding: 10px 16px;
+  border-radius: 12px;
+  background-color: #2d2d2d;
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.platform-chip.active {
+  background-color: var(--surface-card);
+  color: var(--text-inverse);
+  border: 1px solid transparent;
+}
+
+.platform-chip:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.platform-chip.active:hover {
+  background-color: var(--surface-card);
+}
+
+.chip-header {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+  height: 16px;
+}
+
+.chip-type {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.chip-type.app {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.chip-type.web {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.chip-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--tier-new);
+  color: white;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.chip-name {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  margin: 0;
+}

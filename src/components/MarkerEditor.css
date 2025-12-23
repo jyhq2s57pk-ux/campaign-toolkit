@@ -1,0 +1,202 @@
+.marker-editor {
+  margin: 24px 0;
+  padding: 20px;
+  background-color: var(--surface-default);
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+}
+
+.marker-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.marker-editor-header label {
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.btn-add-marker {
+  padding: 8px 16px;
+  background-color: var(--accent-green);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-add-marker:hover {
+  opacity: 0.9;
+}
+
+.marker-editor-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.marker-preview {
+  position: relative;
+  aspect-ratio: 3/4;
+  background-color: #3a3a3a;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.marker-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.marker-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 20px;
+}
+
+.marker {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--accent-green);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.marker:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.marker.selected {
+  background-color: var(--accent-purple);
+  border-color: #ffd700;
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.marker-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.marker-instructions {
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+  margin: 0;
+}
+
+.marker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.marker-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-default);
+  border-radius: 6px;
+  padding: 4px;
+  transition: all 0.2s;
+}
+
+.marker-item.active {
+  background-color: rgba(167, 139, 250, 0.1);
+  border-color: var(--accent-purple);
+}
+
+.marker-select-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.marker-select-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.marker-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--accent-green);
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.marker-item.active .marker-number {
+  background-color: var(--accent-purple);
+}
+
+.marker-coords {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.marker-remove-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  background-color: transparent;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.marker-remove-btn:hover {
+  background-color: #ef4444;
+  color: white;
+}
+
+@media (max-width: 968px) {
+  .marker-editor-content {
+    grid-template-columns: 1fr;
+  }
+}

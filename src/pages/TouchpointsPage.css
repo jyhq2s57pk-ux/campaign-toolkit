@@ -1,0 +1,176 @@
+.page-header {
+  padding: 80px 0 60px;
+  text-align: center;
+  background-color: var(--surface-default);
+}
+
+.page-subtitle {
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 30px;
+  text-align: center;
+  color: var(--text-secondary);
+  margin: 0 0 12px 0;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 500;
+  line-height: 110%;
+  letter-spacing: -1.68px;
+  text-align: center;
+  color: rgba(245, 243, 237, 1);
+  margin: 0;
+}
+
+.platform-nav-section {
+  padding: 40px 0;
+  background-color: var(--surface-default);
+  transition: all 0.3s ease;
+}
+
+.platform-nav-section.scrolled {
+  position: sticky;
+  top: 56px;
+  padding: 20px 0;
+  background-color: rgba(30, 30, 30, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-default);
+  z-index: 40;
+}
+
+.platform-nav-container {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.platform-nav-section.scrolled .platform-nav-container {
+  flex-direction: row;
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.platform-nav-section.scrolled .platform-nav-container::-webkit-scrollbar {
+  display: none;
+}
+
+.on-this-page-label {
+  font-size: 14px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-align: center;
+  background-color: var(--surface-card);
+  color: var(--text-inverse);
+  padding: 12px 24px;
+  border-radius: 40px;
+  font-weight: 500;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.platform-nav-section.scrolled .on-this-page-label {
+  background-color: transparent;
+  color: var(--text-primary);
+  padding: 0;
+  border-radius: 0;
+  margin: 0;
+}
+
+.platform-chips-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.platform-nav-section.scrolled .platform-chips-row {
+  display: flex;
+  flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  gap: 10px;
+}
+
+.platform-nav-section.scrolled .platform-chips-row::-webkit-scrollbar {
+  display: none;
+}
+
+.touchpoint-section {
+  padding: 64px 0;
+  background-color: var(--surface-default);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 40px;
+  color: var(--text-primary);
+}
+
+.touchpoint-card {
+  background-color: var(--surface-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.touchpoint-layout {
+  display: grid;
+  grid-template-columns: 40% 1fr;
+  gap: 64px;
+}
+
+.touchpoint-screenshot {
+  position: sticky;
+  top: 200px;
+  align-self: start;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    padding: 40px 0 24px;
+  }
+
+  .page-title {
+    font-size: 32px;
+  }
+
+  .touchpoint-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .touchpoint-screenshot {
+    position: relative;
+    top: 0;
+  }
+
+  .touchpoint-card {
+    padding: 24px;
+  }
+
+  .section-title {
+    font-size: 24px;
+  }
+
+  .on-this-page-label {
+    font-size: 12px;
+  }
+
+  .platform-nav-container {
+    gap: 16px;
+  }
+}

@@ -1,0 +1,41 @@
+.touchpoint-section-full {
+  padding: 60px 0 80px;
+  background-color: var(--surface-default);
+}
+
+.section-header-centered {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.platform-label {
+  font-size: 17px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.section-title-large {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .section-title-large {
+    font-size: 32px;
+  }
+
+  .platform-label {
+    font-size: 14px;
+  }
+
+  .touchpoint-section-full {
+    padding: 40px 0 60px;
+  }
+}

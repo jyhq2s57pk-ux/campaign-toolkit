@@ -1,0 +1,221 @@
+{
+  "campaign": {
+    "id": "holiday-season-2025",
+    "name": "The Magic of Joy",
+    "subtitle": "Holiday Season",
+    "year": "2025-26",
+    "scope": "Global",
+    "activationDates": "October – December 2025",
+    "overview": "This holiday season, we're bringing the magic of gifting to life across all our travel retail touchpoints. From festive hero banners to personalized product carousels, every element has been designed to inspire travelers and drive conversion during our peak trading period.\n\nThe campaign runs from October through December 2025, with key activations aligned to Black Friday, Cyber Monday, and the Christmas gifting window."
+  },
+  "platforms": [
+    { "name": "Gifting Content Landing Page", "isNew": false, "type": null },
+    { "name": "Product detail page", "isNew": false, "type": null },
+    { "name": "Check-out & Shopping bag", "isNew": false, "type": null },
+    { "name": "Home", "isNew": false, "type": "App" },
+    { "name": "Shopping Home", "isNew": false, "type": "App" },
+    { "name": "Homepage", "isNew": false, "type": "Web" }
+  ],
+  "touchpoints": [
+    {
+      "id": "1",
+      "title": "Hero Banner",
+      "platform": "Homepage",
+      "description": "Include activation visual, update the copy for members and non-members and include a CTA button linked to the Content Landing Page.",
+      "is_new": true,
+      "is_optional": false,
+      "tier_premium": true,
+      "tier_executive": true,
+      "sort_order": 1
+    },
+    {
+      "id": "2",
+      "title": "Promobar",
+      "platform": "Homepage",
+      "description": "Change the promobar colour to green for the holiday campaign. Keep messaging concise.",
+      "is_new": false,
+      "is_optional": false,
+      "tier_premium": true,
+      "tier_executive": true,
+      "sort_order": 2
+    },
+    {
+      "id": "3",
+      "title": "Top Categories",
+      "platform": "Homepage",
+      "description": "Feature Holiday Gifts in the first position. Reorder existing categories to prioritize gifting.",
+      "is_new": false,
+      "is_optional": false,
+      "tier_premium": true,
+      "tier_executive": true,
+      "sort_order": 3
+    },
+    {
+      "id": "4",
+      "title": "Most Popular Carousel",
+      "platform": "Homepage",
+      "description": "Feature special SKUs on this carousel and update the title during the activation.",
+      "is_new": true,
+      "is_optional": false,
+      "tier_premium": true,
+      "tier_executive": true,
+      "sort_order": 4
+    },
+    {
+      "id": "5",
+      "title": "CLP Hero",
+      "platform": "Gifting Content Landing Page",
+      "description": "Feature special SKUs by category in a new carousel to appear before Bestsellers one. Beauty: Exclusive Gifting Sets (fragrance & skincare sets). Liquor: Festive Spirits to Celebrate (wine & champagne).",
+      "is_new": true,
+      "is_optional": true,
+      "tier_premium": true,
+      "tier_executive": true,
+      "sort_order": 1
+    },
+    {
+      "id": "6",
+      "title": "Extra Gifting Carousel",
+      "platform": "Gifting Content Landing Page",
+      "description": "Feature special SKUs by category in a new carousel before Bestsellers.",
+      "is_new": false,
+      "is_optional": false,
+      "tier_premium": true,
+      "tier_executive": true,
+      "sort_order": 2
+    },
+    {
+      "id": "7",
+      "title": "Dual Content Block",
+      "platform": "Gifting Content Landing Page",
+      "description": "Include one related to the activation linking to Fragrances Product Listing Page.",
+      "is_new": false,
+      "is_optional": true,
+      "tier_premium": true,
+      "tier_executive": true,
+      "sort_order": 3
+    }
+  ],
+  "calendarTiers": [
+    { "name": "Overarching Campaign", "color": "#14b8a6" },
+    { "name": "Category-Led", "color": "#8b5cf6" },
+    { "name": "Campaigns", "color": "#ec4899" },
+    { "name": "Other Global Campaigns", "color": "#3b82f6" },
+    { "name": "Other Local Campaigns", "color": "#6b7280" }
+  ],
+  "calendarEvents": [
+    {
+      "id": "1",
+      "title": "Winter Sale / Summer",
+      "startDate": "2025-01-01",
+      "endDate": "2025-06-30",
+      "tier": "Overarching Campaign",
+      "color": "#22c55e"
+    },
+    {
+      "id": "2",
+      "title": "Trading Club",
+      "startDate": "2025-02-15",
+      "endDate": "2025-04-30",
+      "tier": "Category-Led",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "3",
+      "title": "Blue Monday",
+      "startDate": "2025-01-15",
+      "endDate": "2025-01-31",
+      "tier": "Campaigns",
+      "color": "#ec4899"
+    },
+    {
+      "id": "4",
+      "title": "Valentine's Day",
+      "startDate": "2025-02-01",
+      "endDate": "2025-02-14",
+      "tier": "Campaigns",
+      "color": "#ec4899"
+    },
+    {
+      "id": "5",
+      "title": "Mother's & Father's Day",
+      "startDate": "2025-03-01",
+      "endDate": "2025-03-31",
+      "tier": "Campaigns",
+      "color": "#f97316"
+    }
+  ],
+  "resources": [
+    {
+      "id": "1",
+      "title": "Campaign Visual Assets",
+      "description": "Hero banners, product photography, and lifestyle imagery.",
+      "category": "Creative"
+    },
+    {
+      "id": "2",
+      "title": "Copy Library",
+      "description": "Pre-approved headlines, body copy, and CTAs.",
+      "category": "Content"
+    },
+    {
+      "id": "3",
+      "title": "Product Assortment Guide",
+      "description": "Curated SKU lists by category.",
+      "category": "Product"
+    },
+    {
+      "id": "4",
+      "title": "Brand Guidelines",
+      "description": "Logo usage, color palette, typography.",
+      "category": "Brand"
+    },
+    {
+      "id": "5",
+      "title": "Technical Specs",
+      "description": "Asset dimensions and file formats.",
+      "category": "Technical"
+    }
+  ],
+  "waysOfWorking": {
+    "process": [
+      { "id": "1", "title": "Review the brief", "description": "Understand campaign objectives and timeline." },
+      { "id": "2", "title": "Download assets", "description": "Access creative files from Resources." },
+      { "id": "3", "title": "Localise content", "description": "Adapt copy and visuals for your market." },
+      { "id": "4", "title": "Submit for approval", "description": "Send assets to global team for review." },
+      { "id": "5", "title": "Implement touchpoints", "description": "Deploy approved content across channels." },
+      { "id": "6", "title": "QA and go live", "description": "Test all touchpoints before launch." }
+    ],
+    "timeline": [
+      { "phase": "Brief distribution", "date": "Week 40" },
+      { "phase": "Asset delivery", "date": "Week 42" },
+      { "phase": "Campaign launch", "date": "Week 46" },
+      { "phase": "Campaign end", "date": "Week 52" }
+    ]
+  },
+  "omnichannel": [
+    {
+      "id": "1",
+      "channel": "Email Marketing",
+      "description": "Coordinate holiday emails with web touchpoints.",
+      "content": "Send teaser emails 2 weeks before launch. Follow up with personalized product recommendations."
+    },
+    {
+      "id": "2",
+      "channel": "Social Media",
+      "description": "Amplify campaign reach through organic and paid content.",
+      "content": "Use consistent hashtags. Feature user-generated content."
+    },
+    {
+      "id": "3",
+      "channel": "In-Store Experience",
+      "description": "Bridge digital and physical with store activations.",
+      "content": "Gift wrapping stations. Digital screens. QR codes."
+    },
+    {
+      "id": "4",
+      "channel": "Push Notifications",
+      "description": "Drive app engagement with timely alerts.",
+      "content": "Collection reminders. Flash sales. Recommendations."
+    }
+  ]
+}
