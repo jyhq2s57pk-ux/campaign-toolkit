@@ -5,74 +5,6 @@ import "./Calendar2026Page.css";
 
 const STORAGE_KEY = "avolta_toolkit_calendar_v1";
 
-function parseCSV(text) {
-  const lines = text.trim().split(/\r?\n/);
-  if (lines.length < 2) return [];
-  const header = lines[0].split(",").map((h) => h.trim());
-  const idx = (k) => header.indexOf(k);
-
-  const iTitle = idx("title");
-  const iStart = idx("startDate");
-  const iEnd = idx("endDate");
-  const iTier = idx("tier");
-
-  if ([iTitle, iStart, iEnd, iTier].some((i) => i < 0)) return [];
-
-  const validTiers = [
-    "Overarching Campaign",
-    "Category-Led",
-    "Omnichannel Campaigns",
-    "Digital Campaigns",
-    "Local Campaigns (supported by Global)"
-  ];
-
-  return lines.slice(1).map((row, r) => {
-    const cols = row.split(",").map((c) => c.trim());
-    const tierRaw = cols[iTier];
-    const tier = validTiers.includes(tierRaw) ? tierRaw : "Digital Campaigns";
-    return {
-      id: `csv-${r}-${Date.now()}`,
-      title: cols[iTitle] || "Untitled",
-      startDate: cols[iStart],
-      endDate: cols[iEnd],
-      tier,
-      status: "Planned",
-    };
-  });
-}
-
-function toCSV(items) {
-  const header = "title,startDate,endDate,tier\n";
-  const body = items.map((e) => `${e.title},${e.startDate},${e.endDate},${e.tier}`).join("\n");
-  return header + body + "\n";
-}
-
-// Assign colors based on campaign name patterns
-function getCampaignColor(title) {
-  const t = title.toLowerCase();
-
-  // Overarching campaigns - Pink/Purple
-  if (t.includes('moments of joy') || t.includes('love your journey')) return '#E5B8F4';
-
-  // Category-led - Teal/Turquoise
-  if (t.includes('club') || t.includes('value') || t.includes('tasting') || t.includes('summer') || t.includes('festive')) return '#7DD3C0';
-
-  // Seasonal/Holiday - Purple
-  if (t.includes('valentine') || t.includes('ramadan') || t.includes('easter') || t.includes('diwali') ||
-      t.includes('golden week') || t.includes('champagne') || t.includes('cny') || t.includes('mother') ||
-      t.includes('father') || t.includes('black friday') || t.includes('carnival') || t.includes('eid') ||
-      t.includes('moon festival')) return '#C4B5FD';
-
-  // Digital/Sales - Light Purple
-  if (t.includes('sales') || t.includes('blue monday') || t.includes('singles') || t.includes('double')) return '#DDD6FE';
-
-  // Seasonal periods - Peach
-  if (t.includes('spring') || t.includes('autumn') || t.includes('back to routine') || t.includes('best of')) return '#FED7AA';
-
-  // Default
-  return '#A5B4FC';
-}
-
 export default function Calendar2026Page() {
   const seeded = [
     // Overarching Campaign
@@ -113,7 +45,6 @@ export default function Calendar2026Page() {
   ];
 
   const [events, setEvents] = useState([]);
-  const [csvError, setCsvError] = useState(null);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -216,27 +147,6 @@ export default function Calendar2026Page() {
     return gridColumn;
   };
 
-  const onImport = async (file) => {
-    setCsvError(null);
-    const text = await file.text();
-    const parsed = parseCSV(text);
-    if (!parsed.length) {
-      setCsvError("Could not import CSV. Please use: title,startDate,endDate,tier");
-      return;
-    }
-    setEvents(parsed);
-  };
-
-  const onExport = () => {
-    const blob = new Blob([toCSV(events)], { type: "text/csv;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "campaign-calendar-2026.csv";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
   return (
     <div className="calendar-page">
       <Header />
@@ -248,37 +158,6 @@ export default function Calendar2026Page() {
         </div>
 
         <div className="calendar-main">
-          <div className="import-card">
-            <div className="import-info">
-              <div>Use this as a lightweight planning view. Import a CSV to add or update campaign blocks.</div>
-              <div className="import-format">CSV format: title,startDate,endDate,tier</div>
-              {csvError ? <div className="import-error">{csvError}</div> : null}
-            </div>
-
-            <div className="import-actions">
-              <label className="import-button">
-                Import CSV
-                <input
-                  type="file"
-                  accept=".csv,text/csv"
-                  className="file-input"
-                  onChange={(e) => {
-                    const f = e.target.files?.[0];
-                    if (f) onImport(f);
-                  }}
-                />
-              </label>
-
-              <button onClick={onExport} className="export-button">
-                Export CSV
-              </button>
-
-              <button onClick={() => setEvents(seeded)} className="reset-button">
-                Reset
-              </button>
-            </div>
-          </div>
-
           <div className="timeline-container">
             <div className="timeline-grid" style={{
               display: 'grid',

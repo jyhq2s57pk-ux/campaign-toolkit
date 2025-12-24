@@ -8,12 +8,56 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 
 .admin-header h1 {
   font-family: var(--font-display);
   font-size: 36px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Tabs */
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--border-default);
+  padding-bottom: 0;
+}
+
+.admin-tab {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.admin-tab:hover {
+  color: var(--text-primary);
+}
+
+.admin-tab.active {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent-green);
+}
+
+.admin-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.admin-section-header h2 {
+  font-size: 24px;
   color: var(--text-primary);
   margin: 0;
 }
@@ -231,11 +275,85 @@
   color: white;
 }
 
+/* Calendar Admin */
+.calendar-admin-section {
+  max-width: 800px;
+}
+
+.calendar-admin-card {
+  background-color: var(--surface-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.calendar-admin-info {
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.import-error {
+  font-size: 13px;
+  color: #fde047;
+  background-color: rgba(253, 224, 71, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.calendar-admin-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.calendar-admin-help {
+  padding-top: 24px;
+  border-top: 1px solid var(--border-default);
+}
+
+.calendar-admin-help h3 {
+  font-size: 16px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.calendar-admin-help code {
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--accent-green);
+  font-family: 'Courier New', monospace;
+}
+
 @media (max-width: 768px) {
   .admin-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
+  }
+
+  .admin-tabs {
+    flex-direction: column;
+    gap: 0;
+    border-bottom: none;
+  }
+
+  .admin-tab {
+    border-bottom: 1px solid var(--border-default);
+    text-align: left;
+    padding: 16px;
+    margin-bottom: 0;
+  }
+
+  .admin-tab.active {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-bottom-color: var(--border-default);
   }
 
   .form-row {
@@ -254,5 +372,15 @@
 
   .btn-edit, .btn-delete {
     flex: 1;
+  }
+
+  .calendar-admin-actions {
+    flex-direction: column;
+  }
+
+  .calendar-admin-actions button,
+  .calendar-admin-actions label {
+    width: 100%;
+    text-align: center;
   }
 }

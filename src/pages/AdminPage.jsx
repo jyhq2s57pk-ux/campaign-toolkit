@@ -5,11 +5,92 @@ import Header from '../components/Header';
 import MarkerEditor from '../components/MarkerEditor';
 import './AdminPage.css';
 
+const STORAGE_KEY = "avolta_toolkit_calendar_v1";
+
+// Calendar seeded data
+const seededCalendarEvents = [
+  // Overarching Campaign
+  { id: "ev-1", title: "Moments of Joy (2025)", startDate: "2026-01-01", endDate: "2026-12-31", tier: "Overarching Campaign", status: "Planned" },
+  { id: "ev-2", title: "Love your journey", startDate: "2026-04-01", endDate: "2026-12-31", tier: "Overarching Campaign", status: "Planned" },
+  // Category-Led
+  { id: "ev-3", title: "Value Club / Summer (Southern Hemisphere)", startDate: "2026-01-01", endDate: "2026-03-31", tier: "Category-Led", status: "Planned" },
+  { id: "ev-4", title: "Tasting Club", startDate: "2026-04-01", endDate: "2026-04-30", tier: "Category-Led", status: "Planned" },
+  { id: "ev-5", title: "Summer Club", startDate: "2026-07-01", endDate: "2026-07-31", tier: "Category-Led", status: "Planned" },
+  { id: "ev-6", title: "Festive Club", startDate: "2026-10-01", endDate: "2026-10-31", tier: "Category-Led", status: "Planned" },
+  // Omnichannel Campaigns
+  { id: "ev-7", title: "Mother's & Father's Day", startDate: "2026-03-01", endDate: "2026-03-31", tier: "Omnichannel Campaigns", status: "Planned" },
+  { id: "ev-8", title: "Valentine's Day", startDate: "2026-02-14", endDate: "2026-02-14", tier: "Omnichannel Campaigns", status: "Planned" },
+  { id: "ev-9", title: "Ramadan", startDate: "2026-02-17", endDate: "2026-03-19", tier: "Omnichannel Campaigns", status: "Planned" },
+  { id: "ev-10", title: "Easter", startDate: "2026-04-02", endDate: "2026-04-03", tier: "Omnichannel Campaigns", status: "Planned" },
+  { id: "ev-11", title: "Golden Week", startDate: "2026-10-01", endDate: "2026-10-07", tier: "Omnichannel Campaigns", status: "Planned" },
+  { id: "ev-12", title: "Diwali", startDate: "2026-11-08", endDate: "2026-11-08", tier: "Omnichannel Campaigns", status: "Planned" },
+  { id: "ev-13", title: "Champagne Festival", startDate: "2026-11-01", endDate: "2026-11-30", tier: "Omnichannel Campaigns", status: "Planned" },
+  { id: "ev-14", title: "CNY", startDate: "2026-02-17", endDate: "2026-02-17", tier: "Omnichannel Campaigns", status: "Planned" },
+  { id: "ev-15", title: "Sales", startDate: "2026-06-01", endDate: "2026-06-30", tier: "Omnichannel Campaigns", status: "Planned" },
+  { id: "ev-16", title: "Black Friday", startDate: "2026-11-27", endDate: "2026-11-27", tier: "Omnichannel Campaigns", status: "Planned" },
+  // Digital Campaigns
+  { id: "ev-17", title: "Blue Monday", startDate: "2026-01-19", endDate: "2026-01-19", tier: "Digital Campaigns", status: "Planned" },
+  { id: "ev-18", title: "Best of 2025", startDate: "2026-01-01", endDate: "2026-01-31", tier: "Digital Campaigns", status: "Planned" },
+  { id: "ev-19", title: "Spring (Spring fragrances)", startDate: "2026-04-01", endDate: "2026-06-30", tier: "Digital Campaigns", status: "Planned" },
+  { id: "ev-20", title: "Back to Routine", startDate: "2026-08-01", endDate: "2026-09-30", tier: "Digital Campaigns", status: "Planned" },
+  { id: "ev-21", title: "Autumn", startDate: "2026-10-01", endDate: "2026-12-31", tier: "Digital Campaigns", status: "Planned" },
+  { id: "ev-22", title: "Singles Day", startDate: "2026-11-11", endDate: "2026-11-11", tier: "Digital Campaigns", status: "Planned" },
+  { id: "ev-23", title: "Double 12", startDate: "2026-12-12", endDate: "2026-12-12", tier: "Digital Campaigns", status: "Planned" },
+  // Local Campaigns
+  { id: "ev-24", title: "Carnival (BR)", startDate: "2026-02-13", endDate: "2026-02-18", tier: "Local Campaigns (supported by Global)", status: "Planned" },
+  { id: "ev-25", title: "Eid al adha (ME)", startDate: "2026-05-27", endDate: "2026-05-27", tier: "Local Campaigns (supported by Global)", status: "Planned" },
+  { id: "ev-26", title: "Moon Festival", startDate: "2026-09-25", endDate: "2026-09-25", tier: "Local Campaigns (supported by Global)", status: "Planned" },
+];
+
+function parseCalendarCSV(text) {
+  const lines = text.trim().split(/\r?\n/);
+  if (lines.length < 2) return [];
+  const header = lines[0].split(",").map((h) => h.trim());
+  const idx = (k) => header.indexOf(k);
+
+  const iTitle = idx("title");
+  const iStart = idx("startDate");
+  const iEnd = idx("endDate");
+  const iTier = idx("tier");
+
+  if ([iTitle, iStart, iEnd, iTier].some((i) => i < 0)) return [];
+
+  const validTiers = [
+    "Overarching Campaign",
+    "Category-Led",
+    "Omnichannel Campaigns",
+    "Digital Campaigns",
+    "Local Campaigns (supported by Global)"
+  ];
+
+  return lines.slice(1).map((row, r) => {
+    const cols = row.split(",").map((c) => c.trim());
+    const tierRaw = cols[iTier];
+    const tier = validTiers.includes(tierRaw) ? tierRaw : "Digital Campaigns";
+    return {
+      id: `csv-${r}-${Date.now()}`,
+      title: cols[iTitle] || "Untitled",
+      startDate: cols[iStart],
+      endDate: cols[iEnd],
+      tier,
+      status: "Planned",
+    };
+  });
+}
+
+function calendarToCSV(items) {
+  const header = "title,startDate,endDate,tier\n";
+  const body = items.map((e) => `${e.title},${e.startDate},${e.endDate},${e.tier}`).join("\n");
+  return header + body + "\n";
+}
+
 export default function AdminPage() {
+  const [activeTab, setActiveTab] = useState('touchpoints');
   const [touchpoints, setTouchpoints] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [csvError, setCsvError] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -186,6 +267,46 @@ export default function AdminPage() {
     });
   };
 
+  // Calendar management functions
+  const handleCalendarImport = async (file) => {
+    setCsvError(null);
+    const text = await file.text();
+    const parsed = parseCalendarCSV(text);
+    if (!parsed.length) {
+      setCsvError("Could not import CSV. Please use: title,startDate,endDate,tier");
+      return;
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+    alert(`Successfully imported ${parsed.length} campaigns!`);
+  };
+
+  const handleCalendarExport = () => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    let events = [];
+    if (stored) {
+      try {
+        events = JSON.parse(stored);
+      } catch {}
+    }
+    if (events.length === 0) {
+      events = seededCalendarEvents;
+    }
+    const blob = new Blob([calendarToCSV(events)], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "campaign-calendar-2026.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleCalendarReset = () => {
+    if (confirm('Are you sure you want to reset the calendar to default campaigns? This will overwrite any custom campaigns.')) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(seededCalendarEvents));
+      alert('Calendar reset to defaults!');
+    }
+  };
+
   return (
     <div className="app">
       <Header />
@@ -193,25 +314,48 @@ export default function AdminPage() {
       <main style={{ paddingTop: '56px' }}>
         <div className="admin-container">
           <div className="admin-header">
-            <h1>Touchpoint Management</h1>
-            <div className="admin-actions">
-              <button
-                className="btn-primary"
-                onClick={() => setShowForm(!showForm)}
-              >
-                {showForm ? 'Cancel' : '+ Add Touchpoint'}
-              </button>
-              <label className="btn-secondary">
-                Upload CSV
-                <input
-                  type="file"
-                  accept=".csv"
-                  onChange={handleCSVUpload}
-                  style={{ display: 'none' }}
-                />
-              </label>
-            </div>
+            <h1>Admin</h1>
           </div>
+
+          {/* Tab Navigation */}
+          <div className="admin-tabs">
+            <button
+              className={`admin-tab ${activeTab === 'touchpoints' ? 'active' : ''}`}
+              onClick={() => setActiveTab('touchpoints')}
+            >
+              Manage Touchpoints
+            </button>
+            <button
+              className={`admin-tab ${activeTab === 'calendar' ? 'active' : ''}`}
+              onClick={() => setActiveTab('calendar')}
+            >
+              Manage Calendar
+            </button>
+          </div>
+
+          {/* Touchpoints Tab */}
+          {activeTab === 'touchpoints' && (
+            <>
+              <div className="admin-section-header">
+                <h2>Touchpoint Management</h2>
+                <div className="admin-actions">
+                  <button
+                    className="btn-primary"
+                    onClick={() => setShowForm(!showForm)}
+                  >
+                    {showForm ? 'Cancel' : '+ Add Touchpoint'}
+                  </button>
+                  <label className="btn-secondary">
+                    Upload CSV
+                    <input
+                      type="file"
+                      accept=".csv"
+                      onChange={handleCSVUpload}
+                      style={{ display: 'none' }}
+                    />
+                  </label>
+                </div>
+              </div>
 
           {/* Add/Edit Form */}
           {showForm && (
@@ -345,30 +489,79 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* Touchpoints List */}
-          <div className="admin-list">
-            <h2>Touchpoints ({touchpoints.length})</h2>
-            <div className="touchpoints-table">
-              {touchpoints.map((item) => (
-                <div key={item.id} className="touchpoint-row">
-                  <div className="touchpoint-info">
-                    <h3>{item.title}</h3>
-                    <p>{item.platform}</p>
-                    <div className="touchpoint-badges">
-                      {item.is_new && <span className="badge-new">New</span>}
-                      {item.tier_premium && <span className="badge-premium">Premium</span>}
-                      {item.tier_executive && <span className="badge-executive">Executive</span>}
-                      {item.is_optional && <span className="badge-optional">Optional</span>}
+              {/* Touchpoints List */}
+              <div className="admin-list">
+                <h2>Touchpoints ({touchpoints.length})</h2>
+                <div className="touchpoints-table">
+                  {touchpoints.map((item) => (
+                    <div key={item.id} className="touchpoint-row">
+                      <div className="touchpoint-info">
+                        <h3>{item.title}</h3>
+                        <p>{item.platform}</p>
+                        <div className="touchpoint-badges">
+                          {item.is_new && <span className="badge-new">New</span>}
+                          {item.tier_premium && <span className="badge-premium">Premium</span>}
+                          {item.tier_executive && <span className="badge-executive">Executive</span>}
+                          {item.is_optional && <span className="badge-optional">Optional</span>}
+                        </div>
+                      </div>
+                      <div className="touchpoint-actions">
+                        <button onClick={() => handleEdit(item)} className="btn-edit">Edit</button>
+                        <button onClick={() => handleDelete(item.id)} className="btn-delete">Delete</button>
+                      </div>
                     </div>
-                  </div>
-                  <div className="touchpoint-actions">
-                    <button onClick={() => handleEdit(item)} className="btn-edit">Edit</button>
-                    <button onClick={() => handleDelete(item.id)} className="btn-delete">Delete</button>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+            </>
+          )}
+
+          {/* Calendar Tab */}
+          {activeTab === 'calendar' && (
+            <div className="calendar-admin-section">
+              <div className="admin-section-header">
+                <h2>Campaign Calendar Management</h2>
+              </div>
+
+              <div className="calendar-admin-card">
+                <p className="calendar-admin-info">
+                  Manage your 2026 campaign calendar data. Import/export campaigns as CSV or reset to defaults.
+                </p>
+                {csvError && <div className="import-error">{csvError}</div>}
+
+                <div className="calendar-admin-actions">
+                  <label className="btn-primary">
+                    Import CSV
+                    <input
+                      type="file"
+                      accept=".csv,text/csv"
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        const f = e.target.files?.[0];
+                        if (f) handleCalendarImport(f);
+                      }}
+                    />
+                  </label>
+
+                  <button onClick={handleCalendarExport} className="btn-secondary">
+                    Export CSV
+                  </button>
+
+                  <button onClick={handleCalendarReset} className="btn-secondary">
+                    Reset to Defaults
+                  </button>
+                </div>
+
+                <div className="calendar-admin-help">
+                  <h3>CSV Format</h3>
+                  <code>title,startDate,endDate,tier</code>
+                  <p style={{ marginTop: '8px', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                    Valid tiers: Overarching Campaign, Category-Led, Omnichannel Campaigns, Digital Campaigns, Local Campaigns (supported by Global)
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </main>
     </div>
