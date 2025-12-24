@@ -42,7 +42,32 @@ function toCSV(items) {
 
 export default function Calendar2026Page() {
   const seeded = [
-    { id: "ev-1", title: "Holiday Season", startDate: "2026-10-01", endDate: "2026-12-31", tier: "Tier 1", status: "Planned" },
+    { id: "ev-1", title: "Moments of Joy (2025)", startDate: "2026-01-01", endDate: "2026-12-31", tier: "Tier 1", status: "Planned" },
+    { id: "ev-2", title: "Love your journey", startDate: "2026-04-01", endDate: "2026-04-30", tier: "Tier 1", status: "Planned" },
+    { id: "ev-3", title: "Value Club / Summer (Southern Hemisphere)", startDate: "2026-01-01", endDate: "2026-03-31", tier: "Tier 2", status: "Planned" },
+    { id: "ev-4", title: "Tasting Club", startDate: "2026-04-01", endDate: "2026-04-30", tier: "Tier 2", status: "Planned" },
+    { id: "ev-5", title: "Summer Club", startDate: "2026-07-01", endDate: "2026-07-31", tier: "Tier 2", status: "Planned" },
+    { id: "ev-6", title: "Festive Club", startDate: "2026-10-01", endDate: "2026-10-31", tier: "Tier 2", status: "Planned" },
+    { id: "ev-7", title: "Mother's & Father's Day", startDate: "2026-03-01", endDate: "2026-03-31", tier: "Tier 2", status: "Planned" },
+    { id: "ev-8", title: "Valentine's Day", startDate: "2026-02-14", endDate: "2026-02-14", tier: "Tier 3", status: "Planned" },
+    { id: "ev-9", title: "Ramadan", startDate: "2026-02-17", endDate: "2026-03-19", tier: "Tier 3", status: "Planned" },
+    { id: "ev-10", title: "Easter", startDate: "2026-04-02", endDate: "2026-04-03", tier: "Tier 3", status: "Planned" },
+    { id: "ev-11", title: "Golden Week", startDate: "2026-10-01", endDate: "2026-10-07", tier: "Tier 3", status: "Planned" },
+    { id: "ev-12", title: "Diwali", startDate: "2026-11-08", endDate: "2026-11-08", tier: "Tier 3", status: "Planned" },
+    { id: "ev-13", title: "Champagne Festival", startDate: "2026-11-01", endDate: "2026-11-30", tier: "Tier 3", status: "Planned" },
+    { id: "ev-14", title: "CNY", startDate: "2026-02-17", endDate: "2026-02-17", tier: "Tier 3", status: "Planned" },
+    { id: "ev-15", title: "Sales", startDate: "2026-06-01", endDate: "2026-06-30", tier: "Tier 3", status: "Planned" },
+    { id: "ev-16", title: "Black Friday", startDate: "2026-11-27", endDate: "2026-11-27", tier: "Tier 3", status: "Planned" },
+    { id: "ev-17", title: "Blue Monday", startDate: "2026-01-19", endDate: "2026-01-19", tier: "Tier 3", status: "Planned" },
+    { id: "ev-18", title: "Singles Day", startDate: "2026-11-11", endDate: "2026-11-11", tier: "Tier 3", status: "Planned" },
+    { id: "ev-19", title: "Double 12", startDate: "2026-12-12", endDate: "2026-12-12", tier: "Tier 3", status: "Planned" },
+    { id: "ev-20", title: "Best of 2025", startDate: "2026-01-01", endDate: "2026-01-31", tier: "Tier 2", status: "Planned" },
+    { id: "ev-21", title: "Spring (Spring fragrances)", startDate: "2026-04-01", endDate: "2026-06-30", tier: "Tier 2", status: "Planned" },
+    { id: "ev-22", title: "Back to Routine", startDate: "2026-08-01", endDate: "2026-09-30", tier: "Tier 2", status: "Planned" },
+    { id: "ev-23", title: "Autumn", startDate: "2026-10-01", endDate: "2026-12-31", tier: "Tier 2", status: "Planned" },
+    { id: "ev-24", title: "Carnival (BR)", startDate: "2026-02-13", endDate: "2026-02-18", tier: "Tier 3", status: "Planned" },
+    { id: "ev-25", title: "Eid al adha (ME)", startDate: "2026-05-27", endDate: "2026-05-27", tier: "Tier 3", status: "Planned" },
+    { id: "ev-26", title: "Moon Festival", startDate: "2026-09-25", endDate: "2026-09-25", tier: "Tier 3", status: "Planned" },
   ];
 
   const [events, setEvents] = useState([]);
