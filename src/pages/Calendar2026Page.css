@@ -7,7 +7,8 @@
 }
 
 .calendar-main {
-  max-width: 1200px;
+  width: 100%;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 40px 20px;
 }
@@ -89,81 +90,106 @@
   display: none;
 }
 
-.calendar-grid-container {
+/* Timeline Container */
+.timeline-container {
   border-radius: 24px;
   border: 1px solid var(--border-default);
   background-color: rgba(255, 255, 255, 0.05);
-  overflow: auto;
+  overflow-x: auto;
+  padding: 20px;
 }
 
-.calendar-grid {
-  display: grid;
-  grid-template-columns: 240px repeat(12, minmax(120px, 1fr));
+/* Timeline Grid */
+.timeline-grid {
+  position: relative;
+  min-width: 1000px;
 }
 
-.grid-header {
-  padding: 16px;
-  font-size: 14px;
+/* Timeline Headers */
+.timeline-header {
+  padding: 12px 8px;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--text-secondary);
-  border-bottom: 1px solid var(--border-default);
+  border-bottom: 2px solid var(--border-default);
+  text-align: center;
+  position: sticky;
+  top: 0;
+  background-color: rgba(255, 255, 255, 0.05);
+  z-index: 10;
 }
 
-.month-header {
-  border-left: 1px solid var(--border-default);
+.timeline-header.tier-label {
+  text-align: left;
+  padding-left: 16px;
+  left: 0;
+  z-index: 15;
 }
 
-.tier-cell {
+.month-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Tier Cells */
+.timeline-tier-cell {
   padding: 16px;
+  background-color: rgba(255, 255, 255, 0.05);
   border-bottom: 1px solid var(--border-default);
-  background-color: rgba(255, 255, 255, 0.03);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  left: 0;
+  z-index: 8;
+}
+
+.tier-color-bar {
+  width: 6px;
+  height: 60px;
+  border-radius: 3px;
+  flex-shrink: 0;
 }
 
 .tier-name {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 16px;
-  margin-bottom: 4px;
-}
-
-.tier-status {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-primary);
 }
 
-.event-cell {
-  padding: 12px;
+/* Month Cells (background grid) */
+.timeline-month-cell {
   border-bottom: 1px solid var(--border-default);
-  border-left: 1px solid var(--border-default);
-  min-height: 76px;
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+  min-height: 80px;
 }
 
-.event-item {
-  padding: 8px 12px;
-  margin-bottom: 8px;
-  border-radius: 12px;
-  background-color: rgba(255, 255, 255, 0.1);
-  border: 1px solid var(--border-default);
-  font-size: 12px;
+/* Campaign Bars */
+.campaign-bar {
+  position: relative;
+  padding: 12px 16px;
+  margin: 8px 4px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
 
-.event-title {
+.campaign-title {
   font-weight: 600;
-  margin-bottom: 4px;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.85);
+  line-height: 1.3;
 }
 
-.event-dates {
-  color: var(--text-secondary);
+.campaign-dates {
   font-size: 11px;
-  margin-bottom: 6px;
-}
-
-.event-badge {
-  display: inline-flex;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
-  font-size: 11px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
 }
 
 .empty-state {
