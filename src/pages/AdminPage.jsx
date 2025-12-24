@@ -9,6 +9,7 @@ export default function AdminPage() {
   const [touchpoints, setTouchpoints] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -99,6 +100,51 @@ export default function AdminPage() {
     setEditingItem(item);
     setFormData(item);
     setShowForm(true);
+  };
+
+  // Handle image upload to Supabase Storage
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file');
+      return;
+    }
+
+    setUploading(true);
+
+    try {
+      // Create unique filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `touchpoints/${fileName}`;
+
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('touchpoint-images')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (error) throw error;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('touchpoint-images')
+        .getPublicUrl(filePath);
+
+      // Update form data with image URL
+      setFormData({ ...formData, image_url: publicUrl });
+      alert('Image uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Error uploading image: ' + error.message);
+    } finally {
+      setUploading(false);
+    }
   };
 
   // Handle CSV upload
@@ -222,7 +268,22 @@ export default function AdminPage() {
                 </div>
 
                 <div className="form-group">
-                  <label>Image URL</label>
+                  <label>Screenshot Image</label>
+                  <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                    <label className="btn-secondary" style={{ cursor: 'pointer' }}>
+                      {uploading ? 'Uploading...' : 'Upload Image'}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        style={{ display: 'none' }}
+                        disabled={uploading}
+                      />
+                    </label>
+                    <span style={{ color: 'var(--text-secondary)', fontSize: '14px', alignSelf: 'center' }}>
+                      or paste URL below
+                    </span>
+                  </div>
                   <input
                     type="url"
                     value={formData.image_url || ''}
@@ -231,7 +292,7 @@ export default function AdminPage() {
                   />
                   {formData.image_url && (
                     <div style={{ marginTop: '10px' }}>
-                      <img src={formData.image_url} alt="Preview" style={{ maxWidth: '200px', borderRadius: '8px' }} />
+                      <img src={formData.image_url} alt="Preview" style={{ maxWidth: '300px', maxHeight: '200px', borderRadius: '8px', objectFit: 'contain' }} />
                     </div>
                   )}
                 </div>

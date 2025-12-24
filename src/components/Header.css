@@ -17,18 +17,14 @@
 .header-logo {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 18px;
-  font-weight: 600;
+  text-decoration: none;
+  color: inherit;
 }
 
-.header-logo .bracket {
-  color: var(--accent-purple);
-}
-
-.header-logo .brand {
-  color: white;
-  margin-left: 4px;
+.header-logo svg {
+  height: 20px;
+  width: auto;
+  display: block;
 }
 
 .header-nav {
@@ -45,6 +41,8 @@
   padding: 8px 16px;
   border-radius: 20px;
   transition: all 0.2s;
+  text-decoration: none;
+  font-family: var(--font-body);
 }
 
 .nav-btn:hover {
@@ -62,21 +60,100 @@
   color: var(--text-inverse);
 }
 
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 51;
+}
+
+.hamburger {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: var(--text-primary);
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.hamburger::before,
+.hamburger::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 22px;
+  height: 2px;
+  background-color: var(--text-primary);
+  transition: all 0.3s ease;
+}
+
+.hamburger::before {
+  top: -7px;
+}
+
+.hamburger::after {
+  top: 7px;
+}
+
+.hamburger.open {
+  background-color: transparent;
+}
+
+.hamburger.open::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.hamburger.open::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
 @media (max-width: 768px) {
   .header {
     padding: 0 16px;
   }
 
-  .header-logo .brand {
-    font-size: 14px;
+  .mobile-menu-toggle {
+    display: block;
   }
 
   .header-nav {
-    gap: 4px;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background-color: rgba(30, 30, 30, 0.98);
+    backdrop-filter: blur(12px);
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    border-bottom: 1px solid var(--border-default);
+  }
+
+  .header-nav.mobile-open {
+    max-height: 400px;
   }
 
   .nav-btn {
-    font-size: 12px;
-    padding: 6px 12px;
+    width: 100%;
+    padding: 16px 24px;
+    border-radius: 0;
+    text-align: left;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-btn:last-child {
+    border-bottom: none;
+  }
+
+  .nav-btn-active {
+    background-color: rgba(255, 255, 255, 0.1);
   }
 }

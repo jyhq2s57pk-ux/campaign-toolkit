@@ -172,5 +172,29 @@
 
   .platform-nav-container {
     gap: 16px;
+    padding: 0 16px;
+  }
+
+  .platform-chips-row {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: 12px;
+    padding: 0 16px;
+    margin: 0 -16px;
+  }
+
+  .platform-chips-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .platform-chip {
+    min-width: 160px;
+  }
+
+  .platform-nav-section.scrolled .platform-chips-row {
+    padding: 0 16px;
+    margin: 0 -16px;
   }
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import PlatformChip from '../components/PlatformChip';
 import TouchpointSection from '../components/TouchpointSection';
 import './TouchpointsPage.css';
@@ -152,6 +153,7 @@ export default function TouchpointsPage() {
           );
         })}
       </main>
+      <Footer />
     </div>
   );
 }
