@@ -1,4 +1,4 @@
-/* HomePage.css - Redesign v2 */
+/* HomePage.css - Redesign v3 */
 
 /* Main Layout */
 .home-page {
@@ -120,54 +120,127 @@
   gap: 24px;
 }
 
-.grid-card {
-  background-color: #232323;
-  border-radius: 40px;
-  /* Updated to 40px */
-  padding: 32px;
-  height: 220px;
+/* User provided specific card styling */
+.card {
+  align-items: flex-start;
+  background-color: #212121;
+  border: 1px solid;
+  border-color: #323232;
+  border-radius: 18px;
+  /* Using user specified radius */
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  /* Title at bottom */
-  text-decoration: none;
-  transition: transform 0.2s ease;
+  gap: 20px;
+  overflow: hidden;
+  padding: 24px 0px;
   position: relative;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  height: 220px;
+  /* Keeping the height consistent */
 }
 
-.grid-card:hover {
-  transform: translateY(-4px);
-}
-
-.card-orange {
+/* Hover state - Orange */
+.card:hover {
   background-color: #F08E35;
-  /* Matching the hero/screenshot orange */
+  border-color: #F08E35;
+  transform: translateY(-4px);
+  cursor: pointer;
 }
 
-/* Text inside cards */
-.grid-card .card-number {
-  position: absolute;
-  top: 32px;
-  left: 32px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #666;
-  /* Darker for orange card? */
+.card:hover .text-wrapper {
+  color: #000000;
 }
 
-.card-orange .card-number {
+.card:hover .period {
   color: rgba(0, 0, 0, 0.4);
+  opacity: 1;
 }
 
-.card-orange .card-title-main {
-  color: #000;
+.card .frame {
+  align-items: flex-start;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 12px;
+  padding: 0px 20px;
+  position: relative;
+  width: 100%;
+  /* Changed from fixed 312px to 100% */
 }
 
-.card-title-main {
-  font-size: 20px;
+.card .div {
+  align-items: flex-start;
+  align-self: stretch;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+}
+
+.card .frame-2 {
+  align-items: flex-start;
+  align-self: stretch;
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+}
+
+.card .period {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  align-items: center;
+  color: #56acb4;
+  display: -webkit-box;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  justify-content: center;
+  letter-spacing: 0;
+  line-height: 24px;
+  margin-top: -1.00px;
+  opacity: 0.3;
+  overflow: hidden;
+  position: relative;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.card .pillar {
+  align-items: flex-start;
+  align-self: stretch;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 5px;
+  position: relative;
+  width: 100%;
+}
+
+.card .text-wrapper {
+  align-items: center;
+  align-self: stretch;
+  color: #ffffff;
+  display: flex;
+  font-family: inherit;
+  font-size: 18px;
   font-weight: 500;
-  color: #fff;
-  margin: 0;
+  justify-content: flex-start;
+  /* Changed from center to match design snippet structure */
+  letter-spacing: 0;
+  line-height: 23.9px;
+  margin-top: -1.00px;
+  position: relative;
 }
 
 /* Section C: Details */

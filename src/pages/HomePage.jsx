@@ -5,14 +5,22 @@ import Footer from "../components/Footer";
 import "./HomePage.css";
 
 export default function HomePage() {
-  // Force HMR Update v2
+  // Force HMR Update v3
   const Card = ({ n, title, desc, href = "#", className = "" }) => (
     <Link
       to={href}
-      className={`grid-card ${className}`}
+      className={`card ${className}`}
     >
-      <div className="card-number">{n}</div>
-      <div className="card-title-main">{title}</div>
+      <div className="frame">
+        <div className="div">
+          <div className="frame-2">
+            <div className="period">{n}</div>
+          </div>
+          <div className="pillar">
+            <div className="text-wrapper">{title}</div>
+          </div>
+        </div>
+      </div>
     </Link>
   );
 
@@ -54,12 +62,11 @@ export default function HomePage() {
               <span className="section-badge">Whats inside</span>
 
               <div className="content-grid two-rows">
-                {/* 1. Customer Journey (Orange) */}
+                {/* 1. Customer Journey */}
                 <Card
                   n="01"
                   title="Customer Journey"
                   href="/customer-journey"
-                  className="card-orange"
                 />
 
                 {/* 2. Campaign Calendar */}
