@@ -125,21 +125,48 @@
 }
 
 /* Mobile Menu Open State */
+/* Mobile Menu Open State */
 .header-nav.mobile-open {
   display: flex;
   position: fixed;
-  top: 0;
+  top: 72px;
+  /* Start below the header */
   left: 0;
   right: 0;
-  bottom: 0;
+  height: calc(100vh - 72px);
+  /* Fill remaining viewport height */
+  bottom: auto;
   background: var(--surface-default);
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  /* Start items from top */
+  padding-top: 40px;
   align-items: center;
   gap: 24px;
   z-index: 1001;
+  overflow-y: auto;
+  /* Allow scrolling if content overflows */
+
+  /* Animation */
+  opacity: 0;
+  animation: slideDownMobile 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideDownMobile {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .header-nav.mobile-open .nav-btn {
-  font-size: 32px;
+  font-size: 24px;
+  /* Slightly smaller for better fit */
+  width: 100%;
+  text-align: center;
 }
