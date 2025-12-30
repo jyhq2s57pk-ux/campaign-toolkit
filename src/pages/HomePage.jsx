@@ -4,8 +4,10 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "./HomePage.css";
 
+import joyImage from '../assets/joy-unlimited.png';
+
 export default function HomePage() {
-  // Force HMR Update v3
+  // Force HMR Update v4
   const Card = ({ n, title, desc, href = "#", className = "" }) => (
     <Link
       to={href}
@@ -50,8 +52,7 @@ export default function HomePage() {
                 <div className="hero-content-center">
                   <h2 className="hero-campaign-title">Summer Joy campaign</h2>
                   <div className="joy-unlimited-logo">
-                    <span className="joy-bold">JOY</span>
-                    <span className="joy-outline">UNLIMITED</span>
+                    <img src={joyImage} alt="Joy Unlimited" className="joy-image" />
                   </div>
                 </div>
               </div>

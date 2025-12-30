@@ -94,23 +94,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-display);
-  line-height: 1;
+  height: 80px;
+  /* Matching the previous font size height */
 }
 
-.joy-bold {
-  font-size: 80px;
-  font-weight: 900;
-  letter-spacing: -4px;
-}
-
-.joy-outline {
-  font-size: 80px;
-  font-weight: 900;
-  letter-spacing: -2px;
-  -webkit-text-stroke: 2px #fff;
-  color: transparent;
-  margin-left: 2px;
+.joy-image {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
 }
 
 /* Section B: Grid */
