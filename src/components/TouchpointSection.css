@@ -25,6 +25,31 @@
   line-height: 1.2;
 }
 
+.touchpoint-card {
+  background: var(--surface-card);
+  border-radius: 32px;
+  border: 1px solid var(--border-glass);
+  padding: 60px;
+  margin-top: 40px;
+}
+
+.touchpoint-layout {
+  display: grid;
+  grid-template-columns: 5fr 5fr;
+  gap: 60px;
+  align-items: start;
+}
+
+.touchpoint-screenshot {
+  position: sticky;
+  top: 100px;
+}
+
+.touchpoint-list {
+  display: flex;
+  flex-direction: column;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .section-title-large {

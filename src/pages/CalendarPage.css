@@ -1,0 +1,176 @@
+.calendar-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-main-content {
+  flex: 1;
+  padding-bottom: 80px;
+}
+
+.outer-container {
+  max-width: none !important;
+  width: 100%;
+}
+
+.inner-content-wrapper.full-width {
+  max-width: none;
+  width: 98%;
+  margin: 0 auto;
+}
+
+/* Grid Container */
+.calendar-grid-container {
+  border-radius: 32px;
+  overflow-x: auto;
+  margin-bottom: 40px;
+  background: var(--surface-glass);
+}
+
+.timeline-grid {
+  display: grid;
+  grid-template-columns: 200px repeat(12, minmax(80px, 1fr));
+  min-width: 1160px;
+  position: relative;
+}
+
+/* Headers */
+.timeline-header {
+  padding: 24px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-glass);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.timeline-header.tier-label {
+  grid-column: 1;
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.timeline-header.month-label {
+  text-align: center;
+}
+
+/* Tier Cells */
+.timeline-tier-cell {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1px solid var(--border-glass);
+  border-right: 1px solid var(--border-glass);
+  background-color: rgba(255, 255, 255, 0.01);
+  grid-column: 1;
+}
+
+.tier-accent-bar {
+  width: 3px;
+  height: 40px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.tier-name-wrapper {
+  flex: 1;
+}
+
+.tier-name-text,
+.local-tier-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.2;
+  word-wrap: break-word;
+}
+
+.local-tier-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.plus-icon {
+  font-size: 22px;
+  font-weight: 300;
+}
+
+/* Month Cells */
+.timeline-month-cell {
+  border-bottom: 1px solid var(--border-glass);
+  border-right: 1px solid rgba(255, 255, 255, 0.03);
+  min-height: 104px;
+}
+
+.timeline-month-cell:last-child {
+  border-right: none;
+}
+
+/* Campaign Bars */
+.campaign-bar {
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  height: auto;
+  min-height: 52px;
+  align-self: center;
+  margin: 4px;
+}
+
+.campaign-bar:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.campaign-bar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.calendar-campaign-title {
+  font-weight: 700;
+  font-size: 13px;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.calendar-campaign-date {
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* Supporting Note */
+.supporting-note {
+  padding: 24px 32px;
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  border: 1px solid var(--border-glass);
+}
+
+.supporting-note strong {
+  color: var(--text-primary);
+}
+
+@media (max-width: 1024px) {
+  .calendar-grid-container {
+    overflow-x: auto;
+  }
+}

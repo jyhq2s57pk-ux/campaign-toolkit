@@ -87,6 +87,7 @@ function calendarToCSV(items) {
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState('touchpoints');
   const [touchpoints, setTouchpoints] = useState([]);
+  const [calendarEvents, setCalendarEvents] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -119,8 +120,36 @@ export default function AdminPage() {
     }
   };
 
+  // Fetch calendar events from Supabase
+  const fetchCalendarEvents = async () => {
+    const { data, error } = await supabase
+      .from('calendar_events')
+      .select('*')
+      .order('start_date', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching calendar events:', error);
+    } else {
+      setCalendarEvents(data || []);
+    }
+  };
+
   useEffect(() => {
     fetchTouchpoints();
+    fetchCalendarEvents();
+
+    // Check for URL parameters
+    const params = new URLSearchParams(window.location.search);
+    const platformParam = params.get('platform');
+    const showFormParam = params.get('showForm');
+
+    if (platformParam) {
+      setFormData(prev => ({ ...prev, platform: platformParam }));
+    }
+    if (showFormParam === 'true' || platformParam) {
+      setShowForm(true);
+      setActiveTab('touchpoints');
+    }
   }, []);
 
   // Handle form submission
@@ -276,8 +305,24 @@ export default function AdminPage() {
       setCsvError("Could not import CSV. Please use: title,startDate,endDate,tier");
       return;
     }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
-    alert(`Successfully imported ${parsed.length} campaigns!`);
+
+    const { error } = await supabase
+      .from('calendar_events')
+      .insert(parsed.map(e => ({
+        title: e.title,
+        start_date: e.startDate,
+        end_date: e.endDate,
+        tier: e.tier,
+        status: e.status
+      })));
+
+    if (error) {
+      console.error('Error importing calendar:', error);
+      alert('Error importing calendar: ' + error.message);
+    } else {
+      alert(`Successfully imported ${parsed.length} campaigns!`);
+      fetchCalendarEvents();
+    }
   };
 
   const handleCalendarExport = () => {
@@ -286,7 +331,7 @@ export default function AdminPage() {
     if (stored) {
       try {
         events = JSON.parse(stored);
-      } catch {}
+      } catch { }
     }
     if (events.length === 0) {
       events = seededCalendarEvents;
@@ -300,10 +345,35 @@ export default function AdminPage() {
     URL.revokeObjectURL(url);
   };
 
-  const handleCalendarReset = () => {
-    if (confirm('Are you sure you want to reset the calendar to default campaigns? This will overwrite any custom campaigns.')) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(seededCalendarEvents));
-      alert('Calendar reset to defaults!');
+  const handleCalendarReset = async () => {
+    if (confirm('Are you sure you want to reset the calendar to default campaigns? This will delete all current campaigns.')) {
+      // First delete all
+      const { error: deleteError } = await supabase
+        .from('calendar_events')
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all
+
+      if (deleteError) {
+        console.error('Error resetting calendar:', deleteError);
+        return;
+      }
+
+      const { error: insertError } = await supabase
+        .from('calendar_events')
+        .insert(seededCalendarEvents.map(e => ({
+          title: e.title,
+          start_date: e.startDate,
+          end_date: e.endDate,
+          tier: e.tier,
+          status: e.status
+        })));
+
+      if (insertError) {
+        console.error('Error seeding calendar:', insertError);
+      } else {
+        alert('Calendar reset to defaults!');
+        fetchCalendarEvents();
+      }
     }
   };
 
@@ -341,7 +411,25 @@ export default function AdminPage() {
                 <div className="admin-actions">
                   <button
                     className="btn-primary"
-                    onClick={() => setShowForm(!showForm)}
+                    onClick={() => {
+                      if (!showForm) {
+                        setEditingItem(null);
+                        setFormData({
+                          title: '',
+                          slug: '',
+                          platform: '',
+                          description: '',
+                          tier_premium: false,
+                          tier_executive: false,
+                          is_new: false,
+                          is_optional: false,
+                          sort_order: touchpoints.length + 1,
+                          image_url: '',
+                          marker_positions: []
+                        });
+                      }
+                      setShowForm(!showForm);
+                    }}
                   >
                     {showForm ? 'Cancel' : '+ Add Touchpoint'}
                   </button>
@@ -357,137 +445,137 @@ export default function AdminPage() {
                 </div>
               </div>
 
-          {/* Add/Edit Form */}
-          {showForm && (
-            <div className="admin-form-card">
-              <h2>{editingItem ? 'Edit Touchpoint' : 'Add New Touchpoint'}</h2>
-              <form onSubmit={handleSubmit}>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Title *</label>
-                    <input
-                      type="text"
-                      value={formData.title}
-                      onChange={(e) => setFormData({...formData, title: e.target.value})}
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Slug</label>
-                    <input
-                      type="text"
-                      value={formData.slug}
-                      onChange={(e) => setFormData({...formData, slug: e.target.value})}
-                    />
-                  </div>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Platform *</label>
-                    <input
-                      type="text"
-                      value={formData.platform}
-                      onChange={(e) => setFormData({...formData, platform: e.target.value})}
-                      required
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Sort Order</label>
-                    <input
-                      type="number"
-                      value={formData.sort_order}
-                      onChange={(e) => setFormData({...formData, sort_order: parseInt(e.target.value)})}
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Description</label>
-                  <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
-                    rows="4"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Screenshot Image</label>
-                  <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                    <label className="btn-secondary" style={{ cursor: 'pointer' }}>
-                      {uploading ? 'Uploading...' : 'Upload Image'}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        style={{ display: 'none' }}
-                        disabled={uploading}
-                      />
-                    </label>
-                    <span style={{ color: 'var(--text-secondary)', fontSize: '14px', alignSelf: 'center' }}>
-                      or paste URL below
-                    </span>
-                  </div>
-                  <input
-                    type="url"
-                    value={formData.image_url || ''}
-                    onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-                    placeholder="https://example.com/image.jpg"
-                  />
-                  {formData.image_url && (
-                    <div style={{ marginTop: '10px' }}>
-                      <img src={formData.image_url} alt="Preview" style={{ maxWidth: '300px', maxHeight: '200px', borderRadius: '8px', objectFit: 'contain' }} />
+              {/* Add/Edit Form */}
+              {showForm && (
+                <div className="admin-form-card">
+                  <h2>{editingItem ? 'Edit Touchpoint' : 'Add New Touchpoint'}</h2>
+                  <form onSubmit={handleSubmit}>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>Title *</label>
+                        <input
+                          type="text"
+                          value={formData.title}
+                          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Slug</label>
+                        <input
+                          type="text"
+                          value={formData.slug}
+                          onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                        />
+                      </div>
                     </div>
-                  )}
+
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>Platform *</label>
+                        <input
+                          type="text"
+                          value={formData.platform}
+                          onChange={(e) => setFormData({ ...formData, platform: e.target.value })}
+                          required
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Sort Order</label>
+                        <input
+                          type="number"
+                          value={formData.sort_order}
+                          onChange={(e) => setFormData({ ...formData, sort_order: parseInt(e.target.value) })}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="form-group">
+                      <label>Description</label>
+                      <textarea
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        rows="4"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Screenshot Image</label>
+                      <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                        <label className="btn-secondary" style={{ cursor: 'pointer' }}>
+                          {uploading ? 'Uploading...' : 'Upload Image'}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            style={{ display: 'none' }}
+                            disabled={uploading}
+                          />
+                        </label>
+                        <span style={{ color: 'var(--text-secondary)', fontSize: '14px', alignSelf: 'center' }}>
+                          or paste URL below
+                        </span>
+                      </div>
+                      <input
+                        type="url"
+                        value={formData.image_url || ''}
+                        onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                        placeholder="https://example.com/image.jpg"
+                      />
+                      {formData.image_url && (
+                        <div style={{ marginTop: '10px' }}>
+                          <img src={formData.image_url} alt="Preview" style={{ maxWidth: '300px', maxHeight: '200px', borderRadius: '8px', objectFit: 'contain' }} />
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="form-checkboxes">
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={formData.tier_premium}
+                          onChange={(e) => setFormData({ ...formData, tier_premium: e.target.checked })}
+                        />
+                        Premium
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={formData.tier_executive}
+                          onChange={(e) => setFormData({ ...formData, tier_executive: e.target.checked })}
+                        />
+                        Executive
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={formData.is_new}
+                          onChange={(e) => setFormData({ ...formData, is_new: e.target.checked })}
+                        />
+                        New
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={formData.is_optional}
+                          onChange={(e) => setFormData({ ...formData, is_optional: e.target.checked })}
+                        />
+                        Optional
+                      </label>
+                    </div>
+
+                    <MarkerEditor
+                      imageUrl={formData.image_url}
+                      markers={formData.marker_positions || []}
+                      onChange={(markers) => setFormData({ ...formData, marker_positions: markers })}
+                    />
+
+                    <button type="submit" className="btn-primary">
+                      {editingItem ? 'Update' : 'Create'} Touchpoint
+                    </button>
+                  </form>
                 </div>
-
-                <div className="form-checkboxes">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={formData.tier_premium}
-                      onChange={(e) => setFormData({...formData, tier_premium: e.target.checked})}
-                    />
-                    Premium
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={formData.tier_executive}
-                      onChange={(e) => setFormData({...formData, tier_executive: e.target.checked})}
-                    />
-                    Executive
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={formData.is_new}
-                      onChange={(e) => setFormData({...formData, is_new: e.target.checked})}
-                    />
-                    New
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={formData.is_optional}
-                      onChange={(e) => setFormData({...formData, is_optional: e.target.checked})}
-                    />
-                    Optional
-                  </label>
-                </div>
-
-                <MarkerEditor
-                  imageUrl={formData.image_url}
-                  markers={formData.marker_positions || []}
-                  onChange={(markers) => setFormData({...formData, marker_positions: markers})}
-                />
-
-                <button type="submit" className="btn-primary">
-                  {editingItem ? 'Update' : 'Create'} Touchpoint
-                </button>
-              </form>
-            </div>
-          )}
+              )}
 
               {/* Touchpoints List */}
               <div className="admin-list">

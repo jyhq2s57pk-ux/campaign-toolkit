@@ -45,28 +45,63 @@
 
 :root {
   /* Colors */
-  --surface-default: #1e1e1e;
-  --surface-elevated: #2a2a2a;
-  --surface-card: #f8f7f4;
+  --surface-default: #121212;
+  --surface-elevated: #1a1a1a;
+  --surface-card: #232323;
+  --surface-glass: rgba(255, 255, 255, 0.03);
 
   --border-default: rgba(255, 255, 255, 0.08);
-  --border-light: rgba(255, 255, 255, 0.06);
+  --border-light: rgba(255, 255, 255, 0.04);
+  --border-glass: rgba(255, 255, 255, 0.1);
 
   --text-primary: #ffffff;
-  --text-secondary: #a1a1a1;
-  --text-muted: #6b7280;
-  --text-inverse: #1e1e1e;
+  --text-secondary: #a1a1a6;
+  --text-muted: #86868b;
+  --text-inverse: #1d1d1f;
 
-  --accent-green: rgb(16, 108, 87);
-  --accent-purple: #a78bfa;
+  --accent-green: #22c55e;
+  --accent-purple: #8F53F0;
+  --accent-blue: #3E85FF;
 
   --tier-new: #8F53F0;
-  --tier-premium: rgb(149, 57, 62);
-  --tier-executive: rgb(59, 91, 122);
+  --tier-premium: #22c55e;
+  --tier-executive: #8F53F0;
 
   /* Typography */
-  --font-display: 'Saans', system-ui, sans-serif;
-  --font-body: 'Saans', system-ui, sans-serif;
+  --font-display: 'Saans', 'Inter', system-ui, sans-serif;
+  --font-body: 'Saans', 'Inter', system-ui, sans-serif;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-medium: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass {
+  background: var(--surface-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--transition-medium) forwards;
 }
 
 * {

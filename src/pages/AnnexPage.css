@@ -1,0 +1,145 @@
+.annex-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.annex-main {
+    flex: 1;
+    padding-bottom: 100px;
+}
+
+.annex-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 60px;
+    align-items: flex-start;
+}
+
+.annex-sidenav {
+    position: sticky;
+    top: 120px;
+}
+
+.annex-sidenav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.annex-sidenav a {
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: block;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+.annex-sidenav a:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.annex-content {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.annex-section {
+    padding: 48px;
+    border-radius: 32px;
+}
+
+.annex-section h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 32px;
+    color: var(--text-primary);
+}
+
+.reference-item {
+    margin-bottom: 24px;
+}
+
+.reference-item h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.reference-item p {
+    font-size: 15px;
+    color: var(--text-secondary);
+}
+
+/* Specs Table */
+.specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.specs-table th {
+    text-align: left;
+    padding: 16px;
+    color: var(--text-muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.specs-table td {
+    padding: 20px 16px;
+    border-bottom: 1px solid var(--border-glass);
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.specs-table tr:last-child td {
+    border-bottom: none;
+}
+
+.links-list {
+    padding-left: 20px;
+}
+
+.links-list li {
+    margin-bottom: 12px;
+}
+
+.links-list a {
+    color: var(--accent-purple);
+    text-decoration: none;
+}
+
+.links-list a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 1024px) {
+    .annex-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .annex-sidenav {
+        position: static;
+        margin-bottom: 40px;
+    }
+
+    .annex-sidenav ul {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 12px;
+    }
+
+    .annex-sidenav a {
+        white-space: nowrap;
+    }
+}

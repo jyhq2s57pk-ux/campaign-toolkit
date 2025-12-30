@@ -1,71 +1,82 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "./WaysOfWorkingPage.css";
 
-function ChecklistCard({ title, items }) {
-  return (
-    <div className="checklist-card">
-      <div className="checklist-title">{title}</div>
-      <div className="checklist-items">
-        {items.map((x, i) => (
-          <label key={i} className="checklist-item">
-            <input type="checkbox" className="checklist-checkbox" />
-            <span>{x}</span>
-          </label>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 export default function WaysOfWorkingPage() {
+  const steps = [
+    {
+      number: "1",
+      title: "Global",
+      description: "Global Digital creates a Jira EPIC containing the full toolkit setup. Child tickets are created for each region.",
+      tasks: ["Create Jira EPIC", "Generate child tickets", "Attach global assets"]
+    },
+    {
+      number: "2",
+      title: "Regions",
+      description: "Regional teams review their ticket, confirm activation level, locations and dates, and validate copy, visuals and translations.",
+      tasks: ["Review EPIC", "Confirm activation level", "Validate translations"]
+    },
+    {
+      number: "3",
+      title: "Content Team",
+      description: "Once approved, the content team schedules and implements the campaign.",
+      tasks: ["Schedule activation", "Live execution", "Final testing"]
+    }
+  ];
+
+  const tips = [
+    "Always define activation level first",
+    "Include start and end dates",
+    "Attach final visuals and translations",
+    "Avoid changes once tickets are approved"
+  ];
+
   return (
     <div className="ways-page">
       <Header />
 
-      <main style={{ paddingTop: '56px' }}>
-        <div className="page-header">
-          <p className="page-subtitle">Ecom Trading Toolkit Template</p>
-          <h1 className="page-title">Ways of working</h1>
-        </div>
+      <main className="ways-main-content">
+        <div className="outer-container">
+          <section className="page-header">
+            <h1 className="page-title">Ways of Working</h1>
+            <p className="page-subtitle-grey">
+              This section explains how campaigns move from toolkit to live execution.
+            </p>
+          </section>
 
-        <div className="ways-main">
-          <div className="checklist-grid">
-          <ChecklistCard
-            title="Global"
-            items={[
-              "Create the main Epic in Jira.",
-              "Create one child ticket per region.",
-              "Add the global proposal, copy, and reference links.",
-            ]}
-          />
-          <ChecklistCard
-            title="Regions"
-            items={[
-              "Confirm activation level and locations.",
-              "Confirm start and end dates.",
-              "Add selected visuals and translations.",
-              "Request support via DCCR if needed.",
-              "Reassign to Content when ready.",
-            ]}
-          />
-          <ChecklistCard
-            title="Content"
-            items={[
-              "Implement changes across agreed touchpoints.",
-              "Validate links, copy, and tier logic.",
-              "Coordinate scheduling and go-live.",
-            ]}
-          />
-        </div>
-
-          <div className="warning-card">
-            <div className="warning-title">Do not</div>
-            <div className="warning-text">
-              Avoid late changes once a ticket is complete and assigned to Content.
+          <div className="inner-content-wrapper">
+            <div className="workflow-container">
+              <div className="workflow-steps">
+                {steps.map((step, index) => (
+                  <div key={index} className="workflow-step-card glass">
+                    <div className="step-badge">{step.number}</div>
+                    <div className="step-content">
+                      <h3 className="step-title">{step.title}</h3>
+                      <p className="step-desc">{step.description}</p>
+                      <ul className="step-tasks">
+                        {step.tasks.map((task, i) => (
+                          <li key={i}>{task}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    {index < steps.length - 1 && <div className="step-arrow">→</div>}
+                  </div>
+                ))}
+              </div>
             </div>
+
+            <section className="best-practice-section">
+              <h2 className="section-label centered">Best Practice Tips</h2>
+              <div className="tips-grid">
+                {tips.map((tip, i) => (
+                  <div key={i} className="tip-card glass">
+                    <span className="tip-bullet">✓</span>
+                    <p>{tip}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
           </div>
         </div>
       </main>
