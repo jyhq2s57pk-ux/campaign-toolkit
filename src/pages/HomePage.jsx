@@ -5,93 +5,138 @@ import Footer from "../components/Footer";
 import "./HomePage.css";
 
 export default function HomePage() {
+  // Force HMR Update v2
+  const Card = ({ n, title, desc, href = "#", className = "" }) => (
+    <Link
+      to={href}
+      className={`grid-card ${className}`}
+    >
+      <div className="card-number">{n}</div>
+      <div className="card-title-main">{title}</div>
+    </Link>
+  );
+
   return (
     <div className="home-page">
       <Header />
 
       <main className="home-main">
         <div className="outer-container">
-          <section className="hero-section">
-            <div className="hero-content">
-              <h1 className="hero-title">Ecommerce Trading Toolkits</h1>
-              <p className="hero-subtitle">
-                Global frameworks to plan, launch and scale seasonal ecommerce activations across Reserve & Collect, App and Emporium.
-              </p>
-              <div className="hero-ctas">
-                <Link to="/customer-journey" className="cta-primary">Explore the toolkit</Link>
-                <Link to="/calendar" className="cta-secondary">View campaign calendar</Link>
-              </div>
-            </div>
+          {/* 1. Page Header Section */}
+          <section className="page-header">
+            <h1 className="page-title">Digital Commerce<br />Trading Toolkit</h1>
+            <p className="page-subtitle-grey">
+              Global frameworks to plan, launch and scale seasonal ecommerce<br />
+              activations across Reserve & Collect, App and Emporium.
+            </p>
           </section>
 
-          <section className="intro-section">
-            <div className="inner-content-wrapper">
-              <p className="intro-text">
-                The Ecommerce Trading Toolkits bring together customer journeys, campaign calendars, content modules and ways of working into a single, reusable system. Each toolkit is designed to help global and regional teams activate campaigns faster, more consistently and with measurable commercial impact.
-              </p>
-            </div>
-          </section>
+          {/* 2. Main Content Container */}
+          <div className="inner-content-wrapper">
 
-          <section className="what-it-gives-section">
-            <div className="inner-content-wrapper">
-              <h2 className="section-title-small">What this site gives you</h2>
-              <div className="benefits-grid">
-                <div className="benefit-card glass">
-                  <div className="benefit-icon">🗺️</div>
-                  <p>A clear view of the full ecommerce customer journey</p>
-                </div>
-                <div className="benefit-card glass">
-                  <div className="benefit-icon">🎯</div>
-                  <p>Pre-defined content placements by activation level</p>
-                </div>
-                <div className="benefit-card glass">
-                  <div className="benefit-icon">📦</div>
-                  <p>Central access to assets, copy and templates</p>
-                </div>
-                <div className="benefit-card glass">
-                  <div className="benefit-icon">🔄</div>
-                  <p>A repeatable process for global and local teams</p>
+            {/* Section A: Campaign Hero */}
+            <section className="section-hero">
+              <span className="section-badge">Campaign toolkit</span>
+
+              <div className="campaign-hero-card">
+                <div className="hero-content-center">
+                  <h2 className="hero-campaign-title">Summer Joy campaign</h2>
+                  <div className="joy-unlimited-logo">
+                    <span className="joy-bold">JOY</span>
+                    <span className="joy-outline">UNLIMITED</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <section className="nav-cards-section">
-            <div className="inner-content-wrapper">
-              <div className="nav-grid">
-                <Link to="/customer-journey" className="nav-card glass animate-fade-in">
-                  <div className="card-label">01</div>
-                  <h3 className="card-heading">Customer Journey</h3>
-                  <div className="card-arrow">→</div>
-                </Link>
-                <Link to="/calendar" className="nav-card glass animate-fade-in">
-                  <div className="card-label">02</div>
-                  <h3 className="card-heading">Campaign Calendar</h3>
-                  <div className="card-arrow">→</div>
-                </Link>
-                <Link to="/resources" className="nav-card glass animate-fade-in">
-                  <div className="card-label">03</div>
-                  <h3 className="card-heading">Assets & Resources</h3>
-                  <div className="card-arrow">→</div>
-                </Link>
-                <Link to="/ways-of-working" className="nav-card glass animate-fade-in">
-                  <div className="card-label">04</div>
-                  <h3 className="card-heading">Ways of Working</h3>
-                  <div className="card-arrow">→</div>
-                </Link>
-                <Link to="/omnichannel" className="nav-card glass animate-fade-in">
-                  <div className="card-label">05</div>
-                  <h3 className="card-heading">Omnichannel Activation</h3>
-                  <div className="card-arrow">→</div>
-                </Link>
-                <Link to="/insights" className="nav-card glass animate-fade-in">
-                  <div className="card-label">06</div>
-                  <h3 className="card-heading">Insights & Performance</h3>
-                  <div className="card-arrow">→</div>
-                </Link>
+            {/* Section B: Grid */}
+            <section className="section-grid">
+              <span className="section-badge">Whats inside</span>
+
+              <div className="content-grid two-rows">
+                {/* 1. Customer Journey (Orange) */}
+                <Card
+                  n="01"
+                  title="Customer Journey"
+                  href="/customer-journey"
+                  className="card-orange"
+                />
+
+                {/* 2. Campaign Calendar */}
+                <Card
+                  n="01"
+                  title="Campaign Calendar"
+                  href="/calendar"
+                />
+
+                {/* 3. Omnichannel Activation */}
+                <Card
+                  n="01"
+                  title="Omnichannel Activation"
+                  href="/omnichannel"
+                />
+
+                {/* 4. Assets & Resources */}
+                <Card
+                  n="01"
+                  title="Assets & Resources"
+                  href="/resources"
+                />
+
+                {/* 5. Insights & Performance */}
+                <Card
+                  n="01"
+                  title="Insights & Performance"
+                  href="/insights"
+                />
+
+                {/* 6. Ways of Working */}
+                <Card
+                  n="01"
+                  title="Ways of Working"
+                  href="/ways-of-working"
+                />
               </div>
-            </div>
-          </section>
+            </section>
+
+            {/* Section C: Details */}
+            <section className="section-details">
+              <span className="section-badge">Details</span>
+
+              <div className="details-row">
+                <div className="detail-group">
+                  <div className="detail-label text-orange">Scope</div>
+                  <div className="detail-value">Global</div>
+                </div>
+
+                <div className="detail-group">
+                  <div className="detail-label text-orange">Channels</div>
+                  <div className="detail-value">Reserve & Collect (Web /APP) Emporium</div>
+                </div>
+
+                <div className="detail-group">
+                  <div className="detail-label text-orange">Activation dates</div>
+                  <div className="detail-value">October-December 2025<br />(Activation date may vary by location)</div>
+                </div>
+
+                <div className="detail-group badges-group">
+                  <div className="status-badge badge-premium">
+                    <span className="badge-pill">Premium</span>
+                    <span className="badge-desc">Full visibility</span>
+                  </div>
+                  <div className="status-badge badge-executive">
+                    <span className="badge-pill">Executive</span>
+                    <span className="badge-desc">Medium visibility</span>
+                  </div>
+                  <div className="status-badge badge-standard">
+                    <span className="badge-pill">Standard</span>
+                    <span className="badge-desc">Regular visibility</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+          </div>
         </div>
       </main>
 

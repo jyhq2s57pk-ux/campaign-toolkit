@@ -79,6 +79,30 @@
   /* Transitions */
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-medium: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* NEW DESIGN TOKENS */
+  --caption-1-font-family: "Saans", Helvetica;
+  --caption-1-font-size: 12px;
+  --caption-1-font-style: normal;
+  --caption-1-font-weight: 500;
+  --caption-1-letter-spacing: 0px;
+  --caption-1-line-height: 16px;
+  --color-color: rgba(115, 115, 115, 1);
+  --colours-primary-night: rgba(37, 37, 37, 1);
+  --colours-secondary-lime-shades-lime-10: rgba(203, 249, 105, 1);
+
+  /* Headings */
+  --heading-sans-serif-desktop-default-heading-xxxl-default-font-size: 60px;
+  --heading-sans-serif-desktop-default-heading-xxl-default-font-size: 45px;
+  --heading-sans-serif-desktop-default-heading-xl-default-font-size: 36px;
+  --heading-sans-serif-desktop-default-heading-l-default-font-size: 28px;
+  --heading-sans-serif-desktop-default-heading-m-default-font-size: 22px;
+  --heading-sans-serif-desktop-default-heading-s-default-font-size: 18px;
+
+  --variable-collection-core-purple: rgba(143, 83, 240, 1);
+  --variable-collection-night-2: rgba(37, 37, 37, 1);
+  --variable-collection-sand: rgba(245, 243, 237, 1);
+  --www-ibm-com-width-528: 528px;
 }
 
 .glass {
