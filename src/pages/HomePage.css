@@ -10,11 +10,13 @@
 
 .outer-container {
   width: 100%;
-  max-width: 1080px;
+  /* Max-width removed here to allow inner-content-wrapper to control width (1100px) */
   margin: 0 auto;
   padding: 0 20px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  /* Center the inner content */
 }
 
 /* 1. Header */
@@ -41,12 +43,11 @@
 }
 
 /* 2. Inner Content Wrapper */
-.inner-content-wrapper {
+/* Styling inherited from global index.css, only page-specific overrides here */
+.home-page .inner-content-wrapper {
   background-color: #1a1a1a;
   border-radius: 60px;
   padding: 60px;
-  display: flex;
-  flex-direction: column;
   gap: 60px;
 }
 

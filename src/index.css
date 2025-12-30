@@ -112,6 +112,15 @@
   border: 1px solid var(--border-glass);
 }
 
+/* Global Content Wrapper - Site Wide */
+.inner-content-wrapper {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

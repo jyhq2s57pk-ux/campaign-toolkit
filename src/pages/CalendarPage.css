@@ -14,11 +14,12 @@
   width: 100%;
 }
 
-.inner-content-wrapper.full-width {
+/* inner-content-wrapper inherits global styles (max-width: 1100px) */
+/* .inner-content-wrapper.full-width {
   max-width: none;
   width: 98%;
   margin: 0 auto;
-}
+} */
 
 /* Grid Container */
 .calendar-grid-container {
