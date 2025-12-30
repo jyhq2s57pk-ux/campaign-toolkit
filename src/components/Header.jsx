@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Header.css';
 
+import logo from '../assets/logo1.svg';
+
 export default function Header() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,7 +30,7 @@ export default function Header() {
   return (
     <header className="header">
       <Link to="/" className="header-logo" onClick={closeMenu}>
-        <span className="logo-text">Digital Commerce</span>
+        <img src={logo} alt="Digital Commerce" className="logo-image" />
       </Link>
 
       <button

@@ -18,14 +18,14 @@
 
 .header-logo {
   text-decoration: none;
+  display: flex;
+  align-items: center;
 }
 
-.logo-text {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 20px;
-  color: var(--text-primary);
-  letter-spacing: -0.5px;
+.logo-image {
+  width: 240px;
+  height: 34px;
+  object-fit: contain;
 }
 
 .header-nav {
