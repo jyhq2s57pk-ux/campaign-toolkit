@@ -1,181 +1,453 @@
+/* Omnichannel Page - Premium Overhaul */
+
 .omnichannel-page {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background-color: #000;
+    /* Deep black background */
+    color: #fff;
+    overflow-x: hidden;
 }
 
 .omnichannel-main {
     flex: 1;
-    padding-bottom: 100px;
+    padding-bottom: 120px;
 }
 
-/* Radial Diagram */
-.radial-concept {
-    padding: 80px 0;
-    display: flex;
-    justify-content: center;
+/* Utilities */
+.glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.radial-diagram {
-    position: relative;
-    width: 600px;
-    height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.text-orange {
+    color: var(--accent-coral);
 }
 
-.central-idea {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.centered {
     text-align: center;
-    z-index: 5;
-    border: 2px solid var(--accent-purple);
-    box-shadow: 0 0 30px rgba(143, 83, 240, 0.2);
 }
 
-.central-idea h3 {
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.3;
-}
-
-.channel-node {
-    position: absolute;
-    padding: 16px 24px;
-    border-radius: 100px;
+/* Hero Section */
+.omni-hero {
+    height: 60vh;
+    min-height: 500px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    z-index: 5;
-    transition: transform 0.3s;
+    justify-content: center;
+    position: relative;
+    background: radial-gradient(circle at center, rgba(143, 83, 240, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
 }
 
-.channel-node:hover {
-    transform: scale(1.05);
-    background: rgba(255, 255, 255, 0.08);
+.hero-content {
+    display: flex;
+    align-items: center;
+    gap: 40px;
 }
 
-.node-0 {
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
+.hero-symbol-left,
+.hero-symbol-right {
+    font-size: 120px;
+    font-weight: 300;
+    color: #fff;
+    opacity: 0.8;
+    line-height: 1;
 }
 
-.node-1 {
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+.hero-symbol-left {
+    color: var(--accent-purple);
+    /* Or slight gradient */
+    background: linear-gradient(to right, #fff, var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.node-2 {
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
+.hero-symbol-right {
+    color: #fff;
+    background: linear-gradient(to left, #fff, var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.node-3 {
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
+
+.hero-text-block {
+    text-align: center;
 }
 
-.node-icon {
-    font-size: 20px;
+.hero-title {
+    font-size: 64px;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(180deg, #FFFFFF 0%, #CCCCCC 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
 }
 
-.node-name {
-    font-size: 14px;
-    font-weight: 500;
-    white-space: nowrap;
+.hero-subtitle {
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--accent-purple);
+    margin-top: 16px;
 }
 
-.connection-lines {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+/* Strategy Section */
+.strategy-section {
+    padding: 60px 0;
 }
 
-.line {
-    position: absolute;
-    background: linear-gradient(90deg, transparent, var(--border-glass), transparent);
-    height: 1px;
-    width: 150px;
-    top: 50%;
-    left: 50%;
-    transform-origin: left center;
-}
-
-.line-0 {
-    transform: rotate(-90deg) translateX(40px);
-}
-
-.line-1 {
-    transform: rotate(0deg) translateX(90px);
-}
-
-.line-2 {
-    transform: rotate(90deg) translateX(40px);
-}
-
-.line-3 {
-    transform: rotate(180deg) translateX(90px);
-}
-
-/* Examples Section */
-.examples-grid {
+.strategy-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* Responsive columns */
+    /* We want a specific layout if possible, but auto-fit is safer for now */
     gap: 24px;
-    margin-top: 40px;
+    padding: 0 24px;
 }
 
-.example-card {
+/* Custom Grid Layout for large screens to match the image */
+@media (min-width: 1024px) {
+    .strategy-grid {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: auto auto;
+    }
+
+    .strategy-info-card {
+        grid-column: span 2;
+        grid-row: span 1;
+        /* Or generic positioning */
+    }
+
+    /* Just let them flow for now to ensure responsiveness without complex nth-child rules unless strict */
+}
+
+.strategy-card {
     padding: 32px;
     border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    transition: transform 0.3s ease, background 0.3s ease;
+    min-height: 240px;
+    position: relative;
+    overflow: hidden;
 }
 
-.example-title {
-    font-size: 20px;
+/* Hover effect removed */
+
+.strategy-info-card {
+    padding: 40px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    grid-column: span 2;
+    /* Make it wide by default on larger grids */
+}
+
+.strategy-info-card h2 {
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #fff;
+}
+
+.highlight-purple {
+    color: var(--accent-purple);
+}
+
+.card-number {
+    font-size: 48px;
+    font-weight: 700;
+    opacity: 0.1;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.card-title {
+    font-size: 24px;
     font-weight: 600;
     margin-bottom: 12px;
+    z-index: 1;
 }
 
-.example-desc {
-    font-size: 15px;
+.card-desc {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    z-index: 1;
+}
+
+/* Card Colors (Border accents or slight tints) */
+.card-blue {
+    border-left: 4px solid var(--accent-blue);
+}
+
+.card-green {
+    border-left: 4px solid var(--accent-green);
+}
+
+.card-purple {
+    border-left: 4px solid var(--accent-purple);
+}
+
+.card-orange {
+    border-left: 4px solid var(--accent-coral);
+}
+
+.card-red {
+    border-left: 4px solid #ff4d4d;
+}
+
+.card-indigo {
+    border-left: 4px solid #6c5ce7;
+}
+
+.card-pink {
+    border-left: 4px solid #fd79a8;
+}
+
+
+/* Treasure Section */
+.treasure-section {
+    padding: 100px 0;
+}
+
+.treasure-container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 32px;
+    overflow: hidden;
+    margin: 0 24px;
+}
+
+@media (min-width: 900px) {
+    .treasure-container {
+        flex-direction: row;
+    }
+}
+
+.treasure-image-col {
+    flex: 1;
+    min-height: 400px;
+}
+
+.treasure-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.treasure-content-col {
+    flex: 1;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.treasure-title {
+    font-size: 40px;
+    font-weight: 700;
+    margin: 16px 0 24px;
+    line-height: 1.1;
+    background: linear-gradient(90deg, #FFB86C, #FF758C);
+    /* Sunset gradient */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.treasure-desc {
+    font-size: 20px;
+    color: #ccc;
+    margin-bottom: 40px;
+}
+
+.how-it-works-list h3 {
+    font-size: 18px;
+    color: var(--accent-purple);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icon-arrow {
+    display: inline-block;
+    border: 1px solid var(--accent-purple);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+    line-height: 22px;
+    font-size: 14px;
+}
+
+.how-it-works-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.how-it-works-list li {
+    margin-bottom: 12px;
+    position: relative;
+    padding-left: 20px;
+    color: #ddd;
+}
+
+.how-it-works-list li:before {
+    content: "•";
+    color: var(--accent-purple);
+    position: absolute;
+    left: 0;
+}
+
+/* Ideas Carousel - Apple Style */
+.ideas-carousel-section {
+    padding: 80px 0 120px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(20, 20, 20, 0.5) 100%);
+}
+
+.section-header {
+    margin-bottom: 60px;
+}
+
+.logo-small {
+    font-size: 24px;
+    color: #fff;
+    margin-bottom: 16px;
+    font-weight: 700;
+}
+
+.section-title {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--accent-coral);
+}
+
+.section-subtitle {
+    font-size: 20px;
+    color: var(--text-secondary);
+}
+
+.carousel-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    padding: 0 40px 60px 40px;
+    /* Padding for scroll snapping edge */
+    scrollbar-width: none;
+    /* Hide scrollbar Firefox */
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+}
+
+.carousel-wrapper::-webkit-scrollbar {
+    display: none;
+    /* Hide scrollbar Chrome */
+}
+
+.carousel-track {
+    display: flex;
+    gap: 32px;
+    width: max-content;
+}
+
+.carousel-item {
+    scroll-snap-align: center;
+    width: 380px;
+    /* Fixed width for consistency */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: transform 0.3s ease;
+}
+
+@media (min-width: 768px) {
+    .carousel-item {
+        width: 450px;
+    }
+}
+
+.carousel-image-container {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    /* Square images like Apple example */
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    background: #222;
+}
+
+.carousel-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+/* Hover effect removed */
+
+.carousel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.4) 100%);
+    pointer-events: none;
+}
+
+.carousel-badges {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.carousel-tag {
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-text h3 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #fff;
+}
+
+.carousel-text p {
+    font-size: 16px;
     color: var(--text-secondary);
     line-height: 1.5;
 }
 
-@media (max-width: 768px) {
-    .radial-diagram {
-        width: 100%;
-        height: auto;
-        flex-direction: column;
-        gap: 20px;
+/* Animations */
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
     }
 
-    .channel-node {
-        position: static;
-        transform: none !important;
-        width: 100%;
-    }
-
-    .central-idea {
-        margin-bottom: 20px;
-    }
-
-    .connection-lines {
-        display: none;
-    }
-
-    .examples-grid {
-        grid-template-columns: 1fr;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

@@ -1,166 +1,433 @@
+/* Insights Page - Premium Overhaul */
+
 .insights-page {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background-color: #000;
+    color: #fff;
 }
 
 .insights-main {
     flex: 1;
-    padding-bottom: 100px;
+    padding-bottom: 120px;
 }
 
-.stats-strip {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-bottom: 40px;
-}
+/* Utilities */
+/* text-orange not needed if specific colors used, but let's see */
 
-.stat-card {
-    padding: 32px;
-    border-radius: 24px;
+.centered {
     text-align: center;
 }
 
-.stat-label {
-    font-size: 13px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
-    display: block;
+.section-header {
+    margin-bottom: 60px;
 }
 
-.stat-value {
+.section-title {
     font-size: 48px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-    font-family: var(--font-display);
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--accent-coral);
 }
 
-.stat-trend {
-    font-size: 12px;
-    color: var(--accent-green);
-    font-weight: 500;
-}
-
-/* Chart Mockup */
-.charts-mockup-section {
-    margin-bottom: 40px;
-}
-
-.chart-container {
-    padding: 40px;
-    border-radius: 32px;
-}
-
-.chart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 48px;
-}
-
-.chart-header h3 {
+.section-subtitle {
     font-size: 20px;
-    font-weight: 600;
+    color: var(--text-secondary);
 }
 
-.chart-header span {
-    font-size: 14px;
-    color: var(--text-muted);
+/* Bento Grid */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 60px;
+    padding: 0 24px;
 }
 
-.chart-bars-mockup {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    height: 200px;
-    gap: 12px;
+@media (min-width: 1100px) {
+    .bento-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: 280px 280px 220px;
+        /* Added 3rd row for full width card */
+    }
+
+    .card-large {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+
+    .card-medium {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    .card-small {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+
+    .card-full {
+        grid-column: span 3;
+        grid-row: span 1;
+    }
 }
 
-.bar-wrapper {
-    flex: 1;
+.bento-card {
+    border-radius: 32px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
+    transition: transform 0.3s ease;
+}
+
+.card-bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.4;
+    transition: opacity 0.5s ease;
+}
+
+.bento-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.centered-content {
     align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.bento-label {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--accent-green);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.bento-value {
+    font-size: 40px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 24px;
+    line-height: 1.1;
+}
+
+.top-routes-list {
+    list-style: none;
+    padding: 0;
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
     gap: 12px;
 }
 
-.bar {
-    width: 100%;
-    background: linear-gradient(180deg, var(--accent-purple) 0%, rgba(143, 83, 240, 0.2) 100%);
-    border-radius: 6px 6px 2px 2px;
-    transition: transform 0.3s;
-}
-
-.bar:hover {
-    transform: scaleY(1.05);
-    background: var(--accent-purple);
-}
-
-.bar-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
-}
-
-/* Insights Grid */
-.insights-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
-
-.insight-content-block {
-    padding: 32px;
-    border-radius: 24px;
-    position: relative;
-}
-
-.insight-tag {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 16px;
-}
-
-.insight-tag.behaviour {
-    background: rgba(34, 197, 94, 0.1);
-    color: #22c55e;
-}
-
-.insight-tag.sales {
-    background: rgba(143, 83, 240, 0.1);
-    color: #8F53F0;
-}
-
-.insight-tag.search {
-    background: rgba(62, 133, 255, 0.1);
-    color: #3E85FF;
-}
-
-.insight-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 12px;
-}
-
-.insight-desc {
+.top-routes-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     font-size: 14px;
-    color: var(--text-secondary);
+}
+
+.route-code {
+    font-weight: 700;
+    color: var(--accent-purple);
+    min-width: 80px;
+}
+
+.route-name {
+    color: #ccc;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0 16px;
+}
+
+.route-stat {
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Spain Card */
+.accent-purple-gradient {
+    background: linear-gradient(135deg, rgba(83, 53, 140, 0.4), rgba(0, 0, 0, 0.8));
+    border: 1px solid rgba(143, 83, 240, 0.3);
+}
+
+.bento-huge-number {
+    font-size: 96px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 16px;
+    background: linear-gradient(to top right, #fff, #aaa);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.bento-text {
+    font-size: 18px;
+    color: #ddd;
     line-height: 1.5;
 }
 
-@media (max-width: 768px) {
+.bento-text strong {
+    color: var(--accent-purple);
+}
 
-    .stats-strip,
-    .insights-grid {
-        grid-template-columns: 1fr;
+/* Pie Chart (CSS Only) */
+.pie-chart-simple {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent-green) calc(var(--p)*1%), rgba(255, 255, 255, 0.1) 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.pie-chart-simple:after {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: #111;
+    border-radius: 50%;
+}
+
+.pie-chart-simple span {
+    position: relative;
+    z-index: 5;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.bento-subtext {
+    font-size: 16px;
+    color: var(--text-secondary);
+}
+
+/* Mini Stat Row */
+.mini-stat-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.tag {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Full Width Card Styling */
+.card-full .bento-content {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.card-full-text {
+    flex: 1;
+}
+
+.card-full-visual {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+}
+
+.card-full .bento-text {
+    font-size: 24px;
+    max-width: 600px;
+}
+
+.large-tag {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--surface-card);
+    border: 1px solid var(--border-glass);
+    padding: 16px 24px;
+    border-radius: 16px;
+}
+
+.large-tag .tag-code {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent-purple);
+}
+
+.large-tag .tag-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+
+/* Charts Container - Standard Grid */
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 24px;
+    padding: 0 24px;
+}
+
+.chart-card {
+    padding: 32px;
+    border-radius: 24px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-card h3 {
+    font-size: 20px;
+    margin-bottom: 24px;
+    color: var(--accent-green);
+}
+
+.chart-area {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.line-chart-svg {
+    width: 100%;
+    height: 200px;
+    overflow: visible;
+}
+
+.y-axis {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 180px;
+    /* Aligned with svg content roughly */
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.x-axis,
+.x-axis-dense {
+    display: flex;
+    justify-content: space-between;
+    /* simple distribution */
+    padding-left: 30px;
+    /* make space for Y */
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 8px;
+}
+
+.chart-legend {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.legend-item {
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.dot.purple {
+    background: var(--accent-purple);
+}
+
+.dot.red {
+    background: var(--accent-coral);
+}
+
+.dot.green-outline {
+    border: 2px solid var(--accent-green);
+    background: transparent;
+}
+
+/* SVG Animations */
+.path-anim {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: dash 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.path-anim.delay {
+    animation-delay: 0.5s;
+}
+
+.path-static {
+    opacity: 0.5;
+}
+
+.pulse-circle {
+    animation: pulse 2s infinite;
+    transform-origin: center;
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+        stroke-width: 2px;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+        stroke-width: 1px;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+        stroke-width: 2px;
     }
 }

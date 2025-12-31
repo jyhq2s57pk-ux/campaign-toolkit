@@ -2,9 +2,9 @@
 
 /* Main Layout */
 .home-page {
-  background-color: #0f0f0f;
+  background-color: var(--surface-default);
   min-height: 100vh;
-  color: #fff;
+  color: var(--text-primary);
   padding-bottom: 80px;
 }
 
@@ -45,10 +45,11 @@
 /* 2. Inner Content Wrapper */
 /* Styling inherited from global index.css, only page-specific overrides here */
 .home-page .inner-content-wrapper {
-  background-color: #1a1a1a;
-  border-radius: 60px;
+  background-color: var(--surface-elevated);
+  border-radius: 40px;
   padding: 60px;
   gap: 60px;
+  border: 1px solid var(--border-light);
 }
 
 /* Shared Section Components */
@@ -114,10 +115,10 @@
 /* User provided specific card styling */
 .card {
   align-items: flex-start;
-  background-color: #212121;
+  background-color: var(--surface-card);
   border: 1px solid;
-  border-color: #323232;
-  border-radius: 18px;
+  border-color: var(--border-default);
+  border-radius: var(--radius-xl);
   /* Using user specified radius */
   display: flex;
   flex-direction: column;
@@ -132,21 +133,11 @@
 }
 
 /* Hover state - Orange */
-.card:hover {
-  background-color: #F08E35;
-  border-color: #F08E35;
-  transform: translateY(-4px);
-  cursor: pointer;
-}
+/* Hover effect removed */
 
-.card:hover .text-wrapper {
-  color: #000000;
-}
+/* Hover effect removed */
 
-.card:hover .period {
-  color: rgba(0, 0, 0, 0.4);
-  opacity: 1;
-}
+/* Hover effect removed */
 
 .card .frame {
   align-items: flex-start;

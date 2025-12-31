@@ -44,28 +44,38 @@
 }
 
 :root {
-  /* Colors */
-  --surface-default: #121212;
-  --surface-elevated: #1a1a1a;
-  --surface-card: #232323;
-  --surface-glass: rgba(255, 255, 255, 0.03);
+  /* Colors - eBay Evo Night Theme */
+  --surface-default: #000000;
+  --surface-elevated: #111111;
+  --surface-card: #161616;
+  --surface-glass: rgba(255, 255, 255, 0.02);
 
   --border-default: rgba(255, 255, 255, 0.08);
-  --border-light: rgba(255, 255, 255, 0.04);
+  --border-light: rgba(255, 255, 255, 0.05);
   --border-glass: rgba(255, 255, 255, 0.1);
 
   --text-primary: #ffffff;
   --text-secondary: #a1a1a6;
-  --text-muted: #86868b;
-  --text-inverse: #1d1d1f;
+  --text-muted: #666666;
+  --text-inverse: #000000;
 
-  --accent-green: #22c55e;
+  /* Evo Brand Colors */
+  --accent-green: #BEF264;
+  /* Avocado */
   --accent-purple: #8F53F0;
-  --accent-blue: #3E85FF;
+  --accent-blue: #3B82F6;
+  --accent-coral: #FB7185;
 
-  --tier-new: #8F53F0;
-  --tier-premium: #22c55e;
+  --tier-new: #3B82F6;
+  --tier-premium: #BEF264;
   --tier-executive: #8F53F0;
+  --tier-standard: #ffffff;
+
+  /* Geometry */
+  --radius-xl: 24px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --grid-max-width: 1100px;
 
   /* Typography */
   --font-display: 'Saans', 'Inter', system-ui, sans-serif;
