@@ -25,10 +25,10 @@ export default function TouchpointSection({ platform, platformType, title, touch
                   touchpoints[0]?.marker_positions && touchpoints[0].marker_positions.length > 0
                     ? touchpoints[0].marker_positions
                     : touchpoints.map((_, i) => ({
-                        number: i + 1,
-                        top: `${15 + i * (70 / Math.max(touchpoints.length - 1, 1))}%`,
-                        left: '92%'
-                      }))
+                      number: i + 1,
+                      top: `${15 + i * (70 / Math.max(touchpoints.length - 1, 1))}%`,
+                      left: '92%'
+                    }))
                 }
               />
             </div>
@@ -45,6 +45,7 @@ export default function TouchpointSection({ platform, platformType, title, touch
                   isNew={item.is_new}
                   isPremium={item.tier_premium}
                   isExecutive={item.tier_executive}
+                  isStandard={item.tier_standard}
                 />
               ))}
             </div>

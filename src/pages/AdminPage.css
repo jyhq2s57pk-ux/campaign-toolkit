@@ -1,7 +1,6 @@
 .admin-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 24px;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 .admin-header {
@@ -212,32 +211,8 @@
   flex-wrap: wrap;
 }
 
-.touchpoint-badges span {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.badge-new {
-  background-color: var(--tier-new);
-  color: white;
-}
-
-.badge-premium {
-  background-color: var(--tier-premium);
-  color: white;
-}
-
-.badge-executive {
-  background-color: var(--tier-executive);
-  color: white;
-}
-
-.badge-optional {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
-}
+/* Badge colors and styles provided by unified Badge.css */
+/* Uses badge--new, badge--premium, badge--executive, badge--optional variants */
 
 .touchpoint-actions {
   display: flex;
@@ -370,7 +345,8 @@
     width: 100%;
   }
 
-  .btn-edit, .btn-delete {
+  .btn-edit,
+  .btn-delete {
     flex: 1;
   }
 

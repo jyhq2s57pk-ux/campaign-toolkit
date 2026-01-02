@@ -1,21 +1,115 @@
+/* Badge Component - Unified Styling */
+/* Master style based on Customer Journey page badges */
+/* Variants: New, Executive, Premium, Standard */
+/* Sizes: Small (default), Medium */
+
+/* =====================================================
+   CSS Custom Properties
+   ===================================================== */
+:root {
+  /* Badge Colors - matching Figma design */
+  --badge-magenta-bg: rgba(255, 102, 196, 0.2);
+  --badge-magenta-text: #FF66C4;
+  --badge-success-bg: rgba(52, 199, 89, 0.2);
+  --badge-success-text: #34C759;
+  --badge-purple-bg: rgba(175, 82, 222, 0.2);
+  --badge-purple-text: #AF52DE;
+  --badge-default-bg: rgba(82, 82, 82, 1);
+  --badge-default-text: #E5E5EA;
+}
+
+/* =====================================================
+   Base Badge Styles
+   ===================================================== */
 .badge {
   display: inline-flex;
+  justify-content: center;
   align-items: center;
-  padding: 3px 12px;
-  border-radius: 33.90px;
-  font-size: 14px;
+  border-radius: 9999px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* =====================================================
+   Size Variants
+   ===================================================== */
+
+/* Small (Default) - Used on Customer Journey page */
+.badge,
+.badge--sm {
+  height: 20px;
+  padding: 2px 10px;
+  font-size: 12px;
   font-weight: 400;
-  color: white;
+  gap: 3px;
 }
 
-.badge-new {
-  background-color: var(--tier-new);
+/* Medium - Used on Homepage */
+.badge--md {
+  height: 26px;
+  padding: 4px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  gap: 4px;
 }
 
-.badge-premium {
-  background-color: var(--tier-premium);
+/* Large - For future use */
+.badge--lg {
+  height: 32px;
+  padding: 6px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  gap: 5px;
 }
 
-.badge-executive {
-  background-color: var(--tier-executive);
+/* =====================================================
+   Color Variants
+   ===================================================== */
+
+/* New - Magenta/Pink */
+.badge--new,
+.badge--magenta {
+  background: var(--badge-magenta-bg);
+  color: var(--badge-magenta-text);
+}
+
+/* Executive - Success/Green */
+.badge--executive,
+.badge--success {
+  background: var(--badge-success-bg);
+  color: var(--badge-success-text);
+}
+
+/* Premium - Purple */
+.badge--premium,
+.badge--purple {
+  background: var(--badge-purple-bg);
+  color: var(--badge-purple-text);
+}
+
+/* Standard - Default/Grey */
+.badge--standard,
+.badge--default {
+  background: var(--badge-default-bg);
+  color: var(--badge-default-text);
+}
+
+/* Optional - Light grey (alternative) */
+.badge--optional {
+  background: rgba(255, 255, 255, 0.15);
+  color: #CCCCCC;
+}
+
+/* =====================================================
+   Badge Text (for nested span usage)
+   ===================================================== */
+.badge .badge-text,
+.badge-text {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  white-space: nowrap;
+  text-align: center;
 }

@@ -9,13 +9,12 @@
   padding-bottom: 80px;
 }
 
-.outer-container {
-  width: 100%;
-}
 
-/* Override global wrapper width for calendar */
+
+/* Override global wrapper width for calendar - needs more space for timeline */
 .inner-content-wrapper.full-width {
-  max-width: 1400px;
+  max-width: 1448px;
+  /* 1400px content + 48px padding */
   width: 100%;
   margin: 0 auto;
 }

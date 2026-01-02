@@ -172,97 +172,95 @@ export default function CalendarPage() {
     <div className="calendar-page">
       <Header />
       <main className="calendar-main-content">
-        <div className="outer-container">
-          <section className="page-header">
-            <h1 className="page-title">Campaign Calendar</h1>
-            <p className="page-subtitle-grey">
-              The campaign calendar maps global trading moments across the year, helping teams align planning, assets and delivery timelines.
-            </p>
-          </section>
+        <section className="page-header">
+          <h1 className="page-title">Campaign Calendar</h1>
+          <p className="page-subtitle-grey">
+            The campaign calendar maps global trading moments across the year, helping teams align planning, assets and delivery timelines.
+          </p>
+        </section>
 
-          <div className="inner-content-wrapper full-width">
-            <div className="calendar-grid-container glass">
-              <div className="timeline-grid">
-                {/* Header Row */}
-                <div className="timeline-header tier-label">Category</div>
-                {months.map((m) => (
-                  <div key={m.key} className="timeline-header month-label">
-                    {m.short}
-                  </div>
-                ))}
+        <div className="inner-content-wrapper full-width">
+          <div className="calendar-grid-container glass">
+            <div className="timeline-grid">
+              {/* Header Row */}
+              <div className="timeline-header tier-label">Category</div>
+              {months.map((m) => (
+                <div key={m.key} className="timeline-header month-label">
+                  {m.short}
+                </div>
+              ))}
 
-                {/* Tier Sections */}
-                {tiers.map((tier) => {
-                  const info = tierRowInfo[tier.name];
-                  return (
-                    <React.Fragment key={tier.name}>
-                      <div
-                        className="timeline-tier-cell"
-                        style={{ gridRow: `span ${info.numRows}` }}
-                      >
-                        <div className="tier-accent-bar" style={{ backgroundColor: tier.color }}></div>
-                        <div className="tier-name-wrapper">
-                          {tier.name.includes("Local Campaigns") ? (
-                            <div className="local-tier-label">
-                              <span className="plus-icon">+</span> {tier.name}
-                            </div>
-                          ) : (
-                            <div className="tier-name-text">{tier.name}</div>
-                          )}
-                        </div>
+              {/* Tier Sections */}
+              {tiers.map((tier) => {
+                const info = tierRowInfo[tier.name];
+                return (
+                  <React.Fragment key={tier.name}>
+                    <div
+                      className="timeline-tier-cell"
+                      style={{ gridRow: `span ${info.numRows}` }}
+                    >
+                      <div className="tier-accent-bar" style={{ backgroundColor: tier.color }}></div>
+                      <div className="tier-name-wrapper">
+                        {tier.name.includes("Local Campaigns") ? (
+                          <div className="local-tier-label">
+                            <span className="plus-icon">+</span> {tier.name}
+                          </div>
+                        ) : (
+                          <div className="tier-name-text">{tier.name}</div>
+                        )}
                       </div>
+                    </div>
 
-                      {Array.from({ length: info.numRows }).map((_, rowIdx) => (
-                        <React.Fragment key={`${tier.name}-row-${rowIdx}`}>
-                          {months.map((m, mIdx) => (
-                            <div
-                              key={`${tier.name}-${rowIdx}-${m.key}`}
-                              className="timeline-month-cell"
-                              style={{
-                                gridRow: info.startRow + rowIdx,
-                                gridColumn: mIdx + 2
-                              }}
-                            ></div>
-                          ))}
-                        </React.Fragment>
-                      ))}
+                    {Array.from({ length: info.numRows }).map((_, rowIdx) => (
+                      <React.Fragment key={`${tier.name}-row-${rowIdx}`}>
+                        {months.map((m, mIdx) => (
+                          <div
+                            key={`${tier.name}-${rowIdx}-${m.key}`}
+                            className="timeline-month-cell"
+                            style={{
+                              gridRow: info.startRow + rowIdx,
+                              gridColumn: mIdx + 2
+                            }}
+                          ></div>
+                        ))}
+                      </React.Fragment>
+                    ))}
 
-                      {info.campaignRows.map((row, rowIdx) =>
-                        row.map((event) => {
-                          const start = new Date(event.startDate);
-                          const end = new Date(event.endDate);
-                          const dateString = start.getMonth() === end.getMonth() && start.getDate() === end.getDate()
-                            ? `${start.toLocaleString('en-US', { month: 'short', day: 'numeric' })}`
-                            : `${start.toLocaleString('en-US', { month: 'short', day: 'numeric' })} - ${end.toLocaleString('en-US', { month: 'short', day: 'numeric' })}`;
+                    {info.campaignRows.map((row, rowIdx) =>
+                      row.map((event) => {
+                        const start = new Date(event.startDate);
+                        const end = new Date(event.endDate);
+                        const dateString = start.getMonth() === end.getMonth() && start.getDate() === end.getDate()
+                          ? `${start.toLocaleString('en-US', { month: 'short', day: 'numeric' })}`
+                          : `${start.toLocaleString('en-US', { month: 'short', day: 'numeric' })} - ${end.toLocaleString('en-US', { month: 'short', day: 'numeric' })}`;
 
-                          return (
-                            <div
-                              key={event.id}
-                              className="campaign-bar"
-                              style={{
-                                gridColumn: getCampaignPosition(event),
-                                gridRow: info.startRow + rowIdx,
-                                backgroundColor: tier.color,
-                                zIndex: 2
-                              }}
-                            >
-                              <div className="campaign-bar-content">
-                                <span className="calendar-campaign-title">{event.title}</span>
-                                <span className="calendar-campaign-date">{dateString}</span>
-                              </div>
+                        return (
+                          <div
+                            key={event.id}
+                            className="campaign-bar"
+                            style={{
+                              gridColumn: getCampaignPosition(event),
+                              gridRow: info.startRow + rowIdx,
+                              backgroundColor: tier.color,
+                              zIndex: 2
+                            }}
+                          >
+                            <div className="campaign-bar-content">
+                              <span className="calendar-campaign-title">{event.title}</span>
+                              <span className="calendar-campaign-date">{dateString}</span>
                             </div>
-                          );
-                        })
-                      )}
-                    </React.Fragment>
-                  );
-                })}
-              </div>
+                          </div>
+                        );
+                      })
+                    )}
+                  </React.Fragment>
+                );
+              })}
             </div>
+          </div>
 
-            <div className="supporting-note glass">
-              <p><strong>Note:</strong> Dates may vary by region. Final timing should always be confirmed during regional ticket review.</p>
-            </div>
+          <div className="supporting-note glass">
+            <p><strong>Note:</strong> Dates may vary by region. Final timing should always be confirmed during regional ticket review.</p>
           </div>
         </div>
       </main>

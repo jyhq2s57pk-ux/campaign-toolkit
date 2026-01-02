@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase';
 import Header from '../components/Header';
 import MarkerEditor from '../components/MarkerEditor';
 import './AdminPage.css';
+import JourneyAdmin from '../components/JourneyAdmin';
 
 const STORAGE_KEY = "avolta_toolkit_calendar_v1";
 
@@ -382,7 +383,7 @@ export default function AdminPage() {
       <Header />
 
       <main style={{ paddingTop: '56px' }}>
-        <div className="admin-container">
+        <div className="admin-container inner-content-wrapper">
           <div className="admin-header">
             <h1>Admin</h1>
           </div>
@@ -400,6 +401,12 @@ export default function AdminPage() {
               onClick={() => setActiveTab('calendar')}
             >
               Manage Calendar
+            </button>
+            <button
+              className={`admin-tab ${activeTab === 'journey' ? 'active' : ''}`}
+              onClick={() => setActiveTab('journey')}
+            >
+              Journey Pages
             </button>
           </div>
 
@@ -605,6 +612,10 @@ export default function AdminPage() {
           )}
 
           {/* Calendar Tab */}
+          {activeTab === 'journey' && (
+            <JourneyAdmin />
+          )}
+
           {activeTab === 'calendar' && (
             <div className="calendar-admin-section">
               <div className="admin-section-header">

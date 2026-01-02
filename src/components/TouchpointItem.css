@@ -1,39 +1,59 @@
+/* TouchpointItem Component Styles */
+/* Updated to match Figma CLP Hero design */
+
 .touchpoint-item {
-  margin-bottom: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 16px 0 8px 0;
+  margin-bottom: 32px;
 }
 
+/* Header: Number circle + Title */
 .touchpoint-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
+  gap: 10px;
+  width: 100%;
 }
 
 .touchpoint-title {
-  color: var(--text-primary);
-  font-size: 30px;
-  font-weight: 500;
+  color: #ffffff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 23px;
+  letter-spacing: 0;
   margin: 0;
-  letter-spacing: -0.5px;
-  line-height: 1.15;
 }
 
-.touchpoint-description {
-  color: #e2e2e2;
-  font-size: 14px;
-  line-height: 1.7;
-  margin-bottom: 12px;
-}
-
-.touchpoint-optional {
-  color: var(--text-muted);
-  font-size: 14px;
-  font-style: italic;
-  margin-bottom: 12px;
-  font-weight: 500;
-}
-
+/* Badges container - positioned after title */
 .touchpoint-badges {
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 5px 0;
+}
+
+/* Description text */
+.touchpoint-description {
+  color: #a6a6a6;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+/* Optional module indicator */
+.touchpoint-optional {
+  color: var(--text-muted, #6b7280);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 500;
+  margin: 0;
 }

@@ -1,305 +1,164 @@
-/* HomePage.css - Redesign v3 */
+/* HomePage.css - Redesign v4 (User Request) */
 
 /* Main Layout */
 .home-page {
   background-color: var(--surface-default);
+  /* Likely #000 or very dark */
   min-height: 100vh;
   color: var(--text-primary);
   padding-bottom: 80px;
 }
 
-.outer-container {
+/* 1. Intro Section */
+.intro-section {
   width: 100%;
-  /* Max-width removed here to allow inner-content-wrapper to control width (1100px) */
-  margin: 0 auto;
-  padding: 0 20px;
+  padding: 144px 0 48px;
+  /* pt-36 pb-12 */
+  background-color: var(--surface-default);
+  /* User code neutral-800 = #262626? Or matches body. Assume transparent/match body based on screenshot flow */
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Center the inner content */
 }
 
-/* 1. Header */
-.page-header {
-  text-align: center;
-  padding: 80px 0 60px;
+.intro-container {
+  width: 100%;
+  max-width: var(--container-max-width);
+  /* 1148px to allow 1100px content */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  /* gap-4 */
+  padding: 0 var(--container-padding);
 }
 
-.page-title {
+.intro-title {
+  color: #ffffff;
   font-family: var(--font-display);
   font-size: 72px;
-  font-weight: 500;
-  line-height: 1.1;
-  margin-bottom: 24px;
-  letter-spacing: -2px;
+  /* text-7xl */
+  font-weight: 600;
+  /* font-semibold */
+  line-height: 88px;
+  margin: 0;
 }
 
-.page-subtitle-grey {
-  color: #86868b;
+.intro-subtitle {
+  color: #a3a3a3;
+  /* neutral-400 */
+  font-family: 'Inter', sans-serif;
+  /* font-['Inter'] */
   font-size: 18px;
-  line-height: 1.5;
-  max-width: 600px;
-  margin: 0 auto;
+  /* text-lg */
+  font-weight: 400;
+  /* font-normal */
+  line-height: 24px;
+  /* leading-6 */
+  max-width: 568px;
+  margin: 0;
 }
 
 /* 2. Inner Content Wrapper */
-/* Styling inherited from global index.css, only page-specific overrides here */
-.home-page .inner-content-wrapper {
-  background-color: var(--surface-elevated);
-  border-radius: 40px;
-  padding: 60px;
-  gap: 60px;
-  border: 1px solid var(--border-light);
-}
-
-/* Shared Section Components */
-.section-badge {
-  display: inline-block;
-  background-color: #2a2a2a;
-  color: #a1a1a6;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 6px 16px;
-  border-radius: 20px;
-  margin-bottom: 24px;
-}
-
-/* Section A: Hero Card */
-.campaign-hero-card {
+/* Removed background/border to match screenshot "floating content" look */
+.inner-content-wrapper {
   width: 100%;
-  height: 400px;
-  background: linear-gradient(105deg, #FF9933 0%, #E65C00 100%);
-  /* Vibrant Orange Gradient */
-  border-radius: 40px;
+  max-width: var(--container-max-width);
+  /* 1148px to allow 1100px content */
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
+  flex-direction: column;
+  gap: 60px;
+  /* Space between Hero and Grid */
 }
 
-.hero-content-center {
-  text-align: center;
+/* Section Components */
+.section-badge {
+  /* "Whats inside" label styling */
   color: #fff;
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  display: inline-block;
 }
 
-.hero-campaign-title {
-  font-family: var(--font-display);
-  font-size: 32px;
-  font-weight: 400;
-  margin-bottom: 16px;
-  opacity: 0.9;
-}
-
-.joy-unlimited-logo {
+/* Grid Section */
+.section-grid {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 80px;
-  /* Matching the previous font size height */
+  flex-direction: column;
+  width: 100%;
 }
 
-.joy-image {
-  height: 100%;
-  width: auto;
-  object-fit: contain;
-}
-
-/* Section B: Grid */
 .content-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 16px;
+  /* Tighter gap per screenshot */
 }
 
-/* User provided specific card styling */
+/* Card Styling - Dark Minimal */
 .card {
-  align-items: flex-start;
-  background-color: var(--surface-card);
-  border: 1px solid;
-  border-color: var(--border-default);
-  border-radius: var(--radius-xl);
-  /* Using user specified radius */
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  overflow: hidden;
-  padding: 24px 0px;
-  position: relative;
+  justify-content: space-between;
+  background-color: #161616;
+  /* Dark surface */
+  border: 1px solid #333;
+  /* Thin dark border */
+  border-radius: 16px;
+  /* Rounded corners */
+  padding: 24px;
+  height: 200px;
   text-decoration: none;
-  transition: all 0.3s ease;
-  height: 220px;
-  /* Keeping the height consistent */
-}
-
-/* Hover state - Orange */
-/* Hover effect removed */
-
-/* Hover effect removed */
-
-/* Hover effect removed */
-
-.card .frame {
-  align-items: flex-start;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  flex-grow: 1;
-  gap: 12px;
-  padding: 0px 20px;
-  position: relative;
-  width: 100%;
-  /* Changed from fixed 312px to 100% */
-}
-
-.card .div {
-  align-items: flex-start;
-  align-self: stretch;
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  flex-grow: 1;
-  justify-content: space-between;
-  position: relative;
-  width: 100%;
-}
-
-.card .frame-2 {
-  align-items: flex-start;
-  align-self: stretch;
-  display: flex;
-  flex: 0 0 auto;
-  flex-wrap: wrap;
-  gap: 6px 22px;
-  justify-content: space-between;
-  position: relative;
-  width: 100%;
-}
-
-.card .period {
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  align-items: center;
-  color: #56acb4;
-  display: -webkit-box;
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 400;
-  justify-content: center;
-  letter-spacing: 0;
-  line-height: 24px;
-  margin-top: -1.00px;
-  opacity: 0.3;
+  transition: border-color 0.2s ease, transform 0.2s ease;
   overflow: hidden;
-  position: relative;
-  text-align: right;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: fit-content;
 }
 
-.card .pillar {
-  align-items: flex-start;
-  align-self: stretch;
+.card:hover {
+  border-color: #666;
+  /* Lighter border on hover */
+  transform: translateY(-2px);
+}
+
+.card-top {
+  width: 100%;
   display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  gap: 5px;
-  position: relative;
+  justify-content: flex-start;
+}
+
+.card-number {
+  color: #56acb4;
+  /* User accent color */
+  opacity: 0.4;
+  font-size: 13px;
+  font-family: var(--font-body);
+}
+
+.card-bottom {
   width: 100%;
 }
 
-.card .text-wrapper {
-  align-items: center;
-  align-self: stretch;
+.card-title {
   color: #ffffff;
-  display: flex;
-  font-family: inherit;
-  font-size: 18px;
-  font-weight: 500;
-  justify-content: flex-start;
-  /* Changed from center to match design snippet structure */
-  letter-spacing: 0;
-  line-height: 23.9px;
-  margin-top: -1.00px;
-  position: relative;
-}
-
-/* Section C: Details */
-.details-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding-top: 20px;
-}
-
-.detail-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.detail-label {
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.text-orange {
-  color: #F08E35;
-}
-
-.detail-value {
-  font-size: 15px;
-  color: #ccc;
-  line-height: 1.4;
-  max-width: 250px;
-}
-
-.badges-group {
-  gap: 12px;
-}
-
-.status-badge {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 13px;
-  color: #ccc;
-}
-
-.status-badge .badge-pill {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #fff;
-  min-width: 80px;
-  text-align: center;
-}
-
-.badge-premium .badge-pill {
-  background-color: #581C1C;
-  color: #FF8F8F;
-}
-
-.badge-executive .badge-pill {
-  background-color: #2D1B4E;
-  color: #B48DFF;
-}
-
-.badge-standard .badge-pill {
-  background-color: #1A3824;
-  color: #6EE7B7;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
+  .intro-title {
+    font-size: 48px;
+    line-height: 1.2;
+  }
+
   .content-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .inner-content-wrapper {
+    padding: 0 20px;
   }
 }
 
@@ -308,17 +167,11 @@
     grid-template-columns: 1fr;
   }
 
-  .inner-content-wrapper {
-    padding: 30px;
+  .intro-section {
+    padding-top: 100px;
   }
 
-  .details-row {
-    flex-direction: column;
-    gap: 30px;
-  }
-
-  .joy-bold,
-  .joy-outline {
-    font-size: 48px;
+  .intro-container {
+    padding: 0 20px;
   }
 }

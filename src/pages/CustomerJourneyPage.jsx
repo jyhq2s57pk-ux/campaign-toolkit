@@ -1,284 +1,265 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { supabase } from '../lib/supabase';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { supabase } from '../lib/supabase';
-import TouchpointItem from '../components/TouchpointItem';
-import ScreenshotPlaceholder from '../components/ScreenshotPlaceholder';
+import '../components/Badge.css';
 import './CustomerJourneyPage.css';
 
+// Chevron Down Icon
+const ChevronDown = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8 10.9998L3 5.9998L3.7 5.2998L8 9.5998L12.3 5.2998L13 5.9998L8 10.9998Z" fill="var(--theme-icon-1, #F1F1F1)" />
+  </svg>
+);
+
+// Chevron Up Icon
+const ChevronUp = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8 5L13 10L12.3 10.7L8 6.4L3.7 10.7L3 10L8 5Z" fill="var(--theme-icon-1, #F1F1F1)" />
+  </svg>
+);
+
+// Marker Line SVG
+const MarkerLine = () => (
+  <svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M21.375 9L0.375001 9" stroke="#D6D6D6" strokeWidth="0.75" strokeLinecap="round" />
+  </svg>
+);
+
 export default function CustomerJourneyPage() {
-  const [activeSection, setActiveSection] = useState('home');
-  const [touchpoints, setTouchpoints] = useState([]);
+  const [pages, setPages] = useState([]);
+  const [components, setComponents] = useState({});
+  const [expandedPage, setExpandedPage] = useState(null);
+  const [activeComponent, setActiveComponent] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const journeyStages = [
-    {
-      id: 'home',
-      label: 'Home',
-      icon: '🏠',
-      platforms: ['Home - Web', 'Home - App', 'Shopping Home - App', 'Web', 'web']
-    },
-    {
-      id: 'category',
-      label: 'Category & PLP',
-      icon: '📂',
-      platforms: ['Category Landing Pages', 'Product Listing Pages', 'Gifting Content Landing Page']
-    },
-    {
-      id: 'search',
-      label: 'Navigation & Search',
-      icon: '🔍',
-      platforms: ['Search', 'Top & Megamenu']
-    },
-    {
-      id: 'pdp',
-      label: 'PDP & Checkout',
-      icon: '🛒',
-      platforms: ['Product Detail Page', 'Checkout & Shopping Bag', 'Thank You Page']
-    },
-  ];
+  const detailRefs = useRef({});
+  const screenshotRef = useRef(null);
 
   useEffect(() => {
-    fetchTouchpoints();
+    fetchPages();
   }, []);
 
-  const fetchTouchpoints = async () => {
+  const fetchPages = async () => {
     setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from('touchpoints')
-        .select('*')
-        .order('sort_order', { ascending: true });
+    const { data: pagesData, error: pagesError } = await supabase
+      .from('journey_pages')
+      .select('*')
+      .order('sort_order', { ascending: true });
 
-      if (error) throw error;
-      setTouchpoints(data || []);
-    } catch (err) {
-      console.error('Error fetching touchpoints:', err);
-    } finally {
+    if (pagesError) {
+      console.error('Error fetching pages:', pagesError);
       setLoading(false);
+      return;
+    }
+
+    setPages(pagesData || []);
+
+    // Fetch all components for all pages
+    const { data: componentsData, error: componentsError } = await supabase
+      .from('journey_components')
+      .select('*')
+      .order('sort_order', { ascending: true });
+
+    if (!componentsError && componentsData) {
+      // Group components by page_id
+      const grouped = {};
+      componentsData.forEach(comp => {
+        if (!grouped[comp.page_id]) grouped[comp.page_id] = [];
+        grouped[comp.page_id].push(comp);
+      });
+      setComponents(grouped);
+    }
+
+    setLoading(false);
+  };
+
+  const handlePageClick = (page) => {
+    if (expandedPage?.id === page.id) {
+      setExpandedPage(null);
+      setActiveComponent(null);
+    } else {
+      setExpandedPage(page);
+      const pageComponents = components[page.id] || [];
+      if (pageComponents.length > 0) {
+        setActiveComponent(pageComponents[0]);
+      }
     }
   };
 
-  const getTouchpointsForStage = (platforms) => {
-    return touchpoints.filter(tp =>
-      platforms.some(p => p.toLowerCase() === tp.platform?.toLowerCase())
-    );
-  };
-
-  const content = {
-    home: {
-      title: 'Home',
-      items: [
-        'Web and App hero banners introduce the campaign',
-        'Promobar highlights key member benefits',
-        'Most Popular and What’s Trending carousels feature campaign SKUs',
-        'Editorial banners reinforce the campaign narrative'
-      ]
-    },
-    category: {
-      title: 'Category & PLP',
-      items: [
-        'Campaign-led CLPs act as the main discovery hub',
-        'CLP hero banners adapt copy for members and non-members',
-        'Dual and triple content blocks highlight key categories',
-        'Tailored PLPs surface curated assortments'
-      ]
-    },
-    search: {
-      title: 'Navigation & Search',
-      items: [
-        'Campaign surfaced in top menu and megamenu',
-        'Brand banners used where space allows',
-        'Search terms redirect to campaign PLPs',
-        'Priority SKUs boosted in search results'
-      ]
-    },
-    pdp: {
-      title: 'PDP & Checkout',
-      items: [
-        'PDP marketing banners cross-sell campaign assortments',
-        'Optional product bundles add value',
-        'Checkout carousels adapt messaging by travel date',
-        'Thank you pages reinforce in-store activations'
-      ]
+  const handleComponentClick = (component) => {
+    setActiveComponent(component);
+    // Scroll to component detail
+    if (detailRefs.current[component.id]) {
+      detailRefs.current[component.id].scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
+
+  // Scroll sync: as user scrolls through details, highlight active component
+  const handleDetailScroll = useCallback(() => {
+    if (!expandedPage) return;
+    const pageComponents = components[expandedPage.id] || [];
+
+    for (const comp of pageComponents) {
+      const el = detailRefs.current[comp.id];
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        // Check if element is roughly in the center of viewport
+        if (rect.top < viewportHeight * 0.5 && rect.bottom > viewportHeight * 0.3) {
+          if (activeComponent?.id !== comp.id) {
+            setActiveComponent(comp);
+          }
+          break;
+        }
+      }
+    }
+  }, [expandedPage, components, activeComponent]);
+
+  useEffect(() => {
+    const container = document.querySelector('.detail-scroll-container');
+    if (container) {
+      container.addEventListener('scroll', handleDetailScroll);
+      return () => container.removeEventListener('scroll', handleDetailScroll);
+    }
+  }, [handleDetailScroll]);
+
+  const pageComponents = expandedPage ? (components[expandedPage.id] || []) : [];
 
   return (
-    <div className="journey-page">
+    <div className="page-wrapper">
       <Header />
-      <main className="journey-main">
-        <div className="outer-container">
-          <section className="page-header">
-            <h1 className="page-title">Customer Journey</h1>
-            <p className="page-subtitle-grey">
-              This page shows how a seasonal campaign comes to life across the ecommerce journey, from first exposure to checkout and post-purchase.
-            </p>
-          </section>
+      <main className="journey-page">
+        <div className="inner-content-wrapper">
+          <div className="journey-header">
+            <h1>Customer Journey</h1>
+            <p>Explore touchpoints across the customer experience</p>
+          </div>
 
-          <div className="inner-content-wrapper">
-            {/* Journey Map / In-page Nav */}
-            <section className="journey-overview">
-              <h2 className="section-label">Journey Overview</h2>
-              <div className="journey-map-nav">
-                {journeyStages.map((stage, index) => (
-                  <React.Fragment key={stage.id}>
-                    <button
-                      className={`journey-step-btn ${activeSection === stage.id ? 'active' : ''}`}
-                      onClick={() => setActiveSection(stage.id)}
-                    >
-                      <span className="step-icon">{stage.icon}</span>
-                      <span className="step-label">{stage.label}</span>
-                    </button>
-                    {index < journeyStages.length - 1 && <div className="step-connector">→</div>}
-                  </React.Fragment>
-                ))}
-              </div>
-            </section>
+          <div className="journey-content">
+            {loading ? (
+              <div className="loading-state">Loading journey data...</div>
+            ) : (
+              <div className="accordion-container">
+                {pages.map((page) => {
+                  const isExpanded = expandedPage?.id === page.id;
+                  const componentCount = (components[page.id] || []).length;
 
-            {/* Content Display (Tabs/Accordion style) */}
-            <section className="journey-details">
-              <div className="content-accordion glass">
-                {journeyStages.map((stage) => {
-                  const stageTouchpoints = getTouchpointsForStage(stage.platforms);
                   return (
-                    <div
-                      key={stage.id}
-                      className={`accordion-item ${activeSection === stage.id ? 'expanded' : ''}`}
-                    >
-                      <button
+                    <div key={page.id} className={`accordion-item ${isExpanded ? 'expanded' : ''}`}>
+                      {/* Accordion Header */}
+                      <div
                         className="accordion-header"
-                        onClick={() => setActiveSection(activeSection === stage.id ? null : stage.id)}
+                        onClick={() => handlePageClick(page)}
                       >
-                        <span className="header-icon">{stage.icon}</span>
-                        <h3>{stage.label}</h3>
-                        <span className="header-arrow">{activeSection === stage.id ? '−' : '+'}</span>
-                      </button>
-                      {activeSection === stage.id && (
-                        <div className="accordion-content animate-fade-only">
-                          {(() => {
-                            // Find all unique platforms that belong to this stage
-                            // Belonging means: matches one of the hardcoded platforms OR starts with the stage label (e.g. "Home - ")
-                            const stageTouchpoints = touchpoints.filter(tp => {
-                              const p = tp.platform?.toLowerCase() || '';
-                              const labelMatch = stage.label.toLowerCase();
-                              return stage.platforms.some(sp => sp.toLowerCase() === p) ||
-                                p.startsWith(labelMatch + ' -') ||
-                                p === labelMatch;
-                            });
+                        <div className="accordion-title-area">
+                          <div className="accordion-title">{page.title}</div>
+                          <div className="platform-badge">
+                            <span className="platform-badge-text">{page.platform_type}</span>
+                          </div>
+                        </div>
+                        <div className="accordion-meta">
+                          <span className="component-count">{componentCount} Components</span>
+                          <div className="accordion-chevron">
+                            {isExpanded ? <ChevronUp /> : <ChevronDown />}
+                          </div>
+                        </div>
+                      </div>
 
-                            // Get unique platform names (case-insensitive grouping but keep first casing)
-                            const uniquePlatforms = [];
-                            const seenPlatforms = new Set();
+                      {/* Expanded Content */}
+                      {isExpanded && (
+                        <div className="accordion-body">
+                          <div className="content-layout">
+                            {/* Left: Image Frame with Screenshot */}
+                            <div className="image-frame" ref={screenshotRef}>
+                              {page.screenshot_url ? (
+                                <div className="screenshot-wrapper">
+                                  <img src={page.screenshot_url} alt={page.title} className="screenshot-image" />
+                                  {/* Number markers with connecting lines */}
+                                  <div className="markers-container">
+                                    {pageComponents.map((comp, index) => {
+                                      const markers = comp.marker_positions || [];
+                                      // Calculate position - distribute evenly or use saved positions
+                                      const topPercent = markers.length > 0 && markers[0]?.top
+                                        ? markers[0].top
+                                        : `${(index * 140) + 58}px`;
 
-                            stageTouchpoints.forEach(tp => {
-                              const platformName = tp.platform || 'Unknown';
-                              const lowerName = platformName.toLowerCase();
-                              if (!seenPlatforms.has(lowerName)) {
-                                seenPlatforms.add(lowerName);
-                                uniquePlatforms.push(platformName);
-                              }
-                            });
-
-                            // Sort platforms by their minimum sort_order
-                            uniquePlatforms.sort((a, b) => {
-                              const minA = Math.min(...stageTouchpoints.filter(tp => tp.platform?.toLowerCase() === a.toLowerCase()).map(tp => tp.sort_order || 999));
-                              const minB = Math.min(...stageTouchpoints.filter(tp => tp.platform?.toLowerCase() === b.toLowerCase()).map(tp => tp.sort_order || 999));
-                              return minA - minB;
-                            });
-
-                            if (uniquePlatforms.length === 0) {
-                              return !loading ? (
-                                <div className="no-data-note">
-                                  No component data found for this stage in the CMS.
-                                </div>
-                              ) : null;
-                            }
-
-                            return uniquePlatforms.map((platformName) => {
-                              const platformTouchpoints = stageTouchpoints.filter(tp =>
-                                tp.platform?.toLowerCase() === platformName.toLowerCase()
-                              );
-
-                              // Find the first touchpoint with an image to use for the module screenshot
-                              const moduleWithImage = platformTouchpoints.find(tp => tp.image_url) || platformTouchpoints[0];
-
-                              return (
-                                <div key={platformName} className="module-container">
-                                  <div className="module-header">
-                                    <div className="module-title-row">
-                                      <div className="module-icon-circle">
-                                        <span className="arrow-icon">→</span>
-                                      </div>
-                                      <h4 className="module-name">{platformName}</h4>
-                                    </div>
+                                      return (
+                                        <div
+                                          key={comp.id}
+                                          className={`marker-row ${activeComponent?.id === comp.id ? 'active' : ''}`}
+                                          style={{ top: topPercent }}
+                                        >
+                                          <MarkerLine />
+                                          <div className="number-label">
+                                            <span className="number-label-text">{comp.marker_number}</span>
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
                                   </div>
+                                </div>
+                              ) : (
+                                <div className="no-screenshot">
+                                  <span>No screenshot available</span>
+                                  <p>Add a screenshot URL in the Admin panel</p>
+                                </div>
+                              )}
+                            </div>
 
-                                  <div className="touchpoint-card-compact glass">
-                                    <div className="touchpoint-layout">
-                                      <div className="touchpoint-screenshot">
-                                        <ScreenshotPlaceholder
-                                          imageUrl={moduleWithImage.image_url}
-                                          markers={moduleWithImage.marker_positions || []}
-                                        />
+                            {/* Right: Feature Descriptions */}
+                            <div className="descriptions-container">
+                              {pageComponents.map((comp) => {
+                                // Build badges array using unified badge variant names
+                                const badges = [];
+                                if (comp.is_new) badges.push({ label: 'New', variant: 'new' });
+                                if (comp.tier_executive) badges.push({ label: 'Executive', variant: 'executive' });
+                                if (comp.tier_premium) badges.push({ label: 'Premium', variant: 'premium' });
+                                // Always show Standard badge
+                                badges.push({ label: 'Standard', variant: 'standard' });
+
+                                return (
+                                  <div
+                                    key={comp.id}
+                                    ref={(el) => detailRefs.current[comp.id] = el}
+                                    className={`feature-item ${activeComponent?.id === comp.id ? 'active' : ''}`}
+                                    onClick={() => handleComponentClick(comp)}
+                                  >
+                                    <div className="feature-content">
+                                      {/* Header with number and title */}
+                                      <div className="feature-header">
+                                        <div className="feature-number">
+                                          <span className="feature-number-text">{comp.marker_number}</span>
+                                        </div>
+                                        <div className="feature-title">{comp.title}</div>
                                       </div>
-                                      <div className="touchpoint-list">
-                                        {platformTouchpoints.map((tp, i) => (
-                                          <TouchpointItem
-                                            key={tp.id}
-                                            number={i + 1}
-                                            title={tp.title}
-                                            description={tp.description}
-                                            isOptional={tp.is_optional}
-                                            isNew={tp.is_new}
-                                            isPremium={tp.tier_premium}
-                                            isExecutive={tp.tier_executive}
-                                          />
+
+                                      {/* Description */}
+                                      <div className="feature-description">
+                                        {comp.description}
+                                      </div>
+
+                                      {/* Badges */}
+                                      <div className="feature-badges">
+                                        {badges.map((badge, index) => (
+                                          <span key={index} className={`badge badge--${badge.variant}`}>
+                                            {badge.label}
+                                          </span>
                                         ))}
                                       </div>
                                     </div>
                                   </div>
-                                </div>
-                              );
-                            });
-                          })()}
-
-                          <div
-                            className="add-module-card glass"
-                            onClick={() => window.location.href = `/admin?platform=${stage.label} - New Page&showForm=true`}
-                          >
-                            <div className="add-module-icon">+</div>
-                            <div className="add-module-content">
-                              <h5 className="add-module-title">Add New {stage.label} Module</h5>
-                              <p className="add-module-subtitle">Create a new page layout for this stage (e.g. "{stage.label} - Tablet")</p>
+                                );
+                              })}
                             </div>
                           </div>
                         </div>
                       )}
                     </div>
-                  )
+                  );
                 })}
               </div>
-            </section>
-
-            {/* Activation Levels */}
-            <section className="activation-levels">
-              <h2 className="section-label centered">Activation Levels</h2>
-              <div className="levels-grid">
-                <div className="level-card glass tier-premium">
-                  <div className="level-badge">Premium</div>
-                  <p>Delivers full visibility across all stages.</p>
-                </div>
-                <div className="level-card glass tier-executive">
-                  <div className="level-badge">Executive</div>
-                  <p>Focuses on mid-funnel and search.</p>
-                </div>
-                <div className="level-card glass tier-standard">
-                  <div className="level-badge">Standard</div>
-                  <p>Uses selected placements only.</p>
-                </div>
-              </div>
-            </section>
+            )}
           </div>
         </div>
       </main>

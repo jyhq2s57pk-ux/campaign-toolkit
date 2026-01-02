@@ -75,7 +75,11 @@
   --radius-xl: 24px;
   --radius-lg: 16px;
   --radius-md: 12px;
-  --grid-max-width: 1100px;
+  --content-max-width: 1100px;
+  /* Standard content area width */
+  --container-max-width: 1148px;
+  /* Content width + 48px padding */
+  --container-padding: 24px;
 
   /* Typography */
   --font-display: 'Saans', 'Inter', system-ui, sans-serif;
@@ -123,10 +127,13 @@
 }
 
 /* Global Content Wrapper - Site Wide */
+/* Content area = 1100px, with 24px padding on each side = 1148px total */
+/* Calendar page uses .full-width variant for wider layout */
 .inner-content-wrapper {
   width: 100%;
-  max-width: 1100px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
+  padding: 0 var(--container-padding);
   display: flex;
   flex-direction: column;
 }
