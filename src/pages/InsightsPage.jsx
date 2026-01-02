@@ -15,15 +15,14 @@ export default function InsightsPage() {
                     <section className="page-header">
                         <h1>Insights & Performance</h1>
                         <p>
-                            Insights help teams understand what works and where to optimise.
+                            Summer Season Insights.
+                            <br />
+                            Data-driven opportunities for the season
                         </p>
                     </section>
 
                     <div className="inner-content-wrapper">
-                        <div className="section-header centered">
-                            <h2 className="section-title">Summer Season Insights</h2>
-                            <p className="section-subtitle">Data-driven opportunities for the season</p>
-                        </div>
+
 
                         {/* Bento Grid Infographics */}
                         <div className="bento-grid">
