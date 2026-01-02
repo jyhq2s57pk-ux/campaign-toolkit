@@ -8,11 +8,15 @@ import OmnichannelPage from './pages/OmnichannelPage';
 import InsightsPage from './pages/InsightsPage';
 import AnnexPage from './pages/AnnexPage';
 import AdminPage from './pages/AdminPage';
+import StyleGalleryPage from './pages/StyleGalleryPage';
 import './App.css';
+
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/customer-journey" element={<CustomerJourneyPage />} />
@@ -23,6 +27,7 @@ function App() {
         <Route path="/insights" element={<InsightsPage />} />
         <Route path="/annex" element={<AnnexPage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/style-gallery" element={<StyleGalleryPage />} />
       </Routes>
     </BrowserRouter>
   );

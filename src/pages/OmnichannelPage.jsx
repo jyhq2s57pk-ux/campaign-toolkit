@@ -49,16 +49,13 @@ export default function OmnichannelPage() {
             <main className="omnichannel-main">
 
                 {/* Hero Section */}
-                <section className="omni-hero">
-                    <div className="hero-content fade-in-up">
-                        <div className="hero-symbol-left">((</div>
-                        <div className="hero-text-block">
-                            <h1 className="hero-title">Omnichannel Harmony</h1>
-                            <h2 className="hero-subtitle">with Entertainment included!</h2>
-                        </div>
-                        <div className="hero-symbol-right">))</div>
-                    </div>
-                </section>
+                {/* Header Section */}
+                <div className="outer-container">
+                    <section className="page-header">
+                        <h1>Omnichannel Harmony</h1>
+                        <p>A 360° activation strategy designed to engage, captivate, and include entertainment.</p>
+                    </section>
+                </div>
 
                 {/* 360 Activation Strategy Grid */}
                 <section className="strategy-section">

@@ -21,10 +21,14 @@
 
 /* Grid Container */
 .calendar-grid-container {
-  border-radius: var(--radius-xl);
+  border-radius: 32px;
+  /* Master Style 01 */
   overflow-x: auto;
   margin-bottom: 40px;
-  background: var(--surface-glass);
+  background: rgba(255, 255, 255, 0.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .timeline-grid {

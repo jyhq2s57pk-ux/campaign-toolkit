@@ -230,8 +230,8 @@ export default function ResourcesPage() {
       <main className="resources-main-content">
         <div className="outer-container">
           <section className="page-header">
-            <h1 className="page-title">Assets & Resources</h1>
-            <p className="page-subtitle-grey">
+            <h1>Assets & Resources</h1>
+            <p>
               All assets, copy and templates needed to activate campaigns are housed here.
             </p>
           </section>

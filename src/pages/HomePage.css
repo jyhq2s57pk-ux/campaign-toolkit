@@ -12,7 +12,7 @@
 /* 1. Intro Section */
 .intro-section {
   width: 100%;
-  padding: 144px 0 48px;
+  padding: 200px 0 48px;
   /* pt-36 pb-12 */
   background-color: var(--surface-default);
   /* User code neutral-800 = #262626? Or matches body. Assume transparent/match body based on screenshot flow */
@@ -27,7 +27,7 @@
   /* 1148px to allow 1100px content */
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
   /* gap-4 */
   padding: 0 var(--container-padding);
 }
@@ -39,7 +39,8 @@
   /* text-7xl */
   font-weight: 600;
   /* font-semibold */
-  line-height: 88px;
+  letter-spacing: -1px;
+  line-height: 80px;
   margin: 0;
 }
 
@@ -48,13 +49,13 @@
   /* neutral-400 */
   font-family: 'Inter', sans-serif;
   /* font-['Inter'] */
-  font-size: 18px;
+  font-size: 16px;
   /* text-lg */
   font-weight: 400;
   /* font-normal */
   line-height: 24px;
   /* leading-6 */
-  max-width: 568px;
+  max-width: 450px;
   margin: 0;
 }
 

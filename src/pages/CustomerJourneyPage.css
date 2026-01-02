@@ -43,27 +43,7 @@
   padding: 24px 0;
 }
 
-.journey-header {
-  text-align: left;
-  margin-bottom: 40px;
-  padding: 0 24px;
-}
-
-.journey-header h1 {
-  font-family: var(--font-saans);
-  font-size: 48px;
-  font-weight: 500;
-  color: white;
-  margin: 0 0 8px 0;
-  line-height: 1.1;
-}
-
-.journey-header p {
-  font-family: var(--font-saans);
-  font-size: 16px;
-  color: var(--theme-text-2);
-  margin: 0;
-}
+/* .journey-header removed to use global .page-header */
 
 .journey-content {
   width: 100%;
@@ -88,8 +68,11 @@
 }
 
 .accordion-item {
-  background: var(--neutral-800);
-  border-radius: 10px;
+  background: var(--surface-elevated);
+  /* #111 */
+  border-radius: 16px;
+  /* Master Style 02 - LG */
+  border: 1px solid var(--border-light);
   overflow: hidden;
   transition: all 0.3s ease;
 }
@@ -112,8 +95,8 @@
 }
 
 .accordion-item:not(.expanded) .accordion-header {
-  background: var(--neutral-800);
-  border-radius: 10px;
+  background: var(--surface-elevated);
+  border-radius: 16px;
 }
 
 .accordion-header:hover {

@@ -39,8 +39,8 @@ export default function WaysOfWorkingPage() {
       <main className="ways-main-content">
         <div className="outer-container">
           <section className="page-header">
-            <h1 className="page-title">Ways of Working</h1>
-            <p className="page-subtitle-grey">
+            <h1>Ways of Working</h1>
+            <p>
               This section explains how campaigns move from toolkit to live execution.
             </p>
           </section>

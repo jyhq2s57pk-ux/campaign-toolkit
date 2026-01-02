@@ -13,8 +13,8 @@ export default function InsightsPage() {
             <main className="insights-main">
                 <div className="outer-container">
                     <section className="page-header">
-                        <h1 className="page-title">Insights & Performance</h1>
-                        <p className="page-subtitle-grey">
+                        <h1>Insights & Performance</h1>
+                        <p>
                             Insights help teams understand what works and where to optimise.
                         </p>
                     </section>

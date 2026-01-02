@@ -173,8 +173,8 @@ export default function CalendarPage() {
       <Header />
       <main className="calendar-main-content">
         <section className="page-header">
-          <h1 className="page-title">Campaign Calendar</h1>
-          <p className="page-subtitle-grey">
+          <h1>Campaign Calendar</h1>
+          <p>
             The campaign calendar maps global trading moments across the year, helping teams align planning, assets and delivery timelines.
           </p>
         </section>

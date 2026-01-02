@@ -28,9 +28,11 @@
 }
 
 .admin-accordion-item {
-  background: #242424;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-elevated);
+  /* #111 */
+  border-radius: 16px;
+  /* Updating to LG radius */
+  border: 1px solid var(--border-light);
   overflow: hidden;
 }
 

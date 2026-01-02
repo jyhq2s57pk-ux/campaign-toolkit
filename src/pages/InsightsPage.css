@@ -42,7 +42,6 @@
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 24px;
     margin-bottom: 60px;
-    padding: 0 24px;
 }
 
 @media (min-width: 1100px) {
@@ -75,12 +74,17 @@
 
 .bento-card {
     border-radius: 32px;
+    /* Master Style 01 */
     padding: 40px;
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+    border: 0.5px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }
 
 .card-bg-image {
@@ -296,7 +300,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 24px;
-    padding: 0 24px;
 }
 
 .chart-card {

@@ -105,7 +105,6 @@
     /* Responsive columns */
     /* We want a specific layout if possible, but auto-fit is safer for now */
     gap: 24px;
-    padding: 0 24px;
 }
 
 /* Custom Grid Layout for large screens to match the image */
@@ -140,11 +139,17 @@
 
 .strategy-info-card {
     padding: 40px;
-    border-radius: 24px;
+    border-radius: 32px;
+    /* Master Style 01 */
     display: flex;
     align-items: center;
     grid-column: span 2;
     /* Make it wide by default on larger grids */
+    background: rgba(255, 255, 255, 0.05);
+    /* Added explicitly */
+    border: 0.5px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }
 
 .strategy-info-card h2 {
@@ -221,7 +226,6 @@
     flex-direction: column;
     border-radius: 32px;
     overflow: hidden;
-    margin: 0 24px;
 }
 
 @media (min-width: 900px) {

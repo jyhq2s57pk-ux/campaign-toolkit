@@ -130,11 +130,14 @@ export default function CustomerJourneyPage() {
     <div className="page-wrapper">
       <Header />
       <main className="journey-page">
-        <div className="inner-content-wrapper">
-          <div className="journey-header">
+        <div className="outer-container">
+          <section className="page-header">
             <h1>Customer Journey</h1>
             <p>Explore touchpoints across the customer experience</p>
-          </div>
+          </section>
+        </div>
+
+        <div className="inner-content-wrapper">
 
           <div className="journey-content">
             {loading ? (

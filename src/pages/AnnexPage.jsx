@@ -17,8 +17,8 @@ export default function AnnexPage() {
             <main className="annex-main">
                 <div className="outer-container">
                     <section className="page-header">
-                        <h1 className="page-title">Annex & Reference</h1>
-                        <p className="page-subtitle-grey">
+                        <h1>Annex & Reference</h1>
+                        <p>
                             Full component inventory, image dimensions and activation matrices.
                         </p>
                     </section>

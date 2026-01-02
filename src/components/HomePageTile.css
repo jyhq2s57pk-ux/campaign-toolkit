@@ -32,7 +32,9 @@
     align-items: flex-start;
     align-self: stretch;
     /* Stretch to fill wrapper */
-    background-color: #262626;
+    background-color: var(--surface-elevated);
+    /* Master Style 02 */
+    border: 1px solid var(--border-light);
     border-radius: 40px;
     display: flex;
     gap: 77px;
@@ -41,6 +43,8 @@
     width: 100%;
     /* Flex 100% of parent */
     box-sizing: border-box;
+    box-shadow: var(--shadow-lg);
+    /* Added depth */
 }
 
 /* 

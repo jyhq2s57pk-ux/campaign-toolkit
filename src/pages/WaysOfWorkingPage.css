@@ -24,8 +24,13 @@
   gap: 32px;
   padding: 40px;
   border-radius: 32px;
+  /* Master Style 01 */
   position: relative;
   align-items: flex-start;
+  background: rgba(255, 255, 255, 0.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .step-badge {

@@ -5,7 +5,7 @@ import joyImage from '../assets/joy-unlimited.png';
 export default function HomePageTile() {
     return (
         <div className="hero-wrapper">
-            <div className="hero-badge">Campaign toolkit</div>
+
 
             <div className="homepage-hero-card">
                 {/* Left Visual Section */}
