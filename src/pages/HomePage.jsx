@@ -57,37 +57,37 @@ export default function HomePage() {
                 href="/customer-journey"
               />
 
-              {/* 2. Campaign Calendar */}
+              {/* 2. Trading Calendar */}
               <Card
-                n="01"
+                n="02"
                 title="Trading calendar"
                 href="/calendar"
               />
 
-              {/* 3. Omnichannel Activation */}
+              {/* 3. Omnichannel Consistency */}
               <Card
-                n="01"
+                n="03"
                 title="Omnichannel consistency"
                 href="/omnichannel"
               />
 
-              {/* 4. Assets & Resources */}
+              {/* 4. Asset Collection */}
               <Card
-                n="01"
+                n="04"
                 title="Asset collection"
+                href="/annex"
+              />
+
+              {/* 5. Resources */}
+              <Card
+                n="05"
+                title="Resources"
                 href="/resources"
               />
 
-              {/* 5. Insights & Performance */}
+              {/* 6. How to Activate */}
               <Card
-                n="01"
-                title="Resources"
-                href="/insights"
-              />
-
-              {/* 6. Ways of Working */}
-              <Card
-                n="01"
+                n="06"
                 title="How to activate"
                 href="/ways-of-working"
               />

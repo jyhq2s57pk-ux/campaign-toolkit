@@ -10,6 +10,7 @@ export default function Footer() {
     { name: 'Insights', path: '/insights' },
     { name: 'Annex', path: '/annex' },
     { name: 'Admin', path: '/admin' },
+    { name: 'Style Gallery', path: '/style-gallery' },
   ];
 
   return (

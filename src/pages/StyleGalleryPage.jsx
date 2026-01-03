@@ -14,161 +14,76 @@ const StyleGalleryPage = () => {
                         <p className="gallery-subtitle">Inferred tokens and rules from code audit</p>
                     </section>
 
-                    {/* Migration Impact Preview */}
+                    {/* Applied Master Styles: Surfaces */}
                     <section className="gallery-section">
-                        <h2 className="section-title">Migration Impact Preview</h2>
-                        <p className="section-desc">Visual comparison of current hardcoded values vs. proposed tokenized styles.</p>
-
-                        <div className="comparison-container">
-
-                            {/* Example 1: Hero Card Surface */}
-                            <div className="comparison-row">
-                                <div className="comparison-col">
-                                    <div className="tag tag-current">Current (Hardcoded)</div>
-                                    <div className="demo-box" style={{
-                                        backgroundColor: '#262626',
-                                        borderRadius: '40px',
-                                        padding: '40px',
-                                        color: 'white'
-                                    }}>
-                                        <h3 style={{ fontSize: '40px', margin: '0 0 10px 0' }}>Hero Card</h3>
-                                        <p style={{ color: '#989898', fontSize: '20px' }}>Background: #262626<br />Radius: 40px<br />Text: 40px / 20px</p>
-                                    </div>
-                                </div>
-                                <div className="comparison-col">
-                                    <div className="tag tag-target">Target (Tokens)</div>
-                                    <div className="demo-box card-elevated" style={{ height: '100%' }}>
-                                        <h3 className="h-xl" style={{ margin: '0 0 10px 0' }}>Hero Card</h3>
-                                        <p className="b-large" style={{ color: 'var(--text-secondary)' }}>Surface: Elevated (#111)<br />Radius: LG (24px)<br />Text: XL (36px) / M (22px)</p>
-                                    </div>
-                                </div>
+                        <h2 className="section-title">Surfaces & Cards</h2>
+                        <div className="card-grid">
+                            <div className="card-token card-elevated">
+                                <h4>Elevated Surface</h4>
+                                <p>Used for primary content islands. Background: #111111</p>
+                                <div className="token-label">.card-elevated</div>
                             </div>
-
-                            {/* Example 2: Badges */}
-                            <div className="comparison-row">
-                                <div className="comparison-col">
-                                    <div className="tag tag-current">Current (Mixed)</div>
-                                    <div className="demo-box" style={{ background: '#1a1a1a' }}>
-                                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                            <span style={{
-                                                background: 'rgba(255, 102, 196, 0.2)',
-                                                color: '#FF66C4',
-                                                padding: '2px 10px',
-                                                borderRadius: '20px',
-                                                fontSize: '12px'
-                                            }}>New</span>
-                                            <span style={{
-                                                background: '#282828',
-                                                color: '#ffffff',
-                                                padding: '0 20px',
-                                                height: '36px',
-                                                display: 'inline-flex',
-                                                alignItems: 'center',
-                                                borderRadius: '20px',
-                                                fontSize: '13px'
-                                            }}>Hero Badge</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="comparison-col">
-                                    <div className="tag tag-target">Target (Unified)</div>
-                                    <div className="demo-box card-default">
-                                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                            <span className="badge-token badge-magenta">New</span>
-                                            <span className="badge-token badge-default">Hero Badge</span>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div className="card-token card-default">
+                                <h4>Card Surface</h4>
+                                <p>Used for secondary cards. Background: #161616</p>
+                                <div className="token-label">.card-default</div>
                             </div>
-
-                            {/* Example 3: Admin / Container Cards */}
-                            <div className="comparison-row">
-                                <div className="comparison-col">
-                                    <div className="tag tag-current">Current (Admin - #262626)</div>
-                                    <div className="demo-box" style={{ background: '#262626', borderRadius: '10px' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-                                            <strong style={{ color: 'white' }}>Ways of Working (Admin)</strong>
-                                            <span style={{ color: '#aaa' }}>#262626</span>
-                                        </div>
-                                        <p style={{ color: '#aaa', fontSize: '14px' }}>
-                                            This card uses the "neutral-800" color from the Admin styling. Note how it is lighter than the Evo Night theme.
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="comparison-col">
-                                    <div className="tag tag-target">Target (Surface Elevated - #111)</div>
-                                    <div className="demo-box card-elevated" style={{ height: '100%', borderRadius: '16px' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-                                            <strong style={{ color: 'var(--text-primary)' }}>Ways of Working (Evo)</strong>
-                                            <span style={{ color: 'var(--text-secondary)' }}>#111111</span>
-                                        </div>
-                                        <p className="b-default">
-                                            This card uses <code>--surface-elevated</code>. It is darker and lighter, providing better contrast for content pop using proper tokens.
-                                        </p>
-                                    </div>
-                                </div>
+                            <div className="card-token card-glass">
+                                <h4>Glass Surface</h4>
+                                <p>Used for overlays. Backdrop blur effect.</p>
+                                <div className="token-label">.card-glass</div>
                             </div>
-
                         </div>
                     </section>
 
-
-
-                    {/* Container Unification Lab (New) */}
+                    {/* Applied Master Styles: Layout */}
                     <section className="gallery-section">
-                        <h2 className="section-title">Container Unification Lab</h2>
-                        <p className="section-desc">Harmonizing 9+ variations into 2 Master Styles based on the browser audit.</p>
+                        <h2 className="section-title">Applied Master Styles: Layout</h2>
+                        <p className="section-desc">Global structural classes defined in index.css</p>
 
-                        <div className="subsection">
-                            <h3>Master Style 01: Glass Content Card (Target)</h3>
-                            <p style={{ color: '#888', marginBottom: '24px' }}>Recommendation for: Workflow, Resources, Calendar, Bento</p>
-
-                            <div className="comparison-row">
-                                <div className="comparison-col">
-                                    <div className="tag tag-current">Current (Fragmented)</div>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                        <div className="demo-box" style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '24px', border: '0.55px solid rgba(255,255,255,0.1)' }}>
-                                            <p style={{ margin: 0, color: '#aaa', fontSize: '12px' }}>Resource (Radius 24px)</p>
-                                        </div>
-                                        <div className="demo-box" style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '32px', border: 'none' }}>
-                                            <p style={{ margin: 0, color: '#aaa', fontSize: '12px' }}>Bento (No Border, Radius 32px)</p>
-                                        </div>
+                        <div className="layout-grid">
+                            {/* Page Header Spec */}
+                            <div className="spec-card card-elevated">
+                                <h3 className="h-l">.page-header</h3>
+                                <div className="spec-details">
+                                    <div className="spec-row">
+                                        <span className="spec-label">Usage</span>
+                                        <span className="spec-value">Standard H1 + Subtitle block (Top of page)</span>
                                     </div>
-                                </div>
-                                <div className="comparison-col">
-                                    <div className="tag tag-target">Unified Master Style</div>
-                                    <div className="demo-box card-glass" style={{ height: '100%', borderRadius: '32px', border: '0.5px solid rgba(255,255,255,0.15)', padding: '40px' }}>
-                                        <h4 style={{ color: 'white', margin: '0 0 8px' }}>Unified Glass Card</h4>
-                                        <ul style={{ paddingLeft: '20px', margin: 0, color: 'var(--text-secondary)', fontSize: '13px' }}>
-                                            <li>Radius: 32px (Consistent)</li>
-                                            <li>Border: 0.5px White (15%)</li>
-                                            <li>Backdrop: Blur 20px</li>
-                                        </ul>
+                                    <div className="spec-row">
+                                        <span className="spec-label">Top Padding</span>
+                                        <span className="spec-value">180px (Clears fixed nav)</span>
+                                    </div>
+                                    <div className="spec-row">
+                                        <span className="spec-label">Max Width</span>
+                                        <span className="spec-value">1148px (Matches global wrapper)</span>
+                                    </div>
+                                    <div className="spec-row">
+                                        <span className="spec-label">Dimensions</span>
+                                        <span className="spec-value">H1: 72px (600) / P: 16px (400)</span>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="subsection">
-                            <h3>Master Style 02: Elevated Container (Target)</h3>
-                            <p style={{ color: '#888', marginBottom: '24px' }}>Recommendation for: Hero, Admin, Main Wrappers</p>
-
-                            <div className="comparison-row">
-                                <div className="comparison-col">
-                                    <div className="tag tag-current">Current (Legacy Grey)</div>
-                                    <div className="demo-box" style={{ background: '#262626', borderRadius: '40px' }}>
-                                        <p style={{ margin: 0, color: '#white', fontSize: '14px' }}>Hero / Admin (#262626)</p>
+                            {/* Content Wrapper Spec */}
+                            <div className="spec-card card-elevated">
+                                <h3 className="h-l">.inner-content-wrapper</h3>
+                                <div className="spec-details">
+                                    <div className="spec-row">
+                                        <span className="spec-label">Usage</span>
+                                        <span className="spec-value">Main container for consistent margins</span>
                                     </div>
-                                </div>
-                                <div className="comparison-col">
-                                    <div className="tag tag-target">Unified Master Style</div>
-                                    <div className="demo-box card-elevated" style={{ height: '100%', borderRadius: '40px', padding: '40px', border: '1px solid var(--border-light)' }}>
-                                        <h4 style={{ color: 'white', margin: '0 0 8px' }}>Unified Elevated Surface</h4>
-                                        <ul style={{ paddingLeft: '20px', margin: 0, color: 'var(--text-secondary)', fontSize: '13px' }}>
-                                            <li>Background: #111111</li>
-                                            <li>Radius: 40px (Hero-class)</li>
-                                            <li>Depth: Richer Black</li>
-                                        </ul>
+                                    <div className="spec-row">
+                                        <span className="spec-label">Max Width</span>
+                                        <span className="spec-value">1100px (+ 48px padding = 1148px)</span>
+                                    </div>
+                                    <div className="spec-row">
+                                        <span className="spec-label">Padding</span>
+                                        <span className="spec-value">0 24px (Horizontal)</span>
+                                    </div>
+                                    <div className="spec-row">
+                                        <span className="spec-label">Alignment</span>
+                                        <span className="spec-value">Centered (margin: 0 auto)</span>
                                     </div>
                                 </div>
                             </div>
@@ -231,6 +146,10 @@ const StyleGalleryPage = () => {
                                 <h4 className="h-l">The quick brown fox</h4>
                             </div>
                             <div className="type-row">
+                                <span className="type-label">Heading M (20px)</span>
+                                <h5 className="h-m" style={{ fontSize: '20px', fontWeight: 500, margin: 0 }}>The quick brown fox</h5>
+                            </div>
+                            <div className="type-row">
                                 <span className="type-label">Body Large (16px)</span>
                                 <p className="b-large">Campaign Toolkit provides resources for global marketing teams.</p>
                             </div>
@@ -280,6 +199,123 @@ const StyleGalleryPage = () => {
                                 <div className="card-token card-glass">
                                     <h4>Glass Surface</h4>
                                     <p>Used for overlays. Backdrop blur effect.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    {/* Site Components (Audited) */}
+                    <section className="gallery-section">
+                        <h2 className="section-title">Site Components (Audited)</h2>
+                        <p className="section-desc">Key patterns identified from site-wide audit.</p>
+
+                        <div className="component-row">
+                            <div className="component-group">
+                                <h3>Campaign Tile (Home)</h3>
+                                <div className="demo-box" style={{
+                                    width: '100%',
+                                    maxWidth: '400px',
+                                    background: '#111',
+                                    border: '1px solid rgba(255, 255, 255, 0.05)',
+                                    borderRadius: '40px',
+                                    padding: '40px',
+                                    color: 'white'
+                                }}>
+                                    <h2 style={{ fontSize: '32px', margin: '0 0 8px 0' }}>Summer 2025</h2>
+                                    <p style={{ color: '#a1a1a6', margin: 0 }}>Campaign Tile Style</p>
+                                    <div style={{ marginTop: '16px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                        <span className="token-label">Radius: 40px</span>
+                                        <span className="token-label">Bg: #111</span>
+                                        <span className="token-label">Border: 1px solid 5% white</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="component-group">
+                                <h3>Actions & Inputs (Admin)</h3>
+                                <div className="demo-box" style={{ background: '#111', padding: '24px', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                    {/* Input */}
+                                    <div>
+                                        <label style={{ display: 'block', color: '#666', fontSize: '12px', marginBottom: '8px' }}>Input Field</label>
+                                        <input type="text" placeholder="Campaign Name" style={{
+                                            background: 'rgba(255, 255, 255, 0.05)',
+                                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                                            borderRadius: '6px',
+                                            padding: '10px 12px',
+                                            color: 'white',
+                                            width: '100%',
+                                            outline: 'none'
+                                        }} />
+                                        <div className="token-label" style={{ marginTop: '8px' }}>Radius: 6px</div>
+                                    </div>
+
+                                    {/* Buttons */}
+                                    <div style={{ display: 'flex', gap: '12px' }}>
+                                        <button className="btn-token btn-primary" style={{ borderRadius: '6px' }}>Primary</button>
+                                        <button className="btn-token btn-secondary" style={{ borderRadius: '6px', background: '#161616', border: '1px solid rgba(255,255,255,0.05)' }}>Secondary</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="component-row" style={{ marginTop: '40px' }}>
+                            <div className="component-group">
+                                <h3>Structure & Data</h3>
+                                <div className="card-grid">
+                                    {/* Accordion */}
+                                    <div className="card-token">
+                                        <h4>Accordion Item (Expanded)</h4>
+                                        <div style={{
+                                            marginTop: '16px',
+                                            border: '0.5px solid rgba(255, 255, 255, 0.15)',
+                                            borderRadius: '16px',
+                                            padding: '16px',
+                                            background: 'transparent'
+                                        }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                                                <span style={{ color: 'white', fontWeight: 500 }}>Global Setup</span>
+                                                <span style={{ color: '#666' }}>−</span>
+                                            </div>
+                                            <p style={{ fontSize: '13px', color: '#a1a1a6' }}>
+                                                When expanded, the item becomes transparent with a subtle 0.5px white border (15% opacity).
+                                            </p>
+                                        </div>
+                                        <div className="token-label" style={{ marginTop: '12px' }}>Border: 0.5px White (15%)</div>
+                                    </div>
+
+                                    {/* Calendar Bar */}
+                                    <div className="card-token">
+                                        <h4>Timeline Bar (Calendar)</h4>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
+                                            <div style={{
+                                                background: 'rgb(233, 177, 242)',
+                                                borderRadius: '6px',
+                                                height: '40px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                padding: '0 12px',
+                                                color: 'black',
+                                                fontSize: '13px',
+                                                fontWeight: 500,
+                                                border: '1px solid rgba(255,255,255,0.05)'
+                                            }}>
+                                                Overarching 2025
+                                            </div>
+                                            <div style={{
+                                                background: 'rgb(87, 217, 163)',
+                                                borderRadius: '6px',
+                                                height: '40px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                padding: '0 12px',
+                                                color: 'black',
+                                                fontSize: '13px',
+                                                fontWeight: 500
+                                            }}>
+                                                Category Led
+                                            </div>
+                                        </div>
+                                        <div className="token-label" style={{ marginTop: '12px' }}>Radius: 6px</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

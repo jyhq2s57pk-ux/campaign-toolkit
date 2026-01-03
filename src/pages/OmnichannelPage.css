@@ -163,7 +163,7 @@
     color: var(--accent-purple);
 }
 
-.card-number {
+.omnichannel-page .card-number {
     font-size: 48px;
     font-weight: 700;
     opacity: 0.1;
@@ -172,14 +172,14 @@
     right: 20px;
 }
 
-.card-title {
+.omnichannel-page .card-title {
     font-size: 24px;
     font-weight: 600;
     margin-bottom: 12px;
     z-index: 1;
 }
 
-.card-desc {
+.omnichannel-page .card-desc {
     font-size: 16px;
     color: var(--text-secondary);
     line-height: 1.5;

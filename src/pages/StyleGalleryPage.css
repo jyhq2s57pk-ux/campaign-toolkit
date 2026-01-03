@@ -327,3 +327,47 @@
 .demo-box.card-default {
     border: 1px solid var(--border-light);
 }
+
+/* Layout Specs */
+.layout-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 24px;
+}
+
+.spec-card {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.spec-details {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 8px;
+}
+
+.spec-label {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.token-label {
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--accent-blue);
+    margin-top: 12px;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+}

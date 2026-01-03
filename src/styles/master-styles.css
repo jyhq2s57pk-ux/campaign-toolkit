@@ -1,0 +1,179 @@
+/* 
+  MASTER STYLES & DESIGN TOKENS
+  =============================================================================
+  This file is the Single Source of Truth for the application's design system.
+  Edit values here to update the entire application, including the Style Gallery.
+  =============================================================================
+*/
+
+:root {
+    /* 1. COLORS (Evo Night Theme) 
+     -------------------------------------------------------------------------- */
+
+    /* Surfaces */
+    --surface-default: #000000;
+    /* Main background */
+    --surface-elevated: #111111;
+    /* Cards, Panels, Modals */
+    --surface-card: #161616;
+    /* Secondary/Nested cards */
+    --surface-glass: rgba(255, 255, 255, 0.02);
+    /* Glass overlays */
+
+    /* Text Colors */
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1a6;
+    --text-muted: #666666;
+    --text-inverse: #000000;
+
+    /* Brand Accents */
+    --accent-green: #BEF264;
+    /* Premium Tier */
+    --accent-purple: #8F53F0;
+    /* Executive Tier */
+    --accent-blue: #3B82F6;
+    /* New Tier */
+    --accent-coral: #FB7185;
+    --accent-orange: #F97316;
+    /* Homepage Hover */
+
+    /* Status Colors (Badges) */
+    /* Magenta */
+    --magenta-bg: rgba(255, 102, 196, 0.2);
+    --magenta-text: #FF66C4;
+    /* Success (Green) */
+    --success-bg: rgba(52, 199, 89, 0.2);
+    --success-text: #34C759;
+    /* Purple */
+    --purple-bg: rgba(175, 82, 222, 0.2);
+    --purple-text: #AF52DE;
+    /* Default (Grey) */
+    --default-bg: rgba(82, 82, 82, 1);
+    --default-text: #E5E5EA;
+
+    /* Borders */
+    --border-default: rgba(255, 255, 255, 0.08);
+    --border-light: rgba(255, 255, 255, 0.05);
+    /* Subtle borders */
+    --border-glass: rgba(255, 255, 255, 0.1);
+    /* Glass borders */
+
+
+    /* 2. TYPOGRAPHY
+     -------------------------------------------------------------------------- */
+    --font-display: 'Saans', 'Inter', system-ui, sans-serif;
+    --font-body: 'Saans', 'Inter', system-ui, sans-serif;
+
+    /* Font Sizes - Headings */
+    --h-xxxl: 60px;
+    --h-xxl: 45px;
+    --h-xl: 36px;
+    --h-l: 28px;
+    --h-m: 20px;
+    --h-s: 18px;
+
+
+    /* 3. LAYOUT & GEOMETRY
+     -------------------------------------------------------------------------- */
+
+    /* Dimensions */
+    --content-max-width: 1100px;
+    --container-padding: 24px;
+    --container-max-width: 1148px;
+    /* 1100px + (24px * 2) */
+
+    /* Border Radius */
+    --radius-xl: 24px;
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --radius-pill: 100px;
+
+    /* Animation */
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-medium: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* 4. MASTER COMPONENT STYLES
+   =============================================================================
+   These utility classes strictly follow the design system. 
+   Use these instead of ad-hoc styles.
+*/
+
+/* --- Master Style 01: Glass Card ---
+   Usage: Secondary cards, floating elements, bento grids */
+.card-glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 0.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 32px;
+    padding: 40px;
+}
+
+/* Glass Helper (Lighter variant) */
+.glass {
+    background: var(--surface-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-glass);
+}
+
+
+/* --- Master Style 02: Elevated Container ---
+   Usage: Main content blocks, admin panels, form containers */
+.card-elevated {
+    background: var(--surface-elevated);
+    /* #111111 */
+    border-radius: 40px;
+    padding: 40px;
+    border: 1px solid var(--border-light);
+}
+
+
+/* --- Page Header ---
+   Usage: Standard Top-of-page Title Block */
+.page-header {
+    padding: 180px 24px 60px;
+    /* Top padding clears fixed navbar */
+    text-align: left;
+    background-color: transparent;
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    width: 100%;
+}
+
+.page-header h1 {
+    font-family: var(--font-display);
+    font-size: 72px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -1.68px;
+    color: var(--text-primary);
+    margin: 0 0 24px 0;
+}
+
+.page-header p {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    /* #A1A1A6 */
+    margin: 0;
+    max-width: 480px;
+}
+
+
+/* --- Global Content Wrapper ---
+   Usage: Enforces max-width and centering on all pages */
+.inner-content-wrapper {
+    width: 100%;
+    max-width: var(--container-max-width);
+    /* 1148px */
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+    /* 24px */
+    display: flex;
+    flex-direction: column;
+}

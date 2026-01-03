@@ -95,3 +95,55 @@ The Campaign Toolkit design system (Evo Night Theme) is built on a dark, premium
     - Various ad-hoc radii found: `20px` (badge), `32px` (visual card), `40px` (hero card).
 5.  **Admin Styling**:
     - The Admin section (`JourneyAdmin.css`) appears to rely heavily on untokenized hex values and uses a slightly different visual language (e.g. green buttons `#22c55e` vs brand green `#BEF264`).
+
+## 5. Applied Master Styles (CSS Reference)
+*These global utility classes are defined in `src/index.css` and should be used to maintain consistency.*
+
+### **Surfaces**
+
+**Master Style 01: Glass Content Card**
+- **Class:** `.card-glass`
+- **Usage:** Secondary cards, floating elements, or areas needing a "light" feel.
+- **Properties:**
+  - Background: `rgba(255, 255, 255, 0.05)` (approx 5% white)
+  - Blur: `20px`
+  - Border: `0.5px solid rgba(255, 255, 255, 0.15)`
+  - Radius: `32px`
+  - Padding: `40px`
+
+**Master Style 02: Elevated Container**
+- **Class:** `.card-elevated`
+- **Usage:** Main content panels, distinct sections on dark backgrounds.
+- **Properties:**
+  - Background: `var(--surface-elevated)` (#111111)
+  - Border: `1px solid var(--border-light)`
+  - Radius: `40px`
+  - Padding: `40px`
+
+**Glass Helper**
+- **Class:** `.glass`
+- **Usage:** General purpose glassmorphism effect for smaller elements.
+- **Properties:**
+  - Background: `var(--surface-glass)`
+  - Blur: `20px`
+  - Border: `1px solid var(--border-glass)`
+
+### **Layout & Typography**
+
+**Page Header**
+- **Class:** `.page-header`
+- **Usage:** The standard standard H1 + Subtitle block at the top of every main page.
+- **Properties:**
+  - Top Padding: `180px` (clears fixed nav)
+  - Layout: Left-aligned
+  - Max Width: `1148px` (matches global wrapper)
+  - H1: `72px`, SemiBold (600), White
+  - P: `16px`, Regular (400), #A3A3A3, Max-width 480px
+
+**Global Content Wrapper**
+- **Class:** `.inner-content-wrapper`
+- **Usage:** The main container for page content to ensure consistent margins.
+- **Properties:**
+  - Max Width: `1100px` content + `48px` padding (Total 1148px)
+  - Padding: `0 24px` horizontal
+  - Alignment: Centered (`margin: 0 auto`)

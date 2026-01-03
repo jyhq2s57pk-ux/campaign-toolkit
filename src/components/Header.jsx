@@ -19,12 +19,10 @@ export default function Header() {
   const navLinks = [
     { name: 'Journey', path: '/customer-journey' },
     { name: 'Calendar', path: '/calendar' },
-    { name: 'Resources', path: '/resources' },
-    { name: 'Working', path: '/ways-of-working' },
     { name: 'Omnichannel', path: '/omnichannel' },
-    { name: 'Insights', path: '/insights' },
-    { name: 'Annex', path: '/annex' },
-    { name: 'Admin', path: '/admin' },
+    { name: 'Assets', path: '/annex' },
+    { name: 'Resources', path: '/resources' },
+    { name: 'Activate', path: '/ways-of-working' },
   ];
 
   return (

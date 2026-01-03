@@ -14,23 +14,24 @@
 }
 
 .workflow-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
 }
 
 .workflow-step-card {
   display: flex;
-  gap: 32px;
-  padding: 40px;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px;
   border-radius: 32px;
   /* Master Style 01 */
   position: relative;
-  align-items: flex-start;
   background: rgba(255, 255, 255, 0.05);
   border: 0.5px solid rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  height: 100%;
 }
 
 .step-badge {
@@ -49,6 +50,8 @@
 
 .step-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .step-title {
@@ -63,32 +66,24 @@
   color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 24px;
-  max-width: 600px;
+  flex: 1;
 }
 
 .step-tasks {
   list-style: none;
   display: flex;
-  gap: 12px;
+  gap: 8px;
   flex-wrap: wrap;
+  margin-top: auto;
 }
 
 .step-tasks li {
   background: rgba(255, 255, 255, 0.05);
-  padding: 8px 16px;
+  padding: 8px 12px;
   border-radius: 100px;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-muted);
   border: 1px solid var(--border-glass);
-}
-
-.step-arrow {
-  position: absolute;
-  bottom: -40px;
-  left: 64px;
-  font-size: 24px;
-  color: var(--text-muted);
-  transform: rotate(90deg);
 }
 
 /* Best Practice Section */
@@ -123,17 +118,36 @@
   line-height: 1.4;
 }
 
-@media (max-width: 768px) {
-  .workflow-step-card {
-    flex-direction: column;
-    padding: 32px;
+.step-arrow-container {
+  position: absolute;
+  right: -36px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  width: 48px;
+  height: 48px;
+}
+
+@media (max-width: 1024px) {
+  .workflow-steps {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    /* Increase gap to make room for arrow */
   }
 
   .tips-grid {
     grid-template-columns: 1fr;
   }
 
-  .step-arrow {
-    display: none;
+  .step-arrow-container {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+    top: auto;
+    bottom: -36px;
   }
 }

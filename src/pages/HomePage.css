@@ -94,8 +94,8 @@
 .content-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  /* Tighter gap per screenshot */
+  gap: 20px;
+  /* Spec: 20px */
 }
 
 /* Card Styling - Dark Minimal */
@@ -104,22 +104,26 @@
   flex-direction: column;
   justify-content: space-between;
   background-color: #161616;
-  /* Dark surface */
   border: 1px solid #333;
-  /* Thin dark border */
   border-radius: 16px;
-  /* Rounded corners */
   padding: 24px;
-  height: 200px;
+  height: 157px;
+  /* Spec: 157px */
   text-decoration: none;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  transition: all 0.2s ease;
   overflow: hidden;
 }
 
 .card:hover {
-  border-color: #666;
-  /* Lighter border on hover */
+  background-color: var(--accent-orange);
+  border-color: var(--accent-orange);
   transform: translateY(-2px);
+}
+
+.card:hover .card-title,
+.card:hover .card-number {
+  color: #000000;
+  opacity: 1;
 }
 
 .card-top {
@@ -134,6 +138,7 @@
   opacity: 0.4;
   font-size: 13px;
   font-family: var(--font-body);
+  transition: color 0.2s, opacity 0.2s;
 }
 
 .card-bottom {
@@ -142,9 +147,12 @@
 
 .card-title {
   color: #ffffff;
-  font-family: var(--font-body);
-  font-size: 16px;
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-size: var(--h-m);
+  /* 20px */
+  font-weight: 500;
+  /* Medium */
+  transition: color 0.2s;
 }
 
 /* Responsive */
