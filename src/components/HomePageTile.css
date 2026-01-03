@@ -62,9 +62,9 @@
     border-radius: 32px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 433px;
-    /* Keep dimensions consistent as per previous logic, user snippet had h-80 (320px) but we need to match layout height */
+    justify-content: flex-start;
+    height: auto;
+    gap: 40px;
     padding: 20px;
     /* p-5 */
     position: relative;
@@ -221,7 +221,7 @@
     font-family: 'Saans', sans-serif;
     font-size: 36px;
     /* text-4xl */
-    font-weight: 400;
+    font-weight: 600;
     line-height: 40px;
     letter-spacing: 0;
 }

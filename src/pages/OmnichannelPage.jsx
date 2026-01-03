@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 import './OmnichannelPage.css';
 
 // Imported Images
-import treasureImg from '../assets/omni/treasure-quest.png';
+
 // import activationImg from '../assets/omni/360-activation.png'; // Not used in new grid layout
 
 // Generated Images for Carousel
@@ -19,6 +19,25 @@ import imgBalance from '../assets/omni/gen/balance.png';
 
 export default function OmnichannelPage() {
     const carouselRef = useRef(null);
+    const gridRef = useRef(null);
+    const [gridVisible, setGridVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                setGridVisible(true);
+                observer.disconnect();
+            }
+        }, { threshold: 0.2 });
+
+        if (gridRef.current) {
+            observer.observe(gridRef.current);
+        }
+
+        return () => {
+            if (gridRef.current) observer.disconnect();
+        };
+    }, []);
 
     // Data for Harmony Channels (360 Activation)
     const harmonySteps = [
@@ -60,12 +79,13 @@ export default function OmnichannelPage() {
                 {/* 360 Activation Strategy Grid */}
                 <section className="strategy-section">
                     <div className="inner-content-wrapper">
-                        <div className="strategy-grid">
+                        <div className={`strategy-grid ${gridVisible ? 'animate-active' : ''}`} ref={gridRef}>
                             <div className="strategy-info-card glass">
+                                <div className="strategy-logo-center">((I))</div>
                                 <h2>A <span className="highlight-purple">360° activation strategy</span> designed to engage, captivate, and inspire passengers around the world.</h2>
                             </div>
                             {harmonySteps.map((step) => (
-                                <div key={step.id} className={`strategy-card glass card-${step.color}`}>
+                                <div key={step.id} className={`strategy-card glass card-${step.color} pos-${step.id}`}>
                                     <div className="card-number">{step.id}</div>
                                     <h3 className="card-title">{step.title}</h3>
                                     <p className="card-desc">{step.desc}</p>
@@ -75,32 +95,7 @@ export default function OmnichannelPage() {
                     </div>
                 </section>
 
-                {/* Treasure Quest Spotlight */}
-                <section className="treasure-section">
-                    <div className="inner-content-wrapper">
-                        <div className="treasure-container glass">
-                            <div className="treasure-image-col">
-                                <img src={treasureImg} alt="Treasure Quest" className="treasure-img" />
-                            </div>
-                            <div className="treasure-content-col">
-                                <h2 className="section-label text-orange">Treasure Quest:</h2>
-                                <h1 className="treasure-title">Turn Every Store Visit into a Brand-led AR Adventure</h1>
-                                <p className="treasure-desc">Coordinate with your Commercial and Entertainment teams to activate this in your stores!</p>
 
-                                <div className="how-it-works-list">
-                                    <h3><span className="icon-arrow">→</span> How it works</h3>
-                                    <ul>
-                                        <li>Customers grab a clue card and start their hunt</li>
-                                        <li>Scan hidden posters using the Club Avolta app</li>
-                                        <li>Watch them come to life with stunning AR animations</li>
-                                        <li>Find number clues and unlock hidden treasures</li>
-                                        <li>Engaging AR gamification increases dwell time</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
 
 
 

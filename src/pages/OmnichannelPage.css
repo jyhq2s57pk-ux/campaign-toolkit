@@ -101,62 +101,220 @@
 
 .strategy-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    /* Responsive columns */
-    /* We want a specific layout if possible, but auto-fit is safer for now */
+    grid-template-columns: 1fr;
     gap: 24px;
+    width: 100%;
 }
 
-/* Custom Grid Layout for large screens to match the image */
+/* Strategy Card Default State - Visible */
+/* Strategy Card Default State - Hidden for Animation */
+.strategy-card {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(20px);
+    /* Subtle shift for intro */
+    position: relative;
+
+    /* Visual Styles matching Screenshot */
+    background: #050505;
+    border-radius: 32px;
+    padding: 32px;
+    border: 1px solid #1a1a1a;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+
+    /* Use 'all' transition to handle filter and opacity. Transform is tricky with !important override below, so we avoid animating translate widely */
+    transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+        filter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+        transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Ensure Circular Layout Triggered on Desktop */
 @media (min-width: 1024px) {
     .strategy-grid {
-        grid-template-columns: repeat(4, 1fr);
-        grid-template-rows: auto auto;
+        position: relative;
+        height: 900px;
+        /* Increased height for better spacing */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        grid-template-columns: none;
+        grid-template-rows: none;
+        grid-template-areas: none;
+    }
+
+    .strategy-info-card,
+    .strategy-card {
+        position: absolute;
+        width: 260px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        /* Default centered before specific pos applied */
+        margin: 0;
+        z-index: 5;
     }
 
     .strategy-info-card {
-        grid-column: span 2;
-        grid-row: span 1;
-        /* Or generic positioning */
+        width: 420px;
+        z-index: 10;
     }
 
-    /* Just let them flow for now to ensure responsiveness without complex nth-child rules unless strict */
-}
+    /* Circular Layout - Increased Radius for Separation */
+    /* Center (0,0) - Info Card */
 
-.strategy-card {
-    padding: 32px;
-    border-radius: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    transition: transform 0.3s ease, background 0.3s ease;
-    min-height: 240px;
-    position: relative;
-    overflow: hidden;
-}
+    /* 01 Web - Top Left */
+    .pos-01 {
+        transform: translate(-50%, -50%) translate(-340px, -240px) !important;
+    }
 
-/* Hover effect removed */
+    /* 02 App - Top Center */
+    .pos-02 {
+        transform: translate(-50%, -50%) translate(0px, -340px) !important;
+    }
+
+    /* 03 Email - Top Right */
+    .pos-03 {
+        transform: translate(-50%, -50%) translate(340px, -240px) !important;
+    }
+
+    /* 04 Social - Right */
+    .pos-04 {
+        transform: translate(-50%, -50%) translate(460px, 0px) !important;
+    }
+
+    /* 05 Paid Social - Bottom Right */
+    .pos-05 {
+        transform: translate(-50%, -50%) translate(340px, 240px) !important;
+    }
+
+    /* 06 Loyalty - Bottom Left */
+    .pos-06 {
+        transform: translate(-50%, -50%) translate(-340px, 240px) !important;
+    }
+
+    /* 07 In-store - Left */
+    .pos-07 {
+        transform: translate(-50%, -50%) translate(-460px, 0px) !important;
+    }
+}
 
 .strategy-info-card {
+    grid-area: center;
     padding: 40px;
     border-radius: 32px;
-    /* Master Style 01 */
     display: flex;
+    flex-direction: column;
     align-items: center;
-    grid-column: span 2;
-    /* Make it wide by default on larger grids */
+    justify-content: center;
+    text-align: center;
     background: rgba(255, 255, 255, 0.05);
-    /* Added explicitly */
     border: 0.5px solid rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    z-index: 2;
+}
+
+.strategy-logo-center {
+    font-family: var(--font-display);
+    font-size: 80px;
+    color: var(--accent-purple);
+    margin-bottom: 24px;
+    line-height: 1;
+    font-weight: 300;
 }
 
 .strategy-info-card h2 {
-    font-size: 32px;
+    font-size: 24px;
     font-weight: 600;
-    line-height: 1.3;
+    line-height: 1.4;
     color: #fff;
+    margin: 0;
+}
+
+/* Grid Positioning */
+.pos-01 {
+    grid-area: a01;
+}
+
+.pos-02 {
+    grid-area: a02;
+}
+
+.pos-03 {
+    grid-area: a03;
+}
+
+.pos-04 {
+    grid-area: a04;
+}
+
+.pos-05 {
+    grid-area: a05;
+}
+
+.pos-06 {
+    grid-area: a06;
+}
+
+.pos-07 {
+    grid-area: a07;
+}
+
+/* Animation Classes Removed/Consolidated to avoid opacity=0 blocking view */
+/* .strategy-card original opacity: 0 block removed */
+
+.strategy-info-card {
+    opacity: 1;
+}
+
+/* Unless we animate center too? User said "cards appear around it". Center stable. */
+
+/* Animation Trigger - Kept for future use if needed, but currently cards are default visible */
+/* Animation Trigger */
+.animate-active .strategy-card {
+    opacity: 1;
+    filter: blur(0);
+    /* For desktop with !important transforms, this transform property might be ignored or additive depending on stacking. 
+       Since we used !important on the translate() values in media query, this translateY(0) here will lose on specific properties if it conflicts. 
+       However, the media query sets specific transforms. 
+       The initial state above set translateY(20px). 
+       Ideally, we just animate opacity and blur to avoid fighting the position. 
+       Let's keep translateY(0) but acknowledge it might not apply on desktop if overridden. 
+       But opacity and blur will work perfectly. 
+    */
+    transform: translateY(0);
+}
+
+/* Stagger Delays */
+.animate-active .pos-01 {
+    transition-delay: 0.1s;
+}
+
+.animate-active .pos-02 {
+    transition-delay: 0.2s;
+}
+
+.animate-active .pos-03 {
+    transition-delay: 0.3s;
+}
+
+.animate-active .pos-04 {
+    transition-delay: 0.4s;
+}
+
+.animate-active .pos-05 {
+    transition-delay: 0.5s;
+}
+
+.animate-active .pos-06 {
+    transition-delay: 0.6s;
+}
+
+.animate-active .pos-07 {
+    transition-delay: 0.7s;
 }
 
 .highlight-purple {
@@ -164,55 +322,56 @@
 }
 
 .omnichannel-page .card-number {
-    font-size: 48px;
-    font-weight: 700;
-    opacity: 0.1;
-    position: absolute;
-    top: 20px;
-    right: 20px;
+    display: none;
 }
 
 .omnichannel-page .card-title {
-    font-size: 24px;
-    font-weight: 600;
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
     margin-bottom: 12px;
+    margin-top: 0;
     z-index: 1;
+    position: relative;
+    letter-spacing: -0.02em;
 }
 
 .omnichannel-page .card-desc {
-    font-size: 16px;
-    color: var(--text-secondary);
+    font-size: 14px;
+    color: #999;
     line-height: 1.5;
     z-index: 1;
+    position: relative;
+    max-width: 100%;
 }
 
-/* Card Colors (Border accents or slight tints) */
+/* Card Colors - Thicker left border */
 .card-blue {
-    border-left: 4px solid var(--accent-blue);
+    border-left: 8px solid var(--accent-blue);
 }
 
 .card-green {
-    border-left: 4px solid var(--accent-green);
+    border-left: 8px solid var(--accent-green);
 }
 
 .card-purple {
-    border-left: 4px solid var(--accent-purple);
+    border-left: 8px solid var(--accent-purple);
 }
 
 .card-orange {
-    border-left: 4px solid var(--accent-coral);
+    border-left: 8px solid var(--accent-coral);
 }
 
 .card-red {
-    border-left: 4px solid #ff4d4d;
+    border-left: 8px solid #ff4d4d;
 }
 
 .card-indigo {
-    border-left: 4px solid #6c5ce7;
+    border-left: 8px solid #6c5ce7;
 }
 
 .card-pink {
-    border-left: 4px solid #fd79a8;
+    border-left: 8px solid #fd79a8;
 }
 
 
