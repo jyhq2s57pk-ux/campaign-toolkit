@@ -17,7 +17,7 @@ const ChevronUp = () => (
 
 export default function ImplementationLevels() {
     // Default expanded: Premium
-    const [expandedLevel, setExpandedLevel] = useState('premium');
+    const [expandedLevel, setExpandedLevel] = useState(null);
 
     const toggleLevel = (level) => {
         if (expandedLevel === level) {
