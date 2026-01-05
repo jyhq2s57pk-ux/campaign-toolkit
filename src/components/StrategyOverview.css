@@ -1,0 +1,114 @@
+/* StrategyOverview.css */
+
+.strategy-section {
+    display: flex;
+    gap: 64px;
+    margin-bottom: 64px;
+    padding-top: 32px;
+}
+
+.strategy-label {
+    font-family: var(--font-saans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--neutral-400);
+    width: 200px;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    padding-top: 8px;
+}
+
+.strategy-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.strategy-headline {
+    font-family: var(--font-saans);
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin: 0;
+    max-width: 900px;
+}
+
+.strategy-headline .text-white {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.strategy-headline .text-green {
+    color: var(--success-text);
+    font-weight: 500;
+}
+
+.strategy-cards {
+    display: flex;
+    gap: 24px;
+}
+
+.strategy-card {
+    flex: 1;
+    background: var(--surface-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.strategy-card .card-title {
+    font-family: var(--font-saans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--neutral-400);
+}
+
+.card-title.text-green {
+    color: var(--success-text);
+}
+
+.card-text {
+    font-family: var(--font-saans);
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--neutral-400);
+    margin: 0;
+}
+
+.card-text.italic {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .strategy-section {
+        flex-direction: column;
+        gap: 24px;
+        margin-bottom: 40px;
+    }
+
+    .strategy-label {
+        width: 100%;
+    }
+
+    .strategy-headline {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 600px) {
+    .strategy-cards {
+        flex-direction: column;
+    }
+}

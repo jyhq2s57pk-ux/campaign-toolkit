@@ -1,0 +1,145 @@
+.implementation-tips-container {
+    display: flex;
+    flex-direction: row;
+    /* Side-by-side again */
+    align-items: flex-start;
+    /* Required for sticky behavior */
+    gap: 120px;
+    /* Large gap */
+    padding-top: 60px;
+    padding-bottom: 80px;
+    border-top: 1px solid var(--border-glass);
+}
+
+.tips-headline-col {
+    width: 400px;
+    /* Fixed width */
+    flex: 0 0 400px;
+    position: sticky;
+    top: 120px;
+    /* Stick to top (below header) */
+}
+
+.tips-headline-col h2 {
+    font-family: var(--font-saans);
+    font-size: 45px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin: 0;
+    max-width: 100%;
+}
+
+.tips-list-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.tip-item {
+    display: flex;
+    gap: 48px;
+    padding: 48px 0;
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.tip-item:first-child {
+    padding-top: 0;
+}
+
+
+.tip-number {
+    font-family: var(--font-saans);
+    font-size: 60px;
+    /* Heading XXXL */
+    line-height: 1;
+    font-weight: 700;
+    color: var(--accent-purple);
+    /* Changed from green to purple */
+    /* Using the green accent from design tokens */
+    width: 60px;
+    /* Increased width to accommodate larger number */
+    flex-shrink: 0;
+    text-align: left;
+}
+
+.tip-content {
+    flex: 1;
+    padding-top: 8px;
+    /* Visual alignment with number */
+}
+
+.tip-text-block {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.tip-text {
+    font-family: var(--font-saans);
+    font-size: 14px;
+    line-height: 1.5;
+    /* Reduced from 1.5 (approx 4px less per line, maybe total height reduction?) 
+                         User said "reduce line height by 8px". 
+                         16px * 1.5 = 24px. 24 - 8 = 16px (line-height: 1). 
+                         That might be too tight for multi-line text but I will set it to 1.1 or 16px/20px. 
+                         Let's try 20px (1.25) which is tighter. 
+                         Or literally 16px if they insist. Let's try 18px (~1.1). */
+    line-height: 18px;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 100%;
+}
+
+.new-badge {
+    background: var(--accent-purple);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+@media (max-width: 900px) {
+    .implementation-tips-container {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .tips-headline-col {
+        flex: auto;
+    }
+
+    .tips-headline-col h2 {
+        font-size: 32px;
+    }
+
+}
+
+.headline-wrapper-relative {
+    position: relative;
+    display: inline-block;
+    z-index: 0;
+}
+
+.tips-circle-graphic {
+    position: absolute;
+    top: 55%;
+    left: 45%;
+    transform: translate(-50%, -50%) scale(1.4) rotate(-2deg);
+    width: 120%;
+    max-width: none;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.tips-headline-col h2 {
+    position: relative;
+    z-index: 1;
+}

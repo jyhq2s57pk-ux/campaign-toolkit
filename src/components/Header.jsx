@@ -20,7 +20,6 @@ export default function Header() {
     { name: 'Journey', path: '/customer-journey' },
     { name: 'Calendar', path: '/calendar' },
     { name: 'Omnichannel', path: '/omnichannel' },
-    { name: 'Assets', path: '/annex' },
     { name: 'Resources', path: '/resources' },
     { name: 'Activate', path: '/ways-of-working' },
   ];

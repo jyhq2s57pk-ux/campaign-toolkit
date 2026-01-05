@@ -122,7 +122,7 @@
 
 .card:hover .card-title,
 .card:hover .card-number {
-  color: #000000;
+  color: #000000 !important;
   opacity: 1;
 }
 
@@ -146,12 +146,13 @@
 }
 
 .card-title {
-  color: #ffffff;
+  color: #ffffff !important;
   font-family: var(--font-display);
   font-size: var(--h-m);
   /* 20px */
   font-weight: 500;
   /* Medium */
+  text-transform: none !important;
   transition: color 0.2s;
 }
 

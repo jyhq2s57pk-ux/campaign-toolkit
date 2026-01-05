@@ -218,12 +218,10 @@
 }
 
 .strategy-logo-center {
-    font-family: var(--font-display);
-    font-size: 80px;
-    color: var(--accent-purple);
+    width: 80px;
+    height: auto;
     margin-bottom: 24px;
-    line-height: 1;
-    font-weight: 300;
+    display: block;
 }
 
 .strategy-info-card h2 {
@@ -479,14 +477,14 @@
 }
 
 .logo-small {
-    font-size: 24px;
-    color: #fff;
+    width: 48px;
+    height: auto;
     margin-bottom: 16px;
-    font-weight: 700;
+    display: inline-block;
 }
 
 .section-title {
-    font-size: 48px;
+    font-size: var(--h-xxxl);
     font-weight: 700;
     margin-bottom: 16px;
     color: var(--accent-coral);

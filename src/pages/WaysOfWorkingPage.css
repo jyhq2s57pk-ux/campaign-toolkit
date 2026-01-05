@@ -19,6 +19,40 @@
   gap: 24px;
 }
 
+/* Make the 3rd card (Content Team) PURPLE styles but NO SPAN */
+.workflow-steps .workflow-step-card:nth-child(3) {
+  /* grid-column: span 2;  <-- REMOVED */
+  background: var(--accent-purple);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Styling/Overrides for the purple card */
+.workflow-steps .workflow-step-card:nth-child(3) .step-icon-wrapper {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+}
+
+.workflow-steps .workflow-step-card:nth-child(3) .step-title {
+  color: white !important;
+  /* Force white title */
+}
+
+.workflow-steps .workflow-step-card:nth-child(3) .step-body-content {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.workflow-steps .workflow-step-card:nth-child(3) .step-body-content strong {
+  color: white;
+}
+
+/* Arrow Positioning Logic */
+
+/* Default arrow (right pointing) works for card 1 AND card 2 now (since 1 row) */
+
+/* Card 2: Arrow needs to point RIGHT (Default behavior), so we REMOVE the override */
+/* .workflow-steps .workflow-step-card:nth-child(2) .step-arrow-container { ... } removed */
+
+
 .workflow-step-card {
   display: flex;
   flex-direction: column;
@@ -55,9 +89,11 @@
 }
 
 .step-title {
-  font-size: 24px;
+  font-size: 36px;
+  /* Heading XL */
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
+  /* Increased margin for balance */
   color: var(--text-primary);
 }
 
@@ -119,17 +155,7 @@
 }
 
 .step-arrow-container {
-  position: absolute;
-  right: -36px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  width: 48px;
-  height: 48px;
+  display: none;
 }
 
 @media (max-width: 1024px) {
@@ -139,15 +165,157 @@
     /* Increase gap to make room for arrow */
   }
 
+  .workflow-steps .workflow-step-card:nth-child(3) {
+    grid-column: auto;
+    /* Reset span */
+  }
+
   .tips-grid {
     grid-template-columns: 1fr;
   }
 
-  .step-arrow-container {
+  /* Reset all arrows to point down on mobile */
+  .step-arrow-container,
+  .workflow-steps .workflow-step-card:nth-child(2) .step-arrow-container {
     right: auto;
     left: 50%;
     transform: translateX(-50%) rotate(90deg);
     top: auto;
     bottom: -36px;
   }
+
+}
+
+/* New Steps Styles */
+.step-icon-wrapper {
+  width: 64px;
+  height: 64px;
+  background: var(--accent-purple);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 20px rgba(143, 83, 240, 0.4);
+  margin-bottom: 8px;
+}
+
+.step-icon-wrapper svg {
+  width: 32px;
+  height: 32px;
+}
+
+.step-title.text-purple {
+  color: var(--accent-purple);
+  margin-bottom: 24px;
+}
+
+.step-body-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.step-body-content strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.step-body-content p {
+  margin: 0;
+}
+
+.underlined-text {
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.3);
+  text-underline-offset: 4px;
+}
+
+.inline-new-badge {
+  background: var(--accent-purple);
+  /* Muted pink/red from screenshot */
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+  display: inline-block;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+
+.highlight-text {
+  color: var(--text-primary);
+  font-weight: 500;
+  border-left: 2px solid var(--accent-purple);
+  padding-left: 12px;
+  margin: 8px 0;
+
+}
+
+/* Header Adjustments */
+.header-title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.back-arrow-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--accent-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.back-arrow-circle:hover {
+  background: var(--accent-purple);
+}
+
+.back-arrow-circle:hover svg path {
+  stroke: white;
+}
+
+.header-subtitle-purple {
+  font-family: var(--font-saans);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--accent-purple);
+  border-bottom: 1px solid var(--accent-purple);
+  padding-bottom: 16px;
+  display: inline-block;
+  margin: 0;
+  width: 100%;
+  max-width: 800px;
+}
+
+/* Card Tip Highlight */
+.workflow-step-card p strong {
+  color: var(--text-primary);
+
+}
+
+.page-header {
+  position: relative;
+  /* Ensure z-index works */
+  z-index: 0;
+  margin-bottom: 60px;
+  /* Ensure space for brush */
+}
+
+
+
+.page-header h1 {
+  line-height: 1.1;
+  position: relative;
+  z-index: 1;
 }

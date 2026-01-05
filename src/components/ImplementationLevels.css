@@ -1,0 +1,177 @@
+/* Implementation Levels Component */
+
+.implementation-levels {
+    margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.implementation-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.implementation-header h2 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    /* ~Heading L */
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.implementation-header p {
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 600px;
+}
+
+/* Accordion Specifics for Levels */
+.level-item.expanded {
+    /* Optional: Specific background for expanded level item if verified in screenshot.
+       Screenshot 0 shows a dark red tint background for Premium?
+       Actually, uploaded_image_0 shows the Premium card has a reddish active background?
+       "Full visibility" sits on a dark reddish bg.
+    */
+    background-color: transparent;
+    /* Default, will override */
+}
+
+/* We might want to tint the background based on level when expanded */
+/* Premium Expanded */
+.level-item.expanded:has(.badge--premium) {
+    background: rgba(209, 43, 114, 0.1);
+    border: 1px solid rgba(209, 43, 114, 0.2);
+}
+
+/* Executive Expanded */
+.level-item.expanded:has(.badge--executive) {
+    background: rgba(0, 115, 217, 0.1);
+    border: 1px solid rgba(0, 115, 217, 0.2);
+}
+
+/* Standard Expanded */
+.level-item.expanded:has(.badge--standard) {
+    background: rgba(210, 98, 0, 0.1);
+    border: 1px solid rgba(210, 98, 0, 0.2);
+}
+
+/* Fallback for browsers not supporting :has (though most do now)
+   We can add specific classes in JSX if needed.
+   Let's rely on :has for now or add class in JSX to be safe.
+   Actually, I'll add the specific class in JS: `expanded level-premium`
+*/
+
+.level-header {
+    justify-content: flex-start;
+    /* Alignment changes */
+    gap: 24px;
+}
+
+.level-badge-wrapper {
+    min-width: 100px;
+    /* Ensure alignment */
+}
+
+.level-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 500;
+    color: #fff;
+    flex: 1;
+}
+
+.level-body {
+    padding: 24px 32px 32px;
+}
+
+/* Content Grid */
+.level-grid {
+    display: grid;
+    gap: 40px;
+}
+
+.level-grid.three-cols {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.level-grid.two-cols {
+    grid-template-columns: repeat(2, 1fr);
+    /* Maybe constrain width or responsive? */
+    max-width: 800px;
+}
+
+.level-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.level-group h4 {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--badge-new-text);
+    /* Use pink for headers? Or standard. Image 2 uses tints. */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+}
+
+/* Specific Header Colors based on Level */
+/* Assign colors via parent class logic or just generic?
+   Image 2 uses distinct header colors per column.
+*/
+
+/* Premium Headers - Pink */
+.level-item:has(.badge--premium) .level-group h4 {
+    color: var(--badge-premium-text);
+}
+
+/* Executive Headers - Blue */
+.level-item:has(.badge--executive) .level-group h4 {
+    color: var(--badge-executive-text);
+}
+
+/* Standard Headers - Orange */
+.level-item:has(.badge--standard) .level-group h4 {
+    color: var(--badge-standard-text);
+}
+
+
+.level-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.level-group li {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: #E5E5E5;
+    line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+
+    .level-grid.three-cols,
+    .level-grid.two-cols {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .level-header {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+}

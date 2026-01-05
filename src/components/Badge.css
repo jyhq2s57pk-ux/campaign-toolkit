@@ -7,15 +7,22 @@
    CSS Custom Properties
    ===================================================== */
 :root {
-  /* Badge Colors - matching Figma design */
-  --badge-magenta-bg: rgba(255, 102, 196, 0.2);
-  --badge-magenta-text: #FF66C4;
-  --badge-success-bg: rgba(52, 199, 89, 0.2);
-  --badge-success-text: #34C759;
-  --badge-purple-bg: rgba(175, 82, 222, 0.2);
-  --badge-purple-text: #AF52DE;
-  --badge-default-bg: rgba(82, 82, 82, 1);
-  --badge-default-text: #E5E5EA;
+  /* Badge Colors - New Definition */
+  /* Premium (Pink) */
+  --badge-premium-bg: rgba(209, 43, 114, 0.15);
+  --badge-premium-text: #FF4D8D;
+
+  /* Executive (Blue) */
+  --badge-executive-bg: rgba(0, 115, 217, 0.15);
+  --badge-executive-text: #3395FF;
+
+  /* Standard (Orange) */
+  --badge-standard-bg: rgba(210, 98, 0, 0.15);
+  --badge-standard-text: #FF9500;
+
+  /* Legacy/Other */
+  --badge-new-bg: rgba(255, 102, 196, 0.2);
+  --badge-new-text: #FF66C4;
 }
 
 /* =====================================================
@@ -63,36 +70,61 @@
   gap: 5px;
 }
 
+/* Accordion Label - Specific Request */
+.badge--accordion-lg {
+  display: inline-flex;
+  height: 26px;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  border-radius: 18px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
 /* =====================================================
    Color Variants
    ===================================================== */
 
 /* New - Magenta/Pink */
-.badge--new,
-.badge--magenta {
-  background: var(--badge-magenta-bg);
-  color: var(--badge-magenta-text);
+.badge--new {
+  background: var(--badge-new-bg);
+  color: var(--badge-new-text);
 }
 
-/* Executive - Success/Green */
-.badge--executive,
-.badge--success {
-  background: var(--badge-success-bg);
-  color: var(--badge-success-text);
+/* Executive - Blue (Updated) */
+.badge--executive {
+  background: var(--badge-executive-bg);
+  color: var(--badge-executive-text);
 }
 
-/* Premium - Purple */
-.badge--premium,
+/* Premium - Pink (Updated) */
+.badge--premium {
+  background: var(--badge-premium-bg);
+  color: var(--badge-premium-text);
+}
+
+/* Standard - Orange (Updated) */
+.badge--standard {
+  background: var(--badge-standard-bg);
+  color: var(--badge-standard-text);
+}
+
+/* Keep legacy Generic classes if needed, or deprecate */
 .badge--purple {
-  background: var(--badge-purple-bg);
-  color: var(--badge-purple-text);
+  background: rgba(175, 82, 222, 0.2);
+  color: #AF52DE;
 }
 
-/* Standard - Default/Grey */
-.badge--standard,
+.badge--success {
+  background: rgba(52, 199, 89, 0.2);
+  color: #34C759;
+}
+
 .badge--default {
-  background: var(--badge-default-bg);
-  color: var(--badge-default-text);
+  background: rgba(82, 82, 82, 1);
+  color: #E5E5EA;
 }
 
 /* Optional - Light grey (alternative) */

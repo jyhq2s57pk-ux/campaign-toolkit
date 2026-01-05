@@ -53,7 +53,7 @@ export default function HomePage() {
               {/* 1. Customer Journey */}
               <Card
                 n="01"
-                title="Customer Journey"
+                title="Customer journey"
                 href="/customer-journey"
               />
 
@@ -71,23 +71,16 @@ export default function HomePage() {
                 href="/omnichannel"
               />
 
-              {/* 4. Asset Collection */}
+              {/* 4. Resources */}
               <Card
                 n="04"
-                title="Asset collection"
-                href="/annex"
-              />
-
-              {/* 5. Resources */}
-              <Card
-                n="05"
                 title="Resources"
                 href="/resources"
               />
 
-              {/* 6. How to Activate */}
+              {/* 5. How to Activate */}
               <Card
-                n="06"
+                n="05"
                 title="How to activate"
                 href="/ways-of-working"
               />

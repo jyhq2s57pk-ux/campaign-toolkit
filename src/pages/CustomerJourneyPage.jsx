@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import '../components/Badge.css';
 import './CustomerJourneyPage.css';
+import ImplementationLevels from '../components/ImplementationLevels';
 
 // Chevron Down Icon
 const ChevronDown = () => (
@@ -137,9 +138,14 @@ export default function CustomerJourneyPage() {
           </section>
         </div>
 
+
         <div className="inner-content-wrapper">
+          <ImplementationLevels />
 
           <div className="journey-content">
+            <div className="journey-section-header">
+              <h2>Customer Touchpoints</h2>
+            </div>
             {loading ? (
               <div className="loading-state">Loading journey data...</div>
             ) : (

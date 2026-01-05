@@ -6,6 +6,7 @@ import './OmnichannelPage.css';
 // Imported Images
 
 // import activationImg from '../assets/omni/360-activation.png'; // Not used in new grid layout
+import logomark from '../assets/logomark.svg';
 
 // Generated Images for Carousel
 import imgBalloon from '../assets/omni/gen/balloon.png';
@@ -81,7 +82,7 @@ export default function OmnichannelPage() {
                     <div className="inner-content-wrapper">
                         <div className={`strategy-grid ${gridVisible ? 'animate-active' : ''}`} ref={gridRef}>
                             <div className="strategy-info-card glass">
-                                <div className="strategy-logo-center">((I))</div>
+                                <img src={logomark} alt="Logo" className="strategy-logo-center" />
                                 <h2>A <span className="highlight-purple">360° activation strategy</span> designed to engage, captivate, and inspire passengers around the world.</h2>
                             </div>
                             {harmonySteps.map((step) => (
@@ -102,8 +103,8 @@ export default function OmnichannelPage() {
                 {/* Apple-style Carousel: Summer Joy Ideas */}
                 <section className="ideas-carousel-section">
                     <div className="section-header centered">
-                        <div className="logo-small">((I))</div>
-                        <h2 className="section-title">Summer Joy Ideas</h2>
+                        <img src={logomark} alt="Logo" className="logo-small" />
+                        <h2 className="h-xxxl section-title">Summer Joy Ideas</h2>
                         <p className="section-subtitle">To be considered and delivered if desired by regions</p>
                     </div>
 

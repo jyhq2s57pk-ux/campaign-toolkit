@@ -59,6 +59,24 @@
 }
 
 /* =====================================================
+   Section Headers
+   ===================================================== */
+.journey-section-header {
+  margin-bottom: 24px;
+}
+
+.journey-section-header h2 {
+  font-family: var(--font-saans);
+  /* Using saans as used elsewhere in this file, or match display if available */
+  font-size: 32px;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* =====================================================
    Accordion Container
    ===================================================== */
 .accordion-container {
