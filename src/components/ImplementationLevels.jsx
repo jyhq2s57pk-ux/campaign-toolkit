@@ -65,6 +65,9 @@ export default function ImplementationLevels() {
                                             <li>Dual Content Block</li>
                                         </ul>
                                     </div>
+                                </div>
+                                {/* Col 2 */}
+                                <div className="level-col">
                                     <div className="level-group">
                                         <h4>PLP</h4>
                                         <ul>
@@ -72,8 +75,14 @@ export default function ImplementationLevels() {
                                             <li>PLP Inline Banner</li>
                                         </ul>
                                     </div>
+                                    <div className="level-group">
+                                        <h4>PDP</h4>
+                                        <ul>
+                                            <li>MK Banner</li>
+                                        </ul>
+                                    </div>
                                 </div>
-                                {/* Col 2 */}
+                                {/* Col 3 */}
                                 <div className="level-col">
                                     <div className="level-group">
                                         <h4>Mega menu</h4>
@@ -89,15 +98,6 @@ export default function ImplementationLevels() {
                                             <li>Boost SKUs</li>
                                             <li>Search Redirections</li>
                                             <li>Popular Searches</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                {/* Col 3 */}
-                                <div className="level-col">
-                                    <div className="level-group">
-                                        <h4>PDP</h4>
-                                        <ul>
-                                            <li>MK Banner</li>
                                         </ul>
                                     </div>
                                 </div>
