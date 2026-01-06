@@ -7,8 +7,8 @@ export default function MarkerEditor({ imageUrl, markers, onChange }) {
   const addMarker = () => {
     const newMarker = {
       number: markers.length + 1,
-      top: '20%',
-      left: '20%'
+      top: '50%',
+      left: 'calc(100% - 30px)' // Fixed horizontal position
     };
     onChange([...markers, newMarker]);
   };
@@ -21,9 +21,10 @@ export default function MarkerEditor({ imageUrl, markers, onChange }) {
     setSelectedMarker(null);
   };
 
-  const updateMarkerPosition = (index, top, left) => {
+  const updateMarkerPosition = (index, top) => {
     const updated = [...markers];
-    updated[index] = { ...updated[index], top, left };
+    // Keep left fixed or assume CSS handles it, but let's persist the "standard" fixed value
+    updated[index] = { ...updated[index], top, left: 'calc(100% - 30px)' };
     onChange(updated);
   };
 
@@ -31,10 +32,13 @@ export default function MarkerEditor({ imageUrl, markers, onChange }) {
     if (selectedMarker === null) return;
 
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    // Only calculate Y
     const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-    updateMarkerPosition(selectedMarker, `${y.toFixed(1)}%`, `${x.toFixed(1)}%`);
+    // Clamp between 0 and 100
+    const clampedY = Math.max(0, Math.min(100, y));
+
+    updateMarkerPosition(selectedMarker, `${clampedY.toFixed(1)}%`);
   };
 
   return (
@@ -47,15 +51,15 @@ export default function MarkerEditor({ imageUrl, markers, onChange }) {
       </div>
 
       <div className="marker-editor-content">
-        <div className="marker-preview" onClick={handleImageClick}>
+        <div className="marker-preview">
           {imageUrl ? (
-            <>
+            <div className="marker-image-wrapper" onClick={handleImageClick}>
               <img src={imageUrl} alt="Touchpoint preview" />
               {markers.map((marker, index) => (
                 <div
                   key={index}
                   className={`marker ${selectedMarker === index ? 'selected' : ''}`}
-                  style={{ top: marker.top, left: marker.left }}
+                  style={{ top: marker.top /* left is handled by CSS class */ }}
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedMarker(index);
@@ -64,7 +68,7 @@ export default function MarkerEditor({ imageUrl, markers, onChange }) {
                   {marker.number}
                 </div>
               ))}
-            </>
+            </div>
           ) : (
             <div className="marker-placeholder">
               <p>Add an image URL above to position markers</p>
@@ -75,7 +79,7 @@ export default function MarkerEditor({ imageUrl, markers, onChange }) {
         <div className="marker-controls">
           <p className="marker-instructions">
             {selectedMarker !== null
-              ? `Click on the image to reposition marker ${markers[selectedMarker]?.number}`
+              ? `Click on the image (at desired height) to position marker ${markers[selectedMarker]?.number}`
               : 'Click "Add Marker" or select an existing marker to edit'}
           </p>
 
@@ -90,7 +94,7 @@ export default function MarkerEditor({ imageUrl, markers, onChange }) {
                   >
                     <span className="marker-number">{marker.number}</span>
                     <span className="marker-coords">
-                      Top: {marker.top}, Left: {marker.left}
+                      Top: {marker.top}
                     </span>
                   </button>
                   <button

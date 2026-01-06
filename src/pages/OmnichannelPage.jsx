@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './OmnichannelPage.css';
+import { api } from '../lib/api';
 
 // Imported Images
 
@@ -22,6 +23,7 @@ export default function OmnichannelPage() {
     const carouselRef = useRef(null);
     const gridRef = useRef(null);
     const [gridVisible, setGridVisible] = useState(false);
+    const [harmonySteps, setHarmonySteps] = useState([]);
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -40,16 +42,21 @@ export default function OmnichannelPage() {
         };
     }, []);
 
-    // Data for Harmony Channels (360 Activation)
-    const harmonySteps = [
-        { id: '01', title: 'Web', desc: 'Enhancing campaign visibility on Reserve & Collect to captivate passengers early on.', color: 'blue' },
-        { id: '02', title: 'App', desc: 'Celebrating the joy of summer with our members before, during and after their trips.', color: 'green' },
-        { id: '03', title: 'Email', desc: 'Crafting personalized communications to strengthen engagement.', color: 'purple' },
-        { id: '04', title: 'Social', desc: 'Amplifying the activation\'s reach and resonance on our social channels.', color: 'orange' },
-        { id: '05', title: 'Paid Social', desc: 'Elevating the activation\'s influence through our paid social channels.', color: 'red' },
-        { id: '06', title: 'Loyalty', desc: 'Offering exclusive benefits & events crafted for our members.', color: 'indigo' },
-        { id: '07', title: 'In-store', desc: 'Featuring masterclasses, event branding, and memorable interactive experiences.', color: 'pink' },
-    ];
+    useEffect(() => {
+        api.getOmnichannel().then(data => {
+            if (data) {
+                const colors = ['blue', 'green', 'purple', 'orange', 'red', 'indigo', 'pink'];
+                const steps = data.map((item, index) => ({
+                    id: String(item.id).padStart(2, '0'),
+                    title: item.channel,
+                    desc: item.description, // using description from DB
+                    color: colors[index % colors.length]
+                }));
+                // If DB has less items than originally in UI, we just show what's in DB.
+                setHarmonySteps(steps);
+            }
+        });
+    }, []);
 
     // Data for Summer Joy Carousel
     const ideas = [

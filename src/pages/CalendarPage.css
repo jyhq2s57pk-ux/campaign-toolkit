@@ -12,9 +12,10 @@
 
 
 /* Override global wrapper width for calendar - needs more space for timeline */
+/* Override global wrapper width for calendar - needs more space for timeline */
 .inner-content-wrapper.full-width {
-  max-width: 1448px;
-  /* 1400px content + 48px padding */
+  max-width: 1648px;
+  /* 1600px content + 48px padding */
   width: 100%;
   margin: 0 auto;
 }
@@ -33,7 +34,7 @@
 
 .timeline-grid {
   display: grid;
-  grid-template-columns: 200px repeat(12, minmax(80px, 1fr));
+  grid-template-columns: 160px repeat(12, minmax(80px, 1fr));
   min-width: 1160px;
   position: relative;
 }
@@ -125,7 +126,7 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   height: auto;
-  min-height: 52px;
+  min-height: 72px;
   align-self: center;
   margin: 4px;
 }
@@ -140,12 +141,11 @@
 
 .calendar-campaign-title {
   font-weight: 700;
-  font-size: 13px;
+  font-size: 11px;
   color: #1a1a1a;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.2;
+  white-space: normal;
+  overflow: visible;
+  line-height: 1.25;
 }
 
 .calendar-campaign-date {

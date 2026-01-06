@@ -42,50 +42,85 @@ export default function JourneyAdmin() {
 
   const fetchAllData = async () => {
     setLoading(true);
-    const { data: pagesData } = await supabase.from('journey_pages').select('*').order('sort_order');
-    const { data: componentsData } = await supabase.from('journey_components').select('*').order('sort_order');
+    // 1. Fetch Platforms (Pages)
+    const { data: platformsData, error: pagesError } = await supabase
+      .from('platforms')
+      .select('*')
+      .order('sort_order', { ascending: true });
 
-    setPages(pagesData || []);
+    if (pagesError) console.error('Error fetching platforms:', pagesError);
+
+    // Map platforms to the internal 'page' structure expected by UI
+    const mappedPages = (platformsData || []).map(p => ({
+      id: p.id,
+      title: p.name,
+      platform_type: p.type || 'Web',
+      accent_color: p.accent_color || '#22c55e',
+      screenshot_url: p.screenshot_url,
+      sort_order: p.sort_order || 0
+    }));
+    setPages(mappedPages);
+
+    // 2. Fetch Touchpoints (Components)
+    const { data: touchpointsData, error: compsError } = await supabase
+      .from('touchpoints')
+      .select('*')
+      .order('sort_order', { ascending: true });
+
+    if (compsError) console.error('Error fetching touchpoints:', compsError);
+
+    // Group touchpoints by platform ID matching
     const grouped = {};
-    (componentsData || []).forEach(c => {
-      if (!grouped[c.page_id]) grouped[c.page_id] = [];
-      grouped[c.page_id].push(c);
+    (touchpointsData || []).forEach(c => {
+      // Find the platform that matches this touchpoint's platform string name
+      const page = mappedPages.find(p => p.title === c.platform);
+      // Fallback: if platform renamed, might lose link, but for now strict match
+      if (page) {
+        if (!grouped[page.id]) grouped[page.id] = [];
+        // Add virtual marker number if missing
+        if (!c.marker_number) c.marker_number = grouped[page.id].length + 1;
+        grouped[page.id].push(c);
+      }
     });
+
     setComponents(grouped);
     setLoading(false);
   };
 
-  // Image Upload to Supabase Storage
-  const handleImageUpload = async (e, target = 'page') => {
+  const handleImageUpload = async (e, type) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    // Validate file type
     if (!file.type.startsWith('image/')) {
       alert('Please upload an image file');
       return;
     }
 
     setUploading(true);
-
     try {
       const fileExt = file.name.split('.').pop();
+      // Generate unique filename
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      // Store in a 'journey-pages' folder to keep things organized
       const filePath = `journey-pages/${fileName}`;
 
-      const { data, error } = await supabase.storage
+      // Upload to the existing 'touchpoint-images' bucket
+      const { error: uploadError } = await supabase.storage
         .from('touchpoint-images')
-        .upload(filePath, file, { cacheControl: '3600', upsert: false });
+        .upload(filePath, file);
 
-      if (error) throw error;
+      if (uploadError) throw uploadError;
 
-      const { data: { publicUrl } } = supabase.storage
+      // Get the public URL
+      const { data } = supabase.storage
         .from('touchpoint-images')
         .getPublicUrl(filePath);
 
-      if (target === 'page') {
-        setPageFormData({ ...pageFormData, screenshot_url: publicUrl });
+      // Update the form data
+      if (type === 'page') {
+        setPageFormData(prev => ({ ...prev, screenshot_url: data.publicUrl }));
       }
-      alert('Image uploaded successfully!');
     } catch (error) {
       console.error('Error uploading image:', error);
       alert('Error uploading image: ' + error.message);
@@ -97,13 +132,26 @@ export default function JourneyAdmin() {
   // Page CRUD
   const handlePageSubmit = async (e) => {
     e.preventDefault();
-    const slug = pageFormData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    const data = { ...pageFormData, slug };
+    // Prepare data for 'platforms' table
+    const data = {
+      name: pageFormData.title,
+      type: pageFormData.platform_type,
+      accent_color: pageFormData.accent_color,
+      screenshot_url: pageFormData.screenshot_url,
+      sort_order: pageFormData.sort_order || (pages.length + 1)
+    };
 
     if (editingPage) {
-      await supabase.from('journey_pages').update(data).eq('id', editingPage.id);
+      await supabase.from('platforms').update(data).eq('id', editingPage.id);
+      // If name changed, we really should update related touchpoints' platform string, 
+      // but that's complex without foreign keys. Warn or ignore for now (or simple update).
+      if (editingPage.title !== pageFormData.title) {
+        await supabase.from('touchpoints')
+          .update({ platform: pageFormData.title })
+          .eq('platform', editingPage.title);
+      }
     } else {
-      await supabase.from('journey_pages').insert([{ ...data, sort_order: pages.length + 1 }]);
+      await supabase.from('platforms').insert([data]);
     }
     resetPageForm();
     fetchAllData();
@@ -111,7 +159,13 @@ export default function JourneyAdmin() {
 
   const handleDeletePage = async (id) => {
     if (confirm('Delete this page and all its components?')) {
-      await supabase.from('journey_pages').delete().eq('id', id);
+      const page = pages.find(p => p.id === id);
+      if (page) {
+        // Delete components first (by platform name)
+        await supabase.from('touchpoints').delete().eq('platform', page.title);
+        // Delete platform
+        await supabase.from('platforms').delete().eq('id', id);
+      }
       if (expandedPage === id) setExpandedPage(null);
       fetchAllData();
     }
@@ -123,16 +177,43 @@ export default function JourneyAdmin() {
     setShowPageForm(false);
   };
 
+  const openNewPageForm = () => {
+    resetPageForm();
+    setShowPageForm(true);
+  }
+
   // Component CRUD
   const handleComponentSubmit = async (e) => {
     e.preventDefault();
+    // valid pages - use loose equality to handle potential string/number type mismatches
+    const page = pages.find(p => p.id == expandedPage);
+
+    if (!page) {
+      console.error('HandleComponentSubmit: Page not found for expandedPage ID:', expandedPage);
+      alert('Error: No active page found. Please try closing and re-opening the page accordion.');
+      return;
+    }
+
     const pageComps = components[expandedPage] || [];
-    const data = { ...componentFormData, page_id: expandedPage };
+
+    // Data for 'touchpoints' table
+    const data = {
+      title: componentFormData.title,
+      description: componentFormData.description,
+      platform: page.title, // LINKING BY NAME
+      tier_premium: componentFormData.tier_premium,
+      tier_executive: componentFormData.tier_executive,
+      tier_standard: componentFormData.tier_standard,
+      is_new: componentFormData.is_new,
+      is_optional: componentFormData.is_optional,
+      marker_positions: componentFormData.marker_positions || [],
+      sort_order: componentFormData.sort_order || (pageComps.length + 1)
+    };
 
     if (editingComponent) {
-      await supabase.from('journey_components').update(data).eq('id', editingComponent.id);
+      await supabase.from('touchpoints').update(data).eq('id', editingComponent.id);
     } else {
-      await supabase.from('journey_components').insert([{ ...data, marker_number: pageComps.length + 1, sort_order: pageComps.length + 1 }]);
+      await supabase.from('touchpoints').insert([data]);
     }
     resetComponentForm();
     fetchAllData();
@@ -140,34 +221,83 @@ export default function JourneyAdmin() {
 
   const handleDeleteComponent = async (id) => {
     if (confirm('Delete this component?')) {
-      await supabase.from('journey_components').delete().eq('id', id);
+      await supabase.from('touchpoints').delete().eq('id', id);
       fetchAllData();
+    }
+  };
+
+  const handleMoveComponent = async (compId, pageId, direction) => {
+    const pageComps = components[pageId] || [];
+    const currentIndex = pageComps.findIndex(c => c.id === compId);
+    if (currentIndex === -1) return;
+
+    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    if (newIndex < 0 || newIndex >= pageComps.length) return; // Out of bounds
+
+    // Create a copy of the list to manipulate
+    const updatedList = [...pageComps];
+
+    // Swap elements
+    [updatedList[currentIndex], updatedList[newIndex]] = [updatedList[newIndex], updatedList[currentIndex]];
+
+    // Re-assign sort_orders based on new index
+    const updates = updatedList.map((c, idx) => ({
+      id: c.id,
+      sort_order: idx + 1
+    }));
+
+    // Optimistic update: Update local state immediately
+    setComponents(prev => ({
+      ...prev,
+      [pageId]: updatedList.map((c, idx) => ({ ...c, sort_order: idx + 1 }))
+    }));
+
+    // Persist to DB
+    // Using individual updates is safer than upsert as it bypasses required-field constraints for existing rows
+    const updatePromises = updates.map(u =>
+      supabase.from('touchpoints').update({ sort_order: u.sort_order }).eq('id', u.id)
+    );
+
+    const results = await Promise.all(updatePromises);
+    const error = results.find(r => r.error)?.error;
+
+    if (error) {
+      console.error('Error reordering components:', error);
+      alert('Failed to save new order');
+      fetchAllData(); // Revert on error
     }
   };
 
   const resetComponentForm = () => {
     setEditingComponent(null);
-    setComponentFormData({ title: '', description: '', tier_premium: true, tier_executive: true, is_new: false, is_optional: false, marker_number: 1, sort_order: 0, marker_positions: [] });
+    setComponentFormData({ title: '', description: '', tier_premium: true, tier_executive: true, tier_standard: true, is_new: false, is_optional: false, marker_number: 1, sort_order: 0, marker_positions: [] });
     setShowComponentForm(false);
   };
 
   const startEditPage = (page) => {
     setEditingPage(page);
-    setPageFormData({ title: page.title, platform_type: page.platform_type, accent_color: page.accent_color, screenshot_url: page.screenshot_url || '', sort_order: page.sort_order });
+    setPageFormData({
+      title: page.title || '',
+      platform_type: page.platform_type || 'Web',
+      accent_color: page.accent_color || '#22c55e',
+      screenshot_url: page.screenshot_url || '',
+      sort_order: page.sort_order || 0
+    });
     setShowPageForm(true);
   };
 
   const startEditComponent = (comp) => {
     setEditingComponent(comp);
     setComponentFormData({
-      title: comp.title,
+      title: comp.title || '',
       description: comp.description || '',
-      tier_premium: comp.tier_premium,
-      tier_executive: comp.tier_executive,
-      is_new: comp.is_new,
-      is_optional: comp.is_optional,
-      marker_number: comp.marker_number,
-      sort_order: comp.sort_order,
+      tier_premium: comp.tier_premium || false,
+      tier_executive: comp.tier_executive || false,
+      tier_standard: comp.tier_standard !== false,
+      is_new: comp.is_new || false,
+      is_optional: comp.is_optional || false,
+      marker_number: comp.marker_number || 1,
+      sort_order: comp.sort_order || 0,
       marker_positions: comp.marker_positions || []
     });
     setShowComponentForm(true);
@@ -191,7 +321,7 @@ export default function JourneyAdmin() {
     <div className="journey-admin">
       <div className="admin-header-row">
         <h2>Journey Pages</h2>
-        <button className="btn-primary" onClick={() => { resetPageForm(); setShowPageForm(true); }}>+ Add Page</button>
+        <button className="btn-primary" onClick={openNewPageForm}>+ Add Page</button>
       </div>
 
       {/* Accordion - Mirrors Front-End */}
@@ -229,7 +359,7 @@ export default function JourneyAdmin() {
                           {pageComps.map((c) => {
                             const markers = c.marker_positions || [];
                             return markers.map((marker, mi) => (
-                              <div key={`${c.id}-${mi}`} className="preview-marker" style={{ top: marker.top, left: marker.left }}>
+                              <div key={`${c.id}-${mi}`} className="preview-marker" style={{ top: marker.top }}>
                                 {marker.number}
                               </div>
                             ));
@@ -251,8 +381,26 @@ export default function JourneyAdmin() {
                       </div>
 
                       <div className="components-list">
-                        {pageComps.map((comp) => (
+                        {pageComps.map((comp, index) => (
                           <div key={comp.id} className="admin-component-card">
+                            <div className="comp-reorder">
+                              <button
+                                className="btn-icon-tiny"
+                                disabled={index === 0}
+                                onClick={() => handleMoveComponent(comp.id, page.id, 'up')}
+                                title="Move Up"
+                              >
+                                ▲
+                              </button>
+                              <button
+                                className="btn-icon-tiny"
+                                disabled={index === pageComps.length - 1}
+                                onClick={() => handleMoveComponent(comp.id, page.id, 'down')}
+                                title="Move Down"
+                              >
+                                ▼
+                              </button>
+                            </div>
                             <div className="comp-marker" style={{ background: page.accent_color }}>{comp.marker_number}</div>
                             <div className="comp-content">
                               <h4>{comp.title}</h4>
@@ -261,6 +409,7 @@ export default function JourneyAdmin() {
                                 {comp.is_new && <span className="badge badge--new">New</span>}
                                 {comp.tier_premium && <span className="badge badge--premium">Premium</span>}
                                 {comp.tier_executive && <span className="badge badge--executive">Executive</span>}
+                                {comp.tier_standard !== false && <span className="badge badge--standard">Standard</span>}
                                 {comp.is_optional && <span className="badge badge--optional">Optional</span>}
                               </div>
                               {comp.marker_positions?.length > 0 && (
@@ -292,7 +441,7 @@ export default function JourneyAdmin() {
         {pages.length === 0 && (
           <div className="empty-pages">
             <p>No pages yet. Create your first page to get started.</p>
-            <button className="btn-primary" onClick={() => setShowPageForm(true)}>+ Add First Page</button>
+            <button className="btn-primary" onClick={openNewPageForm}>+ Add First Page</button>
           </div>
         )}
       </div>
@@ -305,12 +454,12 @@ export default function JourneyAdmin() {
             <form onSubmit={handlePageSubmit}>
               <div className="form-group">
                 <label>Page Title *</label>
-                <input type="text" value={pageFormData.title} onChange={(e) => setPageFormData({ ...pageFormData, title: e.target.value })} required placeholder="e.g., Tailored Content Landing Page" />
+                <input type="text" value={pageFormData.title || ''} onChange={(e) => setPageFormData({ ...pageFormData, title: e.target.value })} required placeholder="e.g., Tailored Content Landing Page" />
               </div>
               <div className="form-row">
                 <div className="form-group">
                   <label>Platform</label>
-                  <select value={pageFormData.platform_type} onChange={(e) => setPageFormData({ ...pageFormData, platform_type: e.target.value })}>
+                  <select value={pageFormData.platform_type || 'Web'} onChange={(e) => setPageFormData({ ...pageFormData, platform_type: e.target.value })}>
                     {PLATFORM_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
                 </div>
@@ -318,7 +467,7 @@ export default function JourneyAdmin() {
                   <label>Accent Color</label>
                   <div className="color-picker">
                     {ACCENT_COLORS.map(c => (
-                      <button key={c.value} type="button" className={`color-swatch ${pageFormData.accent_color === c.value ? 'selected' : ''}`} style={{ background: c.value }} onClick={() => setPageFormData({ ...pageFormData, accent_color: c.value })} />
+                      <button key={c.value} type="button" className={`color-swatch ${(pageFormData.accent_color || '#22c55e') === c.value ? 'selected' : ''}`} style={{ background: c.value }} onClick={() => setPageFormData({ ...pageFormData, accent_color: c.value })} />
                     ))}
                   </div>
                 </div>
@@ -334,7 +483,7 @@ export default function JourneyAdmin() {
                   </label>
                   <span className="or-text">or paste URL:</span>
                 </div>
-                <input type="url" value={pageFormData.screenshot_url} onChange={(e) => setPageFormData({ ...pageFormData, screenshot_url: e.target.value })} placeholder="https://..." />
+                <input type="url" value={pageFormData.screenshot_url || ''} onChange={(e) => setPageFormData({ ...pageFormData, screenshot_url: e.target.value })} placeholder="https://..." />
                 {pageFormData.screenshot_url && <img src={pageFormData.screenshot_url} alt="Preview" className="form-preview" />}
               </div>
 
@@ -355,17 +504,18 @@ export default function JourneyAdmin() {
             <form onSubmit={handleComponentSubmit}>
               <div className="form-group">
                 <label>Component Title *</label>
-                <input type="text" value={componentFormData.title} onChange={(e) => setComponentFormData({ ...componentFormData, title: e.target.value })} required placeholder="e.g., Hero Banner" />
+                <input type="text" value={componentFormData.title || ''} onChange={(e) => setComponentFormData({ ...componentFormData, title: e.target.value })} required placeholder="e.g., Hero Banner" />
               </div>
               <div className="form-group">
                 <label>Description</label>
-                <textarea value={componentFormData.description} onChange={(e) => setComponentFormData({ ...componentFormData, description: e.target.value })} rows="3" placeholder="What does this component do?" />
+                <textarea value={componentFormData.description || ''} onChange={(e) => setComponentFormData({ ...componentFormData, description: e.target.value })} rows="3" placeholder="What does this component do?" />
               </div>
               <div className="form-checkboxes">
-                <label><input type="checkbox" checked={componentFormData.tier_premium} onChange={(e) => setComponentFormData({ ...componentFormData, tier_premium: e.target.checked })} /> Premium</label>
-                <label><input type="checkbox" checked={componentFormData.tier_executive} onChange={(e) => setComponentFormData({ ...componentFormData, tier_executive: e.target.checked })} /> Executive</label>
-                <label><input type="checkbox" checked={componentFormData.is_new} onChange={(e) => setComponentFormData({ ...componentFormData, is_new: e.target.checked })} /> New</label>
-                <label><input type="checkbox" checked={componentFormData.is_optional} onChange={(e) => setComponentFormData({ ...componentFormData, is_optional: e.target.checked })} /> Optional</label>
+                <label><input type="checkbox" checked={componentFormData.tier_premium || false} onChange={(e) => setComponentFormData({ ...componentFormData, tier_premium: e.target.checked })} /> Premium</label>
+                <label><input type="checkbox" checked={componentFormData.tier_executive || false} onChange={(e) => setComponentFormData({ ...componentFormData, tier_executive: e.target.checked })} /> Executive</label>
+                <label><input type="checkbox" checked={componentFormData.tier_standard !== false} onChange={(e) => setComponentFormData({ ...componentFormData, tier_standard: e.target.checked })} /> Standard</label>
+                <label><input type="checkbox" checked={componentFormData.is_new || false} onChange={(e) => setComponentFormData({ ...componentFormData, is_new: e.target.checked })} /> New</label>
+                <label><input type="checkbox" checked={componentFormData.is_optional || false} onChange={(e) => setComponentFormData({ ...componentFormData, is_optional: e.target.checked })} /> Optional</label>
               </div>
 
               {/* Marker Editor */}

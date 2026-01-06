@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './HomePageTile.css';
 import joyImage from '../assets/joy-unlimited.png';
+import { api } from '../lib/api';
 
 export default function HomePageTile() {
+    const [campaign, setCampaign] = useState(null);
+
+    useEffect(() => {
+        api.getCampaign().then(setCampaign);
+    }, []);
+
+    const title = campaign ? campaign.name : "Joy unlimited";
+    const subtitle = campaign ? campaign.subtitle : "Summer campaign";
+    const scope = campaign ? campaign.scope : "Global";
+    const dates = campaign ? (campaign.activation_dates || campaign.activationDates) : "October-December 2025"; // handle snake_case from DB
+
     return (
         <div className="hero-wrapper">
 
@@ -12,11 +24,11 @@ export default function HomePageTile() {
                 {/* Left Visual Section */}
                 <div className="hero-visual">
                     <div className="visual-gradient-card">
-                        <img src={joyImage} alt="Joy Unlimited" className="joy-logo-img" />
+                        <img src={joyImage} alt={title} className="joy-logo-img" />
                     </div>
 
                     <div className="audio-row">
-                        <div className="joy-text">Joy unlimited<br />Audio overview</div>
+                        <div className="joy-text">{title}<br />Audio overview</div>
                         <div className="btn-listen listen-btn">
                             <div className="listen-icon">
                                 <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -35,7 +47,7 @@ export default function HomePageTile() {
                             <div className="link-wrapper">
                                 <div className="campaign-label">Campaign</div>
                             </div>
-                            <div className="campaign-title-large">Joy unlimited<br />Summer campaign</div>
+                            <div className="campaign-title-large">{title}<br />{subtitle}</div>
                         </div>
 
                         <div className="hero-info-group">
@@ -43,13 +55,13 @@ export default function HomePageTile() {
                                 <div className="link-wrapper">
                                     <div className="info-label">Scope</div>
                                 </div>
-                                <div className="info-value">Global</div>
+                                <div className="info-value">{scope}</div>
                             </div>
                             <div className="info-block">
                                 <div className="link-wrapper">
                                     <div className="info-label">Activation dates</div>
                                 </div>
-                                <div className="info-value">October-December 2025</div>
+                                <div className="info-value">{dates}</div>
                             </div>
                             <div className="info-block">
                                 <div className="link-wrapper">

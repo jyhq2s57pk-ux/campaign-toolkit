@@ -47,6 +47,13 @@
   overflow-y: auto;
   background-color: #1a1a1a;
   border-radius: 12px;
+}
+
+.marker-image-wrapper {
+  position: relative;
+  width: 100%;
+  display: block;
+  /* Ensure it takes full height of children */
   cursor: crosshair;
 }
 
@@ -81,12 +88,17 @@
   border: 3px solid white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   transform: translate(-50%, -50%);
-  cursor: pointer;
-  transition: all 0.2s;
+  cursor: ns-resize;
+  /* Indicates vertical movement only */
+  transition: top 0.2s, transform 0.2s;
+  /* Animate top changes */
+  left: calc(100% - 30px) !important;
+  /* Force to right side */
 }
 
 .marker:hover {
   transform: translate(-50%, -50%) scale(1.1);
+  z-index: 10;
 }
 
 .marker.selected {

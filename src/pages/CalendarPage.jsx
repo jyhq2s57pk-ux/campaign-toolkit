@@ -1,91 +1,41 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { supabase } from "../lib/supabase";
 import "./CalendarPage.css";
+import { api } from "../lib/api";
 
 const STORAGE_KEY = "avolta_toolkit_calendar_v1";
 
 export default function CalendarPage() {
-  const seeded = [
-    // Overarching Campaign
-    { id: "ov-1", title: "Moments of Joy (2025)", startDate: "2025-01-01", endDate: "2025-12-31", tier: "Overarching Campaign", status: "Planned" },
-    { id: "ov-2", title: "Love your journey", startDate: "2025-04-01", endDate: "2025-12-31", tier: "Overarching Campaign", status: "Planned" },
-
-    // Category-Led
-    { id: "cat-1", title: "Value Club / Summer (Southern Hemisphere)", startDate: "2025-01-01", endDate: "2025-03-31", tier: "Category-Led", status: "Planned" },
-    { id: "cat-2", title: "Tasting Club", startDate: "2025-04-01", endDate: "2025-04-30", tier: "Category-Led", status: "Planned" },
-    { id: "cat-3", title: "Summer Club", startDate: "2025-07-01", endDate: "2025-07-31", tier: "Category-Led", status: "Planned" },
-    { id: "cat-4", title: "Festive Club", startDate: "2025-10-01", endDate: "2025-10-31", tier: "Category-Led", status: "Planned" },
-
-    // Omnichannel Campaigns
-    { id: "omni-1", title: "Valentine's Day", startDate: "2025-02-14", endDate: "2025-02-14", tier: "Omnichannel Campaigns", status: "Planned" },
-    { id: "omni-2", title: "Mother's & Father's Day", startDate: "2025-03-01", endDate: "2025-03-31", tier: "Omnichannel Campaigns", status: "Planned" },
-    { id: "omni-3", title: "Easter", startDate: "2025-04-02", endDate: "2025-04-03", tier: "Omnichannel Campaigns", status: "Planned" },
-    { id: "omni-4", title: "Sales", startDate: "2025-06-01", endDate: "2025-06-30", tier: "Omnichannel Campaigns", status: "Planned" },
-    { id: "omni-5", title: "Golden Week", startDate: "2025-10-01", endDate: "2025-10-07", tier: "Omnichannel Campaigns", status: "Planned" },
-    { id: "omni-6", title: "Diwali", startDate: "2025-11-08", endDate: "2025-11-08", tier: "Omnichannel Campaigns", status: "Planned" },
-    { id: "omni-7", title: "Ramadan", startDate: "2025-02-17", endDate: "2025-03-19", tier: "Omnichannel Campaigns", status: "Planned" },
-    { id: "omni-8", title: "CNY", startDate: "2025-02-17", endDate: "2025-02-17", tier: "Omnichannel Campaigns", status: "Planned" },
-    { id: "omni-9", title: "Champagne Festival", startDate: "2025-11-01", endDate: "2025-11-30", tier: "Omnichannel Campaigns", status: "Planned" },
-    { id: "omni-10", title: "Black Friday", startDate: "2025-11-27", endDate: "2025-11-27", tier: "Omnichannel Campaigns", status: "Planned" },
-
-    // Digital Campaigns
-    { id: "dig-1", title: "Blue Monday", startDate: "2025-01-19", endDate: "2025-01-19", tier: "Digital Campaigns", status: "Planned" },
-    { id: "dig-2", title: "Spring (Spring fragrances)", startDate: "2025-04-01", endDate: "2025-06-30", tier: "Digital Campaigns", status: "Planned" },
-    { id: "dig-3", title: "Back to Routine", startDate: "2025-08-01", endDate: "2025-09-30", tier: "Digital Campaigns", status: "Planned" },
-    { id: "dig-4", title: "Autumn", startDate: "2025-10-01", endDate: "2025-12-31", tier: "Digital Campaigns", status: "Planned" },
-    { id: "dig-5", title: "Best of 2025", startDate: "2025-01-01", endDate: "2025-01-31", tier: "Digital Campaigns", status: "Planned" },
-    { id: "dig-6", title: "Singles Day", startDate: "2025-11-11", endDate: "2025-11-11", tier: "Digital Campaigns", status: "Planned" },
-    { id: "dig-7", title: "Double 12", startDate: "2025-12-12", endDate: "2025-12-12", tier: "Digital Campaigns", status: "Planned" },
-
-    // Local Campaigns
-    { id: "loc-1", title: "Carnival (BR)", startDate: "2025-02-13", endDate: "2025-02-18", tier: "Local Campaigns (supported by Global)", status: "Planned" },
-    { id: "loc-2", title: "Eid al adha (ME)", startDate: "2025-05-27", endDate: "2025-05-27", tier: "Local Campaigns (supported by Global)", status: "Planned" },
-    { id: "loc-3", title: "Moon Festival", startDate: "2025-09-25", endDate: "2025-09-25", tier: "Local Campaigns (supported by Global)", status: "Planned" },
-  ];
-
   const [events, setEvents] = useState([]);
+  const [tiers, setTiers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  const fetchEvents = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('calendar_events')
-        .select('*')
-        .order('start_date', { ascending: true });
-
-      if (error) throw error;
-
-      // For now, prioritize the seeded data to match the design precisely as requested
-      // If we want to merge with DB, we'd do it differently
-      setEvents(seeded);
-
-      /* 
-      if (data && data.length > 0) {
-        setEvents(data.map(e => ({
+    Promise.all([
+      api.getCalendarEvents(),
+      api.getCalendarTiers()
+    ]).then(([eventsData, tiersData]) => {
+      if (eventsData) {
+        setEvents(eventsData.map(e => ({
           id: e.id,
           title: e.title,
-          startDate: e.start_date,
+          startDate: e.start_date, // Map snake_case to camelCase
           endDate: e.end_date,
           tier: e.tier,
-          status: e.status
+          color: e.color
         })));
-      } else {
-        setEvents(seeded);
       }
-      */
-    } catch (err) {
-      console.error('Error fetching events:', err);
-      setEvents(seeded);
-    } finally {
+      if (tiersData) {
+        // Sort tiers to match original design order if possible, or just by ID?
+        // The original had a specific order. If 'sort_order' isn't in DB, we rely on insertion order or name.
+        // I'll assume insertion order or ID order from DB is fine for now, or I could hardcode the desired order of names.
+        // For now, let's use what we get.
+        setTiers(tiersData);
+      }
       setLoading(false);
-    }
-  };
+    });
+  }, []);
 
   const months = useMemo(
     () => [
@@ -104,14 +54,6 @@ export default function CalendarPage() {
     ],
     []
   );
-
-  const tiers = [
-    { name: "Overarching Campaign", color: "#E9B1F2" },
-    { name: "Category-Led", color: "#57D9A3" },
-    { name: "Omnichannel Campaigns", color: "#B5A6F2" },
-    { name: "Digital Campaigns", color: "#FCD6A8" },
-    { name: "Local Campaigns (supported by Global)", color: "#D4D4D8" },
-  ];
 
   const tierCampaignRows = useMemo(() => {
     const result = {};

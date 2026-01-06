@@ -43,31 +43,46 @@ export default function CustomerJourneyPage() {
 
   const fetchPages = async () => {
     setLoading(true);
-    const { data: pagesData, error: pagesError } = await supabase
-      .from('journey_pages')
-      .select('*')
-      .order('sort_order', { ascending: true });
 
-    if (pagesError) {
-      console.error('Error fetching pages:', pagesError);
+    // 1. Fetch Platforms (acts as "Pages" or "Accordion Items")
+    const { data: platformsData, error: platformsError } = await supabase
+      .from('platforms')
+      .select('*')
+      .order('name'); // or sort_order if you add it
+
+    if (platformsError) {
+      console.error('Error fetching platforms:', platformsError);
       setLoading(false);
       return;
     }
 
-    setPages(pagesData || []);
+    // Map platforms to expected "page" structure
+    const mappedPages = (platformsData || []).map(p => ({
+      id: p.name, // using name as ID for grouping since touchpoints link via name
+      title: p.name,
+      platform_type: p.type || 'Web', // Default or from DB
+      screenshot_url: p.screenshot_url
+    }));
 
-    // Fetch all components for all pages
-    const { data: componentsData, error: componentsError } = await supabase
-      .from('journey_components')
+    setPages(mappedPages);
+
+    // 2. Fetch Touchpoints (acts as "Components")
+    const { data: touchpointsData, error: touchpointsError } = await supabase
+      .from('touchpoints')
       .select('*')
       .order('sort_order', { ascending: true });
 
-    if (!componentsError && componentsData) {
-      // Group components by page_id
+    if (!touchpointsError && touchpointsData) {
+      // Group touchpoints by platform name
       const grouped = {};
-      componentsData.forEach(comp => {
-        if (!grouped[comp.page_id]) grouped[comp.page_id] = [];
-        grouped[comp.page_id].push(comp);
+      touchpointsData.forEach((comp, index) => {
+        const key = comp.platform;
+        if (!grouped[key]) grouped[key] = [];
+
+        // Add a virtual marker number if not present (simple 1-based index per group)
+        comp.marker_number = grouped[key].length + 1;
+
+        grouped[key].push(comp);
       });
       setComponents(grouped);
     }
@@ -224,8 +239,8 @@ export default function CustomerJourneyPage() {
                                 if (comp.is_new) badges.push({ label: 'New', variant: 'new' });
                                 if (comp.tier_executive) badges.push({ label: 'Executive', variant: 'executive' });
                                 if (comp.tier_premium) badges.push({ label: 'Premium', variant: 'premium' });
-                                // Always show Standard badge
-                                badges.push({ label: 'Standard', variant: 'standard' });
+                                // Show Standard badge unless explicitly disabled
+                                if (comp.tier_standard !== false) badges.push({ label: 'Standard', variant: 'standard' });
 
                                 return (
                                   <div

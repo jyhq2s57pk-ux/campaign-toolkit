@@ -470,3 +470,36 @@
   color: #22c55e;
   margin-top: 4px;
 }
+
+.comp-reorder {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-right: 4px;
+}
+
+.btn-icon-tiny {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  padding: 0;
+  line-height: 1;
+}
+
+.btn-icon-tiny:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.btn-icon-tiny:disabled {
+  opacity: 0.3;
+  cursor: default;
+}

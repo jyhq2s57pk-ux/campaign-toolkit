@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import MarkerEditor from '../components/MarkerEditor';
 import './AdminPage.css';
 import JourneyAdmin from '../components/JourneyAdmin';
+import ResourcesAdmin from '../components/ResourcesAdmin';
 
 const STORAGE_KEY = "avolta_toolkit_calendar_v1";
 
@@ -42,42 +43,6 @@ const seededCalendarEvents = [
   { id: "ev-25", title: "Eid al adha (ME)", startDate: "2026-05-27", endDate: "2026-05-27", tier: "Local Campaigns (supported by Global)", status: "Planned" },
   { id: "ev-26", title: "Moon Festival", startDate: "2026-09-25", endDate: "2026-09-25", tier: "Local Campaigns (supported by Global)", status: "Planned" },
 ];
-
-function parseCalendarCSV(text) {
-  const lines = text.trim().split(/\r?\n/);
-  if (lines.length < 2) return [];
-  const header = lines[0].split(",").map((h) => h.trim());
-  const idx = (k) => header.indexOf(k);
-
-  const iTitle = idx("title");
-  const iStart = idx("startDate");
-  const iEnd = idx("endDate");
-  const iTier = idx("tier");
-
-  if ([iTitle, iStart, iEnd, iTier].some((i) => i < 0)) return [];
-
-  const validTiers = [
-    "Overarching Campaign",
-    "Category-Led",
-    "Omnichannel Campaigns",
-    "Digital Campaigns",
-    "Local Campaigns (supported by Global)"
-  ];
-
-  return lines.slice(1).map((row, r) => {
-    const cols = row.split(",").map((c) => c.trim());
-    const tierRaw = cols[iTier];
-    const tier = validTiers.includes(tierRaw) ? tierRaw : "Digital Campaigns";
-    return {
-      id: `csv-${r}-${Date.now()}`,
-      title: cols[iTitle] || "Untitled",
-      startDate: cols[iStart],
-      endDate: cols[iEnd],
-      tier,
-      status: "Planned",
-    };
-  });
-}
 
 function calendarToCSV(items) {
   const header = "title,startDate,endDate,tier\n";
@@ -298,46 +263,155 @@ export default function AdminPage() {
   };
 
   // Calendar management functions
-  const handleCalendarImport = async (file) => {
+  // Helper to validate and normalize tier
+  const normalizeTier = (rawTier) => {
+    const t = rawTier ? rawTier.trim() : "";
+
+    // Direct mappings from CSV/Excel to Database Tier Names
+    const map = {
+      "Overarching Campaign": "Overarching Campaign",
+      "Category-Led": "Category-Led",
+      "Omnichannel Campaigns": "Campaigns", // map to DB
+      "Digital Campaigns": "Other Global Campaigns", // map to DB
+      "Local Campaigns (supported by Global)": "Other Local Campaigns", // map to DB
+      "Local Campaigns": "Other Local Campaigns"
+    };
+
+    if (map[t]) return map[t];
+
+    // Fallback/Validation
+    const validDbTiers = Object.values(map);
+    return validDbTiers.includes(t) ? t : "Other Global Campaigns";
+  };
+
+  const handleCalendarImport = (file) => {
     setCsvError(null);
-    const text = await file.text();
-    const parsed = parseCalendarCSV(text);
-    if (!parsed.length) {
-      setCsvError("Could not import CSV. Please use: title,startDate,endDate,tier");
-      return;
-    }
 
-    const { error } = await supabase
-      .from('calendar_events')
-      .insert(parsed.map(e => ({
-        title: e.title,
-        start_date: e.startDate,
-        end_date: e.endDate,
-        tier: e.tier,
-        status: e.status
-      })));
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: 'greedy', // Better than true for whitespace lines
+      transformHeader: (h) => h.trim().replace(/^\uFEFF/, ''), // Remove BOM and trim
+      complete: async (results) => {
+        console.log("CSV Parse Results:", results);
 
-    if (error) {
-      console.error('Error importing calendar:', error);
-      alert('Error importing calendar: ' + error.message);
-    } else {
-      alert(`Successfully imported ${parsed.length} campaigns!`);
-      fetchCalendarEvents();
-    }
+        if (results.errors.length > 0) {
+          console.warn("CSV Parse Errors:", results.errors);
+        }
+
+        if (!results.data || results.data.length === 0) {
+          setCsvError("Could not import CSV. File appears to be empty.");
+          return;
+        }
+
+        const normalizeDate = (val) => {
+          if (!val) return null;
+          const v = val.trim();
+          // if already YYYY-MM-DD, keep it.
+          if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+
+          // Try parsing
+          const d = new Date(v);
+          if (!isNaN(d.getTime())) {
+            // Note: This returns UTC date part. 
+            // If user inputs '1/1/2026', local time might be 2026-01-01 00:00:00 local. 
+            // But .toISOString() is UTC. For simple date strings without time, this is usually acceptable 
+            // or safer to just simplistic format if needed. 
+            return d.toISOString().split('T')[0];
+          }
+          return v;
+        };
+
+        const parsed = results.data.map((row, index) => {
+          // flexible key matching
+          const getVal = (keyCandidates) => {
+            for (const k of keyCandidates) {
+              if (row[k] !== undefined) return row[k];
+            }
+            // Case-insensitive fallback
+            const rowKeys = Object.keys(row);
+            for (const k of keyCandidates) {
+              const found = rowKeys.find(rk => rk.toLowerCase() === k.toLowerCase());
+              if (found) return row[found];
+            }
+            return undefined;
+          };
+
+          const title = getVal(['title', 'Title', 'Campaign Name']);
+          const startDate = getVal(['startDate', 'startdate', 'Start Date', 'start_date']);
+          const endDate = getVal(['endDate', 'enddate', 'End Date', 'end_date']);
+          const tierRaw = getVal(['tier', 'Tier', 'Category']) || "Digital Campaigns";
+
+          // Log invalid rows for debugging
+          if (!title || !startDate || !endDate) {
+            console.warn(`Row ${index + 1} missing data:`, row);
+          }
+
+          return {
+            title: title ? title.trim() : null,
+            startDate: normalizeDate(startDate),
+            endDate: normalizeDate(endDate),
+            tier: normalizeTier(tierRaw ? tierRaw.trim() : ""),
+            status: "Planned"
+          };
+        }).filter(e => e.title && e.startDate && e.endDate); // Filter invalid rows
+
+        if (parsed.length === 0) {
+          setCsvError("No valid events found. Please check CSV format. Valid headers: title, startDate, endDate.");
+          return;
+        }
+
+        if (!confirm(`Found ${parsed.length} campaigns. This will REPLACE all existing calendar events. Continue?`)) {
+          return;
+        }
+
+        console.log("Events to insert:", parsed);
+
+        // 1. Delete all existing events to avoid ID collisions and duplicates
+        const { error: deleteError } = await supabase
+          .from('calendar_events')
+          .delete()
+          .gt('id', 0); // Assuming positive integer IDs
+
+        if (deleteError) {
+          console.error('Error clearing calendar:', deleteError);
+          alert('Error clearing existing calendar: ' + deleteError.message);
+          return;
+        }
+
+        // 2. Insert new events
+        const { error } = await supabase
+          .from('calendar_events')
+          .insert(parsed.map(e => ({
+            title: e.title,
+            start_date: e.startDate,
+            end_date: e.endDate,
+            tier: e.tier
+          })));
+
+        if (error) {
+          console.error('Error importing calendar:', error);
+          alert('Error importing calendar: ' + error.message);
+        } else {
+          alert(`Successfully imported ${parsed.length} campaigns!`);
+          fetchCalendarEvents();
+        }
+      },
+      error: (error) => {
+        console.error('CSV parse error:', error);
+        setCsvError('Error parsing CSV file: ' + error.message);
+      }
+    });
   };
 
   const handleCalendarExport = () => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    let events = [];
-    if (stored) {
-      try {
-        events = JSON.parse(stored);
-      } catch { }
-    }
-    if (events.length === 0) {
-      events = seededCalendarEvents;
-    }
-    const blob = new Blob([calendarToCSV(events)], { type: "text/csv;charset=utf-8" });
+    const itemsToExport = calendarEvents.length > 0 ? calendarEvents.map(e => ({
+      title: e.title,
+      startDate: e.start_date,
+      endDate: e.end_date,
+      tier: e.tier
+    })) : seededCalendarEvents;
+
+    const blob = new Blob([calendarToCSV(itemsToExport)], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -365,8 +439,7 @@ export default function AdminPage() {
           title: e.title,
           start_date: e.startDate,
           end_date: e.endDate,
-          tier: e.tier,
-          status: e.status
+          tier: e.tier
         })));
 
       if (insertError) {
@@ -408,7 +481,15 @@ export default function AdminPage() {
             >
               Journey Pages
             </button>
+            <button
+              className={`admin-tab ${activeTab === 'resources' ? 'active' : ''}`}
+              onClick={() => setActiveTab('resources')}
+            >
+              Resources
+            </button>
           </div>
+
+          {activeTab === 'resources' && <ResourcesAdmin />}
 
           {/* Touchpoints Tab */}
           {activeTab === 'touchpoints' && (

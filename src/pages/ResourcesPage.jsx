@@ -1,12 +1,15 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "./ResourcesPage.css";
+import { api } from "../lib/api";
 
 // Custom SVG Graphics matching the requested style (Vibrant bg + abstract UI metaphors)
 const renderGraphic = (title) => {
   switch (title) {
     case "Hero banners":
+    case "Campaign Visual Assets":
       return (
         <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="none">
           <rect width="400" height="300" fill="#FB7185" /> {/* Coral */}
@@ -27,6 +30,7 @@ const renderGraphic = (title) => {
         </svg>
       );
     case "Category imagery":
+    case "Product Assortment Guide":
       return (
         <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="none">
           <rect width="400" height="300" fill="#34D399" /> {/* Emerald */}
@@ -47,6 +51,8 @@ const renderGraphic = (title) => {
         </svg>
       );
     case "Social formats":
+    case "Social Media Assets":
+    case "Social Media Templates":
       return (
         <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="none">
           <rect width="400" height="300" fill="#A78BFA" /> {/* Purple */}
@@ -68,6 +74,7 @@ const renderGraphic = (title) => {
         </svg>
       );
     case "Campaign headlines":
+    case "Copy Library":
       return (
         <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="none">
           <rect width="400" height="300" fill="#60A5FA" /> {/* Blue */}
@@ -111,6 +118,7 @@ const renderGraphic = (title) => {
         </svg>
       );
     case "Figma master file":
+    case "Brand Guidelines":
       return (
         <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="none">
           <rect width="400" height="300" fill="#FB923C" /> {/* Orange */}
@@ -131,6 +139,7 @@ const renderGraphic = (title) => {
         </svg>
       );
     case "Component specs":
+    case "Technical Specs":
       return (
         <svg width="100%" height="100%" viewBox="0 0 400 300" preserveAspectRatio="none">
           <rect width="400" height="300" fill="#A3E635" /> {/* Lime */}
@@ -163,65 +172,36 @@ const renderGraphic = (title) => {
 };
 
 export default function ResourcesPage() {
-  const categories = ["Visual Assets", "Copy & Messaging", "Templates"];
+  const navigate = useNavigate();
+  const [resources, setResources] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const resources = [
-    {
-      id: "v1",
-      category: "Visual Assets",
-      title: "Hero banners",
-      description: "Web and App campaign hero imagery in all required formats.",
-      formats: ["SVG", "JPG", "PNG"],
-    },
-    {
-      id: "v2",
-      category: "Visual Assets",
-      title: "Category imagery",
-      description: "CLP, PLP and megamenu imagery for campaign activation.",
-      formats: ["JPG", "PNG"],
-    },
-    {
-      id: "v3",
-      category: "Visual Assets",
-      title: "Social formats",
-      description: "Paid media and organic social assets for global sharing.",
-      formats: ["MP4", "GIF"],
-    },
-    {
-      id: "c1",
-      category: "Copy & Messaging",
-      title: "Campaign headlines",
-      description: "Approved global headlines and subheadings.",
-      formats: ["DOCX", "PDF"],
-    },
-    {
-      id: "c2",
-      category: "Copy & Messaging",
-      title: "Member variants",
-      description: "Specific messaging for loyalty club members.",
-      formats: ["DOCX"],
-    },
-    {
-      id: "t1",
-      category: "Templates",
-      title: "Figma master file",
-      description: "Complete design system for seasonal activations.",
-      formats: ["FIGMA"],
-    },
-    {
-      id: "t2",
-      category: "Templates",
-      title: "Component specs",
-      description: "Standardised dimensions and safe zones for all modules.",
-      formats: ["PDF"],
-    },
-  ];
+  useEffect(() => {
+    api.getResources().then(data => {
+      // Enforce formats if not in DB (original sample data had no formats, so I'll add them based on title match or default)
+      // Actually sample data didn't have formats. The previous code hardcoded them. I'll re-add hardcoded formats mapping or defaults for now.
+      const enhancedData = (data || []).map(r => ({
+        ...r,
+        formats: getFormatsForTitle(r.title)
+      }));
+      setResources(enhancedData);
+      setLoading(false);
+    });
+  }, []);
 
-  const [activeCategory, setActiveCategory] = useState("Visual Assets");
-  const filteredResources = useMemo(() =>
-    resources.filter((r) => r.category === activeCategory),
-    [activeCategory]
-  );
+  const getFormatsForTitle = (title) => {
+    // Map based on original hardcoded values plus new mappings
+    if (title.includes("Hero") || title.includes("Visual") || title.includes("Assets")) return ["SVG", "JPG", "PNG"];
+    if (title.includes("Category") || title.includes("Assortment")) return ["JPG", "PNG"];
+    if (title.includes("Social")) return ["MP4", "GIF"];
+    if (title.includes("Campaign") || title.includes("Copy") || title.includes("Headline")) return ["DOCX", "PDF"];
+    if (title.includes("Member")) return ["DOCX"];
+    if (title.includes("Figma") || title.includes("Brand")) return ["FIGMA"];
+    if (title.includes("Component") || title.includes("Technical") || title.includes("Specs")) return ["PDF"];
+    return ["FILE"];
+  };
+
+
 
   return (
     <div className="resources-page">
@@ -238,21 +218,14 @@ export default function ResourcesPage() {
 
           <div className="inner-content-wrapper">
             <div className="resources-container">
-              <nav className="category-nav">
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    className={`category-btn ${activeCategory === cat ? "active" : ""}`}
-                    onClick={() => setActiveCategory(cat)}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </nav>
-
               <div className="resources-grid animate-fade-in">
-                {filteredResources.map((res) => (
-                  <div key={res.id} className="resource-asset-card glass">
+                {resources.map((res) => (
+                  <div
+                    key={res.id}
+                    className="resource-asset-card glass"
+                    onClick={() => navigate(`/resources/${res.id}`)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     <div className="asset-preview">
                       {/* Render custom graphic based on title */}
                       {renderGraphic(res.title)}
