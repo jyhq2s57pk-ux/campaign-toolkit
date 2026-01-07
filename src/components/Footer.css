@@ -6,6 +6,7 @@
   border-top: 1px solid var(--border-glass);
   padding: 160px 40px 60px 40px;
   color: #fff;
+  margin-top: 160px;
 }
 
 .footer-container {
