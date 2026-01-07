@@ -473,3 +473,30 @@
     font-size: 12px;
   }
 }
+
+@media (max-width: 480px) {
+  .journey-page {
+    padding-top: 100px;
+    /* Account for fixed header if any */
+  }
+
+  h1 {
+    font-size: 36px !important;
+    /* Force override if global styles persist */
+    line-height: 1.2;
+    word-wrap: break-word;
+  }
+
+  .content-layout {
+    padding: 16px 12px;
+  }
+
+  .image-frame {
+    padding: 8px 16px;
+    min-width: 0;
+  }
+
+  .screenshot-wrapper {
+    max-width: 100%;
+  }
+}

@@ -6,7 +6,7 @@
   /* Likely #000 or very dark */
   min-height: 100vh;
   color: var(--text-primary);
-  padding-bottom: 80px;
+  padding-bottom: 0;
 }
 
 /* 1. Intro Section */
@@ -183,5 +183,22 @@
 
   .intro-container {
     padding: 0 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .intro-title {
+    font-size: 36px;
+    line-height: 1.2;
+  }
+
+  .intro-section {
+    padding-top: 80px;
+    padding-bottom: 32px;
+  }
+
+  .card {
+    height: auto;
+    min-height: 160px;
   }
 }

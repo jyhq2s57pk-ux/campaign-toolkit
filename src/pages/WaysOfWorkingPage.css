@@ -6,7 +6,7 @@
 
 .ways-main-content {
   flex: 1;
-  padding-bottom: 80px;
+  padding-bottom: 0;
 }
 
 .workflow-container {
@@ -318,4 +318,19 @@
   line-height: 1.1;
   position: relative;
   z-index: 1;
+}
+
+@media (max-width: 480px) {
+  .page-header h1 {
+    font-size: 32px !important;
+  }
+
+  .step-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .workflow-step-card {
+    padding: 24px;
+  }
 }

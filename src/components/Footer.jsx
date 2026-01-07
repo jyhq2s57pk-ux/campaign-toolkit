@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import './Footer.css';
+import avoltaLogo from '../assets/avoltaLogo.svg';
 
 export default function Footer() {
   const footerLinks = [
@@ -16,16 +17,24 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer-container">
-        <nav className="footer-nav">
-          {footerLinks.map((link) => (
-            <Link key={link.path} className="footer-nav-link" to={link.path}>
-              {link.name}
-            </Link>
-          ))}
-        </nav>
+        {/* Top Row: Links and Copyright */}
+        <div className="footer-top-row">
+          <nav className="footer-nav">
+            {footerLinks.map((link) => (
+              <Link key={link.path} className="footer-nav-link" to={link.path}>
+                {link.name}
+              </Link>
+            ))}
+          </nav>
 
-        <div className="footer-copyright">
-          © {new Date().getFullYear()} Digital Commerce Trading Toolkit · All rights reserved
+          <div className="footer-copyright">
+            © {new Date().getFullYear()} · All rights reserved
+          </div>
+        </div>
+
+        {/* Bottom Row: Big Logo */}
+        <div className="footer-logo-row">
+          <img src={avoltaLogo} alt="Avolta" className="footer-logo-avolta" />
         </div>
       </div>
     </footer>

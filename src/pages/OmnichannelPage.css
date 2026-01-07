@@ -151,53 +151,68 @@
         width: 260px;
         left: 50%;
         top: 50%;
-        transform: translate(-50%, -50%);
         /* Default centered before specific pos applied */
         margin: 0;
         z-index: 5;
     }
 
+    .strategy-card {
+        /* Initial animation state combined with centering */
+        transform: translate(-50%, -50%) translateY(20px);
+    }
+
     .strategy-info-card {
         width: 420px;
         z-index: 10;
+        transform: translate(-50%, -50%);
     }
 
     /* Circular Layout - Increased Radius for Separation */
-    /* Center (0,0) - Info Card */
 
     /* 01 Web - Top Left */
     .pos-01 {
-        transform: translate(-50%, -50%) translate(-340px, -240px) !important;
+        left: calc(50% - 340px);
+        top: calc(50% - 240px);
     }
 
     /* 02 App - Top Center */
     .pos-02 {
-        transform: translate(-50%, -50%) translate(0px, -340px) !important;
+        top: calc(50% - 340px);
     }
 
     /* 03 Email - Top Right */
     .pos-03 {
-        transform: translate(-50%, -50%) translate(340px, -240px) !important;
+        left: calc(50% + 340px);
+        top: calc(50% - 240px);
     }
 
     /* 04 Social - Right */
     .pos-04 {
-        transform: translate(-50%, -50%) translate(460px, 0px) !important;
+        left: calc(50% + 460px);
     }
 
     /* 05 Paid Social - Bottom Right */
     .pos-05 {
-        transform: translate(-50%, -50%) translate(340px, 240px) !important;
+        left: calc(50% + 340px);
+        top: calc(50% + 240px);
     }
 
     /* 06 Loyalty - Bottom Left */
     .pos-06 {
-        transform: translate(-50%, -50%) translate(-340px, 240px) !important;
+        left: calc(50% - 340px);
+        top: calc(50% + 240px);
     }
 
     /* 07 In-store - Left */
     .pos-07 {
-        transform: translate(-50%, -50%) translate(-460px, 0px) !important;
+        left: calc(50% - 460px);
+    }
+
+    /* Animation Final State for Desktop - Specificity boosted to override generic rule */
+    .strategy-grid.animate-active .strategy-card {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+        filter: blur(0);
     }
 }
 
@@ -610,5 +625,43 @@
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 36px;
+        line-height: 1.1;
+    }
+
+    .hero-subtitle {
+        font-size: 18px;
+        margin-top: 12px;
+    }
+
+    .hero-symbol-left,
+    .hero-symbol-right {
+        font-size: 64px;
+    }
+
+    .hero-content {
+        gap: 16px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .omni-hero {
+        min-height: auto;
+        padding-top: 100px;
+        padding-bottom: 60px;
+        height: auto;
+    }
+
+    .strategy-section {
+        padding: 40px 16px;
+    }
+
+    .strategy-info-card {
+        padding: 24px;
     }
 }

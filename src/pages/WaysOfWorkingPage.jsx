@@ -7,16 +7,6 @@ import { api } from "../lib/api";
 
 
 export default function WaysOfWorkingPage() {
-  const [processSteps, setProcessSteps] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    api.getWaysOfWorking().then(({ process }) => {
-      setProcessSteps(process || []);
-      setLoading(false);
-    });
-  }, []);
-
   const IconExpand = () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M15 3H21V9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -41,23 +31,51 @@ export default function WaysOfWorkingPage() {
     </svg>
   );
 
-  // Helper to get icon by index
-  const getIcon = (index) => {
-    if (index === 0) return <IconExpand />;
-    if (index === 1) return <IconGroup />;
-    return <IconStar />;
-  };
-
-  const steps = processSteps.length > 0 ? processSteps.map((step, index) => ({
-    icon: getIcon(index),
-    title: step.title,
-    // Description from DB is plain text, strictly speaking we might want to support HTML or just render text. 
-    // For now, simple text render. The original had complex HTML. 
-    // If we want rich text, we'd need a rich text field in DB or parser. 
-    // The sample data descriptions were simple strings, so I'll just use that.
-    content: <p>{step.description}</p>
-  })) : [
-    // Fallback or Skeleton
+  // Hardcoded steps to match user request
+  const steps = [
+    {
+      icon: <IconExpand />,
+      title: "1. Global",
+      content: (
+        <>
+          <p>
+            <strong>EPIC Ticket in JIRA</strong> – Global Digital Team to open an EPIC ticket in JIRA with everything ready to implement as it is in this toolkit.
+          </p>
+          <p>
+            <strong>One ticket by main region</strong> – Global Digital team to open a child ticket by each region, including an excel file with a detailed implementation guide including copies, translations, etc. <span className="inline-new-badge">NEW</span>
+          </p>
+        </>
+      )
+    },
+    {
+      icon: <IconGroup />,
+      title: "2. Regions",
+      content: (
+        <>
+          <p>
+            <strong>Review & Confirm</strong> – Validate details (location, dates, activation level).
+          </p>
+          <div className="highlight-text">
+            <strong>Approve Assets</strong> – Check copy & translations. Defaults apply if unchanged.
+          </div>
+          <p>
+            <strong>Support</strong> – Open DCCR ticket for design/translation help.
+          </p>
+          <p>
+            <strong>Handover</strong> – Reassign to <strong>Surekha Matte</strong> (Content Team).
+          </p>
+        </>
+      )
+    },
+    {
+      icon: <IconStar />,
+      title: "3. Content Implementation",
+      content: (
+        <p>
+          Once approved and assigned, the Content Team takes over to make it real! Final assets are deployed across all channels.
+        </p>
+      )
+    }
   ];
 
   const tips = [
@@ -83,8 +101,7 @@ export default function WaysOfWorkingPage() {
           <div className="inner-content-wrapper">
             <div className="workflow-container">
               <div className="workflow-steps">
-                {loading && <div className="loading-text">Loading process...</div>}
-                {!loading && steps.map((step, index) => (
+                {steps.map((step, index) => (
                   <div key={index} className="workflow-step-card glass">
                     <div className="step-icon-wrapper">
                       {step.icon}
