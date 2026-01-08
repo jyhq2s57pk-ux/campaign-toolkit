@@ -484,7 +484,7 @@
   }
 
   h1 {
-    font-size: 28px !important;
+    font-size: 42px !important;
     /* Force override if global styles persist */
     line-height: 1.2;
     word-wrap: break-word;

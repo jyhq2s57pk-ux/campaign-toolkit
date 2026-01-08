@@ -655,7 +655,7 @@
 
 @media (max-width: 480px) {
     .hero-title {
-        font-size: 32px;
+        font-size: 42px;
         /* Reduced from 36px */
         line-height: 1.1;
         word-wrap: break-word;
