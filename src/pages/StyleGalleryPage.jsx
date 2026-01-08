@@ -168,9 +168,9 @@ const StyleGalleryPage = () => {
                             <div className="component-group">
                                 <h3>Buttons</h3>
                                 <div className="button-group">
-                                    <button className="btn-token btn-primary">Primary Action</button>
-                                    <button className="btn-token btn-secondary">Secondary Action</button>
-                                    <button className="btn-token btn-outline">Outline Action</button>
+                                    <button className="btn-primary">Primary Action</button>
+                                    <button className="btn-secondary">Secondary Action</button>
+                                    <button className="btn-secondary" style={{ borderStyle: 'dashed' }}>Outline Action</button>
                                 </div>
                             </div>
 
@@ -185,7 +185,7 @@ const StyleGalleryPage = () => {
                             </div>
                         </div>
 
-                        <div className="component-group">
+                        <div className="component-group" style={{ marginTop: '40px' }}>
                             <h3>Cards & Surfaces</h3>
                             <div className="card-grid">
                                 <div className="card-token card-elevated">
@@ -250,9 +250,10 @@ const StyleGalleryPage = () => {
 
                                     {/* Buttons */}
                                     <div style={{ display: 'flex', gap: '12px' }}>
-                                        <button className="btn-token btn-primary" style={{ borderRadius: '6px' }}>Primary</button>
-                                        <button className="btn-token btn-secondary" style={{ borderRadius: '6px', background: '#161616', border: '1px solid rgba(255,255,255,0.05)' }}>Secondary</button>
+                                        <button className="btn-primary">Primary</button>
+                                        <button className="btn-secondary">Secondary</button>
                                     </div>
+                                    <div className="token-label" style={{ marginTop: '8px' }}>Buttons: Pill</div>
                                 </div>
                             </div>
                         </div>

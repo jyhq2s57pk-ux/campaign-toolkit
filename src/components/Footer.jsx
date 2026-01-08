@@ -1,41 +1,60 @@
 import { Link } from 'react-router-dom';
+import FooterLogo from './FooterLogo';
 import './Footer.css';
-import avoltaLogo from '../assets/avoltaLogo.svg';
 
 export default function Footer() {
   const footerLinks = [
-    { name: 'Journey', path: '/customer-journey' },
+    { name: 'Customer Touchpoints', path: '/customer-journey' },
     { name: 'Calendar', path: '/calendar' },
-    { name: 'Resources', path: '/resources' },
     { name: 'Omnichannel', path: '/omnichannel' },
     { name: 'Insights', path: '/insights' },
-    { name: 'Annex', path: '/annex' },
-    { name: 'Admin', path: '/admin' },
-    { name: 'Style Gallery', path: '/style-gallery' },
+    { name: 'Resources', path: '/resources' },
+    { name: 'Activate', path: '/activate' },
   ];
 
   return (
-    <footer className="footer">
-      <div className="footer-container">
-        {/* Top Row: Links and Copyright */}
-        <div className="footer-top-row">
-          <nav className="footer-nav">
-            {footerLinks.map((link) => (
-              <Link key={link.path} className="footer-nav-link" to={link.path}>
-                {link.name}
-              </Link>
-            ))}
-          </nav>
+    <footer className="footer" data-layer="Footer">
+      <div className="footer-container" data-layer="Container">
 
-          <div className="footer-copyright">
-            © {new Date().getFullYear()} · All rights reserved
+        {/* Top Section: Title/Login & Navigation */}
+        <div className="footer-top-section" data-layer="Container">
+
+          {/* Left Column: Title & Admin Login */}
+          <div className="footer-left-column" data-layer="Container">
+            <div className="footer-title" data-layer="Digital Commerce Trading Toolkit">
+              Digital Commerce <br />
+              Trading Toolkit
+            </div>
+            <Link to="/admin" className="footer-admin-login-btn" data-layer="Component 3">
+              <div className="footer-admin-text" data-layer="Text">Admin login</div>
+            </Link>
+          </div>
+
+          {/* Right Column: Navigation Links */}
+          <div className="footer-nav-column" data-layer="Nav - Site nav">
+            <div className="footer-nav-list" data-layer="List">
+              {footerLinks.map((link) => (
+                <div key={link.name} className="footer-nav-item" data-layer="Item">
+                  <Link to={link.path} className="footer-nav-link" data-layer="Link">
+                    <div className="footer-link-text" data-layer={link.name}>
+                      {link.name}
+                    </div>
+                  </Link>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Bottom Row: Big Logo */}
-        <div className="footer-logo-row">
-          <img src={avoltaLogo} alt="Avolta" className="footer-logo-avolta" />
+        {/* Bottom Section: Logo */}
+        <div className="footer-bottom-section" data-layer="Container">
+          <div className="footer-logo-container" data-layer="Logo container">
+            <div className="footer-logo" data-layer="Logo">
+              <FooterLogo />
+            </div>
+          </div>
         </div>
+
       </div>
     </footer>
   );

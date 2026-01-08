@@ -4,16 +4,12 @@ import MarkerEditor from './MarkerEditor';
 import './Badge.css';
 import './JourneyAdmin.css';
 
-const ACCENT_COLORS = [
-  { value: '#a855f7', label: 'Purple' },
-  { value: '#22c55e', label: 'Green' },
-  { value: '#3b82f6', label: 'Blue' },
-  { value: '#f97316', label: 'Orange' },
-  { value: '#ec4899', label: 'Pink' },
-  { value: '#14b8a6', label: 'Teal' },
-  { value: '#6366f1', label: 'Indigo' },
-  { value: '#eab308', label: 'Yellow' },
-];
+// Marker Line SVG (Matches Frontend)
+const MarkerLine = () => (
+  <svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M21.375 9L0.375001 9" stroke="#D6D6D6" strokeWidth="0.75" strokeLinecap="round" />
+  </svg>
+);
 
 const PLATFORM_TYPES = ['Web', 'App', 'In-Store'];
 
@@ -220,7 +216,7 @@ export default function JourneyAdmin() {
   };
 
   const handleDeleteComponent = async (id) => {
-    if (confirm('Delete this component?')) {
+    if (confirm('Delete this touchpoint?')) {
       await supabase.from('touchpoints').delete().eq('id', id);
       fetchAllData();
     }
@@ -320,7 +316,7 @@ export default function JourneyAdmin() {
   return (
     <div className="journey-admin">
       <div className="admin-header-row">
-        <h2>Journey Pages</h2>
+        <h2>Customer Touchpoints</h2>
         <button className="btn-primary" onClick={openNewPageForm}>+ Add Page</button>
       </div>
 
@@ -338,7 +334,7 @@ export default function JourneyAdmin() {
                 <div className="header-content" onClick={() => setExpandedPage(isExpanded ? null : page.id)}>
                   <span className="platform-tag">{page.platform_type}</span>
                   <h3>{page.title}</h3>
-                  <span className="comp-count">{pageComps.length} components</span>
+                  <span className="comp-count">{pageComps.length} Touchpoints</span>
                 </div>
                 <div className="header-actions">
                   <button className="btn-icon" onClick={() => startEditPage(page)} title="Edit Page">✏️</button>
@@ -355,15 +351,23 @@ export default function JourneyAdmin() {
                     <div className="admin-screenshot-panel">
                       {page.screenshot_url ? (
                         <div className="screenshot-preview">
-                          <img src={page.screenshot_url} alt={page.title} />
-                          {pageComps.map((c) => {
-                            const markers = c.marker_positions || [];
-                            return markers.map((marker, mi) => (
-                              <div key={`${c.id}-${mi}`} className="preview-marker" style={{ top: marker.top }}>
-                                {marker.number}
-                              </div>
-                            ));
-                          })}
+                          <div className="screenshot-wrapper">
+                            <img src={page.screenshot_url} alt={page.title} />
+                            {/* Markers Container */}
+                            <div className="admin-markers-container">
+                              {pageComps.map((c) => {
+                                const markers = c.marker_positions || [];
+                                return markers.map((marker, mi) => (
+                                  <div key={`${c.id}-${mi}`} className="marker-row" style={{ top: marker.top }}>
+                                    <MarkerLine />
+                                    <div className="number-label">
+                                      <span className="number-label-text">{c.marker_number}</span>
+                                    </div>
+                                  </div>
+                                ));
+                              })}
+                            </div>
+                          </div>
                         </div>
                       ) : (
                         <div className="no-screenshot">
@@ -376,8 +380,8 @@ export default function JourneyAdmin() {
                     {/* Right: Components List */}
                     <div className="admin-components-panel">
                       <div className="components-header">
-                        <span>Components</span>
-                        <button className="btn-primary btn-sm" onClick={startAddComponent}>+ Add Component</button>
+                        <span>Touchpoints</span>
+                        <button className="btn-primary btn-sm" onClick={startAddComponent}>+ Add Touchpoint</button>
                       </div>
 
                       <div className="components-list">
@@ -401,7 +405,7 @@ export default function JourneyAdmin() {
                                 ▼
                               </button>
                             </div>
-                            <div className="comp-marker" style={{ background: page.accent_color }}>{comp.marker_number}</div>
+                            <div className="comp-marker">{comp.marker_number}</div>
                             <div className="comp-content">
                               <h4>{comp.title}</h4>
                               <p>{comp.description?.substring(0, 80)}{comp.description?.length > 80 ? '...' : ''}</p>
@@ -425,8 +429,8 @@ export default function JourneyAdmin() {
 
                         {pageComps.length === 0 && (
                           <div className="empty-components">
-                            <p>No components yet</p>
-                            <button className="btn-primary btn-sm" onClick={startAddComponent}>+ Add First Component</button>
+                            <p>No touchpoints yet</p>
+                            <button className="btn-primary btn-sm" onClick={startAddComponent}>+ Add First Touchpoint</button>
                           </div>
                         )}
                       </div>
@@ -464,12 +468,7 @@ export default function JourneyAdmin() {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>Accent Color</label>
-                  <div className="color-picker">
-                    {ACCENT_COLORS.map(c => (
-                      <button key={c.value} type="button" className={`color-swatch ${(pageFormData.accent_color || '#22c55e') === c.value ? 'selected' : ''}`} style={{ background: c.value }} onClick={() => setPageFormData({ ...pageFormData, accent_color: c.value })} />
-                    ))}
-                  </div>
+                  <div className="color-picker-hidden" style={{ display: 'none' }}></div>
                 </div>
               </div>
 
@@ -500,15 +499,15 @@ export default function JourneyAdmin() {
       {showComponentForm && (
         <div className="modal-overlay" onClick={resetComponentForm}>
           <div className="modal-content modal-large" onClick={(e) => e.stopPropagation()}>
-            <h2>{editingComponent ? 'Edit Component' : 'Add Component'}</h2>
+            <h2>{editingComponent ? 'Edit Touchpoint' : 'Add Touchpoint'}</h2>
             <form onSubmit={handleComponentSubmit}>
               <div className="form-group">
-                <label>Component Title *</label>
+                <label>Touchpoint Title *</label>
                 <input type="text" value={componentFormData.title || ''} onChange={(e) => setComponentFormData({ ...componentFormData, title: e.target.value })} required placeholder="e.g., Hero Banner" />
               </div>
               <div className="form-group">
                 <label>Description</label>
-                <textarea value={componentFormData.description || ''} onChange={(e) => setComponentFormData({ ...componentFormData, description: e.target.value })} rows="3" placeholder="What does this component do?" />
+                <textarea value={componentFormData.description || ''} onChange={(e) => setComponentFormData({ ...componentFormData, description: e.target.value })} rows="3" placeholder="What does this touchpoint do?" />
               </div>
               <div className="form-checkboxes">
                 <label><input type="checkbox" checked={componentFormData.tier_premium || false} onChange={(e) => setComponentFormData({ ...componentFormData, tier_premium: e.target.checked })} /> Premium</label>
@@ -527,7 +526,7 @@ export default function JourneyAdmin() {
 
               <div className="form-actions">
                 <button type="button" className="btn-secondary" onClick={resetComponentForm}>Cancel</button>
-                <button type="submit" className="btn-primary">{editingComponent ? 'Update' : 'Add'} Component</button>
+                <button type="submit" className="btn-primary">{editingComponent ? 'Update' : 'Add'} Touchpoint</button>
               </div>
             </form>
           </div>

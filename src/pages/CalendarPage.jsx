@@ -183,7 +183,7 @@ export default function CalendarPage() {
                             style={{
                               gridColumn: getCampaignPosition(event),
                               gridRow: info.startRow + rowIdx,
-                              backgroundColor: tier.color,
+                              "--event-color": tier.color,
                               zIndex: 2
                             }}
                           >

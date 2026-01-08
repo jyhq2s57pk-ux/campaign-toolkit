@@ -170,5 +170,20 @@
     flex-direction: column;
     border-radius: 20px;
     width: 100%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header h1 {
+    font-size: 32px !important;
+  }
+
+  .resources-container {
+    gap: 24px;
+  }
+
+  .asset-title {
+    font-size: 16px;
   }
 }

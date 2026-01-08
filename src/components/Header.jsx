@@ -17,7 +17,7 @@ export default function Header() {
   };
 
   const navLinks = [
-    { name: 'Journey', path: '/customer-journey' },
+    { name: 'Customer Touchpoints', path: '/customer-journey' },
     { name: 'Calendar', path: '/calendar' },
     { name: 'Omnichannel', path: '/omnichannel' },
     { name: 'Insights', path: '/insights' },
@@ -27,30 +27,32 @@ export default function Header() {
 
   return (
     <header className="header">
-      <Link to="/" className="header-logo" onClick={closeMenu}>
-        <img src={logo} alt="Digital Commerce" className="logo-image" />
-      </Link>
+      <div className="header-container">
+        <Link to="/" className="header-logo" onClick={closeMenu}>
+          <img src={logo} alt="Digital Commerce" className="logo-image" />
+        </Link>
 
-      <button
-        className="mobile-menu-toggle"
-        onClick={toggleMenu}
-        aria-label="Toggle menu"
-      >
-        <span className={`hamburger ${isMenuOpen ? 'open' : ''}`}></span>
-      </button>
+        <button
+          className="mobile-menu-toggle"
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+        >
+          <span className={`hamburger ${isMenuOpen ? 'open' : ''}`}></span>
+        </button>
 
-      <nav className={`header-nav ${isMenuOpen ? 'mobile-open' : ''}`}>
-        {navLinks.map((link) => (
-          <Link
-            key={link.path}
-            to={link.path}
-            className={`nav-btn ${location.pathname === link.path ? 'nav-btn-active' : ''}`}
-            onClick={closeMenu}
-          >
-            {link.name}
-          </Link>
-        ))}
-      </nav>
+        <nav className={`header-nav ${isMenuOpen ? 'mobile-open' : ''}`}>
+          {navLinks.map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={`nav-btn ${location.pathname === link.path ? 'nav-btn-active' : ''}`}
+              onClick={closeMenu}
+            >
+              {link.name}
+            </Link>
+          ))}
+        </nav>
+      </div>
     </header>
   );
 }

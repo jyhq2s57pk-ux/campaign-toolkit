@@ -169,46 +169,6 @@
     gap: 16px;
 }
 
-.btn-token {
-    padding: 12px 24px;
-    border-radius: 100px;
-    border: none;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-primary {
-    background: var(--text-primary);
-    color: var(--text-inverse);
-}
-
-.btn-primary:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-}
-
-.btn-secondary {
-    background: var(--surface-card, #222);
-    color: var(--text-primary);
-    border: 1px solid var(--border-light);
-}
-
-.btn-secondary:hover {
-    background: var(--surface-elevated);
-}
-
-.btn-outline {
-    background: transparent;
-    border: 1px solid var(--text-muted);
-    color: var(--text-primary);
-}
-
-.btn-outline:hover {
-    border-color: var(--text-primary);
-}
-
 /* Badges */
 .badge-group {
     display: flex;

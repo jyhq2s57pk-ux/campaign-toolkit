@@ -53,7 +53,7 @@ export default function HomePage() {
               {/* 1. Customer Journey */}
               <Card
                 n="01"
-                title="Customer journey"
+                title="Customer Touchpoints"
                 href="/customer-journey"
               />
 

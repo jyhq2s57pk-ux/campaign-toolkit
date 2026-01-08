@@ -322,7 +322,8 @@
 
 @media (max-width: 480px) {
   .page-header h1 {
-    font-size: 32px !important;
+    font-size: 28px !important;
+    word-wrap: break-word;
   }
 
   .step-title {

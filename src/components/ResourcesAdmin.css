@@ -69,3 +69,98 @@
     gap: 8px;
     justify-content: flex-end;
 }
+.rs-form-section {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-glass);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.rs-form-section h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 16px;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-glass);
+    padding-bottom: 8px;
+}
+
+.section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border-glass);
+    padding-bottom: 8px;
+}
+
+.section-header-row h3 {
+    border-bottom: none;
+    margin: 0;
+    padding: 0;
+}
+
+.card-editor-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-glass);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 16px;
+}
+
+.card-editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.card-editor-header h4 {
+    margin: 0;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.btn-delete-text {
+    background: none;
+    border: none;
+    color: #ff4d4f;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btn-delete-text:hover {
+    text-decoration: underline;
+}
+
+.preview-image-container-small {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    background: #000;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.preview-image-container-small img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.form-group-checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.res-list-thumb {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    border: 1px solid var(--border-glass);
+}

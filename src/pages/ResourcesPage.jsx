@@ -182,6 +182,7 @@ export default function ResourcesPage() {
       // Actually sample data didn't have formats. The previous code hardcoded them. I'll re-add hardcoded formats mapping or defaults for now.
       const enhancedData = (data || []).map(r => ({
         ...r,
+        title: r.title === "ard title" ? "Card title" : r.title,
         formats: getFormatsForTitle(r.title)
       }));
       setResources(enhancedData);

@@ -128,7 +128,32 @@
     /* Use 'all' transition to handle filter and opacity. Transform is tricky with !important override below, so we avoid animating translate widely */
     transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
         filter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
-        transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+        scale 0.3s ease, box-shadow 0.3s ease;
+}
+
+.strategy-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 30px 60px rgba(139, 92, 246, 0.15);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+@media (max-width: 1023px) {
+    .strategy-card {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        opacity: 1 !important;
+        filter: none !important;
+    }
+
+    .strategy-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        height: auto !important;
+    }
 }
 
 /* Ensure Circular Layout Triggered on Desktop */
@@ -630,12 +655,15 @@
 
 @media (max-width: 480px) {
     .hero-title {
-        font-size: 36px;
+        font-size: 32px;
+        /* Reduced from 36px */
         line-height: 1.1;
+        word-wrap: break-word;
     }
 
     .hero-subtitle {
-        font-size: 18px;
+        font-size: 16px;
+        /* Reduced from 18px */
         margin-top: 12px;
     }
 

@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import './MarkerEditor.css';
 
+// Marker Line SVG (Matches Frontend)
+const MarkerLine = () => (
+  <svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M21.375 9L0.375001 9" stroke="#D6D6D6" strokeWidth="0.75" strokeLinecap="round" />
+  </svg>
+);
+
 export default function MarkerEditor({ imageUrl, markers, onChange }) {
   const [selectedMarker, setSelectedMarker] = useState(null);
 
@@ -8,7 +15,8 @@ export default function MarkerEditor({ imageUrl, markers, onChange }) {
     const newMarker = {
       number: markers.length + 1,
       top: '50%',
-      left: 'calc(100% - 30px)' // Fixed horizontal position
+      // We don't need 'left' anymore as css handles it, but keeping data structure constraint
+      left: 'auto'
     };
     onChange([...markers, newMarker]);
   };
@@ -23,8 +31,7 @@ export default function MarkerEditor({ imageUrl, markers, onChange }) {
 
   const updateMarkerPosition = (index, top) => {
     const updated = [...markers];
-    // Keep left fixed or assume CSS handles it, but let's persist the "standard" fixed value
-    updated[index] = { ...updated[index], top, left: 'calc(100% - 30px)' };
+    updated[index] = { ...updated[index], top };
     onChange(updated);
   };
 
@@ -55,19 +62,25 @@ export default function MarkerEditor({ imageUrl, markers, onChange }) {
           {imageUrl ? (
             <div className="marker-image-wrapper" onClick={handleImageClick}>
               <img src={imageUrl} alt="Touchpoint preview" />
-              {markers.map((marker, index) => (
-                <div
-                  key={index}
-                  className={`marker ${selectedMarker === index ? 'selected' : ''}`}
-                  style={{ top: marker.top /* left is handled by CSS class */ }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedMarker(index);
-                  }}
-                >
-                  {marker.number}
-                </div>
-              ))}
+              {/* Markers Container */}
+              <div className="editor-markers-container">
+                {markers.map((marker, index) => (
+                  <div
+                    key={index}
+                    className={`editor-marker-row ${selectedMarker === index ? 'selected' : ''}`}
+                    style={{ top: marker.top }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedMarker(index);
+                    }}
+                  >
+                    <MarkerLine />
+                    <div className="number-label">
+                      <span className="number-label-text">{marker.number}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           ) : (
             <div className="marker-placeholder">

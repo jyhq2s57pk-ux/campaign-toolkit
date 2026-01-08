@@ -188,12 +188,14 @@
 
 @media (max-width: 480px) {
   .intro-title {
-    font-size: 36px;
-    line-height: 1.2;
+    font-size: 32px;
+    /* Slightly smaller to fit better */
+    line-height: 1.1;
   }
 
   .intro-section {
-    padding-top: 80px;
+    padding-top: 100px;
+    /* Reduced from 200px (desktop) and 80px? Start at 100px to clear header */
     padding-bottom: 32px;
   }
 

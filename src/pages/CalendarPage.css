@@ -106,7 +106,7 @@
 /* Month Cells */
 .timeline-month-cell {
   border-bottom: 1px solid var(--border-glass);
-  border-right: 1px solid rgba(255, 255, 255, 0.03);
+  border-right: 1px solid var(--border-glass);
   min-height: 104px;
 }
 
@@ -115,20 +115,32 @@
 }
 
 /* Campaign Bars */
+/* Campaign Bars */
 .campaign-bar {
-  padding: 8px 12px;
-  border-radius: 6px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  transition: all var(--transition-fast);
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  flex-direction: row;
+  gap: 8px;
+  /* Gap between strip and text */
   height: auto;
   min-height: 72px;
   align-self: center;
   margin: 4px;
+  padding: 8px;
+  /* Internal padding */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #1A1A1A;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+}
+
+.campaign-bar::before {
+  content: '';
+  width: 12px;
+  background-color: var(--event-color);
+  border-radius: 12px;
+  flex-shrink: 0;
+  align-self: stretch;
+  /* Make it full height of the internal area if desired, or auto */
 }
 
 /* Hover effect removed */
@@ -136,13 +148,20 @@
 .campaign-bar-content {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
   gap: 2px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
 }
 
 .calendar-campaign-title {
   font-weight: 700;
   font-size: 11px;
-  color: #1a1a1a;
+  color: #ffffff;
   white-space: normal;
   overflow: visible;
   line-height: 1.25;
@@ -150,7 +169,7 @@
 
 .calendar-campaign-date {
   font-size: 11px;
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.6);
   font-weight: 500;
   line-height: 1.2;
 }
@@ -171,5 +190,24 @@
 @media (max-width: 1024px) {
   .calendar-grid-container {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scroll on iOS */
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header h1 {
+    font-size: 32px !important;
+    word-wrap: break-word;
+  }
+
+  /* Make grid cleaner on mobile */
+  .timeline-grid {
+    min-width: 800px;
+    /* Reduced min-width so it's not TOO long to scroll */
+  }
+
+  .timeline-grid {
+    grid-template-columns: 120px repeat(12, minmax(60px, 1fr));
   }
 }

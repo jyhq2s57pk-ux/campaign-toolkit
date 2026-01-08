@@ -53,58 +53,84 @@
   position: relative;
   width: 100%;
   display: block;
-  /* Ensure it takes full height of children */
+  /* Space for markers on the right */
+  padding-right: 50px;
   cursor: crosshair;
+  background: #1a1a1a;
+  /* Match background */
+  border-radius: 4px;
 }
 
-.marker-preview img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.marker-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: var(--text-muted);
-  text-align: center;
-  padding: 20px;
-}
-
-.marker {
+.editor-markers-container {
   position: absolute;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: var(--accent-green);
-  color: white;
+  right: 6px;
+  /* Position within the padding */
+  top: 0;
+  width: 44px;
+  height: 100%;
+  pointer-events: none;
+}
+
+.editor-marker-row {
+  position: absolute;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 600;
-  border: 3px solid white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  transform: translate(-50%, -50%);
-  cursor: ns-resize;
-  /* Indicates vertical movement only */
-  transition: top 0.2s, transform 0.2s;
-  /* Animate top changes */
-  left: calc(100% - 30px) !important;
-  /* Force to right side */
-}
-
-.marker:hover {
-  transform: translate(-50%, -50%) scale(1.1);
+  width: 44px;
+  height: 16px;
+  /* Visual height of the line */
+  transform: translateY(-50%);
   z-index: 10;
+  cursor: ns-resize;
+  /* Vertical resize cursor */
+  pointer-events: auto;
+  transition: transform 0.2s;
 }
 
-.marker.selected {
-  background-color: var(--accent-purple);
-  border-color: #ffd700;
-  transform: translate(-50%, -50%) scale(1.15);
+.editor-marker-row svg {
+  flex-shrink: 0;
+  margin-right: -1px;
+}
+
+/* Number Label specific to Editor to ensure styles if isolated */
+.editor-marker-row .number-label {
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  border: 0.67px solid #D4D4D4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.editor-marker-row .number-label-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1C1917;
+  line-height: 1;
+}
+
+.editor-marker-row:hover {
+  transform: translateY(-50%) scale(1.05);
+  z-index: 20;
+}
+
+.editor-marker-row.selected {
+  transform: translateY(-50%) scale(1.1);
+  z-index: 20;
+}
+
+.editor-marker-row.selected .number-label {
+  background-color: var(--accent-purple, #a855f7);
+  border-color: var(--accent-purple, #a855f7);
+}
+
+.editor-marker-row.selected .number-label-text {
+  color: white;
 }
 
 .marker-controls {

@@ -148,7 +148,7 @@ export default function CustomerJourneyPage() {
       <main className="journey-page">
         <div className="outer-container">
           <section className="page-header">
-            <h1>Customer Journey</h1>
+            <h1>Customer Touchpoints</h1>
             <p>Explore touchpoints across the customer experience</p>
           </section>
         </div>
@@ -183,7 +183,7 @@ export default function CustomerJourneyPage() {
                           </div>
                         </div>
                         <div className="accordion-meta">
-                          <span className="component-count">{componentCount} Components</span>
+                          <span className="component-count">{componentCount} Touchpoints</span>
                           <div className="accordion-chevron">
                             {isExpanded ? <ChevronUp /> : <ChevronDown />}
                           </div>

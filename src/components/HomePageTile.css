@@ -326,45 +326,54 @@
     .homepage-hero-card {
         flex-direction: column;
         height: auto;
-        gap: 40px;
+        gap: 32px;
+        padding: 24px;
+        /* Reduced from 40px */
         align-items: flex-start;
-        /* Align card content to start */
+        border-radius: 24px;
     }
 
     .hero-visual {
         width: 100%;
         max-width: 100%;
-        /* Full width */
-        height: 350px;
-        /* Keep height or let it auto if preferred, keeping fixed to ensure layout stability */
+        height: auto;
+        min-height: 300px;
+        padding: 16px;
+        border-radius: 20px;
+    }
+
+    .visual-gradient-card {
+        height: 140px;
+        /* Reduced height for proportion */
+    }
+
+    .joy-logo-img {
+        max-height: 60px;
     }
 
     .hero-details {
         width: 100%;
-        align-items: flex-start;
-        /* Left align */
-        text-align: left;
-        /* Left align text */
-    }
-
-    .hero-title-group {
-        align-items: flex-start;
-        /* Left align */
+        gap: 40px;
+        padding-top: 0;
     }
 
     .campaign-title-large {
-        margin-right: 0;
-        text-align: left;
-        /* Left align */
+        font-size: 28px;
+        line-height: 34px;
+    }
+}
+
+@media (max-width: 375px) {
+    .homepage-hero-card {
+        padding: 20px;
+        /* Even tighter for 375px */
     }
 
-    .info-block {
-        align-items: flex-start;
-        /* Left align */
+    .hero-visual {
+        min-height: auto;
     }
 
-    .badge-legend {
-        align-items: flex-start;
-        /* Left align */
+    .visual-gradient-card {
+        height: 120px;
     }
 }
