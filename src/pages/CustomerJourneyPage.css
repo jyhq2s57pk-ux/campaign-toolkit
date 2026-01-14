@@ -5,11 +5,11 @@
    CSS Custom Properties
    ===================================================== */
 .journey-page {
-  --font-saans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-dm-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+
 
   /* Theme Colors */
-  --theme-bg-1: #1a1a1a;
+  --theme-bg-1: var(--surface-card);
   --theme-bg-2: #262626;
   --theme-text-1: #F1F1F1;
   --theme-text-2: #A6A6A6;
@@ -284,7 +284,7 @@
 
 .number-label-text {
   font-family: var(--font-saans);
-  font-size: 12px;
+  font-size: var(--length-body-small);
   font-weight: 500;
   color: var(--stone-900);
   line-height: 16px;
@@ -319,7 +319,7 @@
 
 .no-screenshot p {
   font-family: var(--font-saans);
-  font-size: 13px;
+  font-size: var(--text-13);
   opacity: 0.7;
   margin: 0;
 }
@@ -392,7 +392,7 @@
    ===================================================== */
 .feature-description {
   font-family: var(--font-saans);
-  font-size: 13px;
+  font-size: var(--text-13);
   font-weight: 400;
   color: var(--neutral-400);
   line-height: 21px;
@@ -473,7 +473,7 @@
   }
 
   .feature-description {
-    font-size: 12px;
+    font-size: var(--length-body-small);
   }
 }
 
@@ -484,7 +484,6 @@
   }
 
   h1 {
-    font-size: 42px !important;
     /* Force override if global styles persist */
     line-height: 1.2;
     word-wrap: break-word;

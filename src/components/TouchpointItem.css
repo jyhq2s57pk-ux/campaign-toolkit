@@ -20,7 +20,7 @@
 
 .touchpoint-title {
   color: #ffffff;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-body);
   font-size: 20px;
   font-weight: 400;
   line-height: 23px;
@@ -40,8 +40,8 @@
 /* Description text */
 .touchpoint-description {
   color: #a6a6a6;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 13px;
+  font-family: var(--font-body);
+  font-size: var(--text-13);
   font-weight: 400;
   line-height: 21px;
   letter-spacing: 0;
@@ -51,8 +51,8 @@
 /* Optional module indicator */
 .touchpoint-optional {
   color: var(--text-muted, #6b7280);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 13px;
+  font-family: var(--font-body);
+  font-size: var(--text-13);
   font-style: italic;
   font-weight: 500;
   margin: 0;

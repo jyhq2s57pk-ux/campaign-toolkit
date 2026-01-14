@@ -25,7 +25,7 @@
 }
 
 .section-title {
-    font-size: 48px;
+    font-size: var(--h-xxl-alt);
     font-weight: 700;
     margin-bottom: 16px;
     color: var(--accent-coral);
@@ -40,8 +40,9 @@
 .bento-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
     gap: 24px;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
 }
 
 @media (min-width: 1100px) {
@@ -70,6 +71,8 @@
         grid-column: span 3;
         grid-row: span 1;
     }
+
+
 }
 
 .bento-card {
@@ -177,7 +180,7 @@
 }
 
 .bento-huge-number {
-    font-size: 96px;
+    font-size: var(--display-huge);
     font-weight: 800;
     color: #fff;
     line-height: 1;
@@ -249,11 +252,12 @@
 }
 
 /* Full Width Card Styling */
+/* Full Width Card Styling - Mobile First (Stack by default) */
 .card-full .bento-content {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 24px;
 }
 
 .card-full-text {
@@ -263,7 +267,8 @@
 .card-full-visual {
     flex: 1;
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    width: 100%;
     gap: 16px;
 }
 
@@ -433,4 +438,24 @@
         opacity: 1;
         stroke-width: 2px;
     }
+}
+
+@media (min-width: 1100px) {
+
+    /* Restore Row Layout on Desktop */
+    .card-full .bento-content {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+
+    .card-full-visual {
+        flex-direction: row !important;
+        justify-content: flex-end !important;
+        width: auto !important;
+    }
+}
+/* Override global wrapper gap for Insights Page */
+.insights-page .inner-content-wrapper {
+    gap: 24px;
 }

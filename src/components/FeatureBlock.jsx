@@ -1,18 +1,6 @@
 import React from 'react';
 import './FeatureBlock.css';
-
-/**
- * Badge component for displaying status labels
- * @param {string} color - Color variant: 'magenta', 'success', 'purple', 'default'
- * @param {React.ReactNode} children - Badge content
- */
-const FeatureBadge = ({ color = 'default', children }) => {
-    return (
-        <div className={`feature-badge feature-badge--${color}`}>
-            <span className="feature-badge__text">{children}</span>
-        </div>
-    );
-};
+import Badge from './Badge';
 
 /**
  * FeatureBlock component - Displays a feature with numbered label, title, description and badges
@@ -28,10 +16,10 @@ const FeatureBlock = ({
     title = 'CLP Hero',
     description = 'Feature special SKUs by category in a new carousel to appear before Bestsellers one Beauty: Exclusive Gifting Sets (fragrance & skincare sets Liquor: Festive Spirits to Celebrate (wine & champagne)',
     badges = [
-        { label: 'New', color: 'magenta' },
-        { label: 'Executive', color: 'success' },
-        { label: 'Premium', color: 'purple' },
-        { label: 'Standard', color: 'default' }
+        { label: 'New', color: 'new' },
+        { label: 'Executive', color: 'executive' },
+        { label: 'Premium', color: 'premium' },
+        { label: 'Standard', color: 'standard' }
     ]
 }) => {
     return (
@@ -56,9 +44,9 @@ const FeatureBlock = ({
                 <div className="feature-block__badges">
                     <div className="feature-block__badges-container">
                         {badges.map((badge, index) => (
-                            <FeatureBadge key={index} color={badge.color}>
+                            <Badge key={index} variant={badge.color} size="sm">
                                 {badge.label}
-                            </FeatureBadge>
+                            </Badge>
                         ))}
                     </div>
                 </div>
@@ -67,5 +55,4 @@ const FeatureBlock = ({
     );
 };
 
-export { FeatureBadge };
 export default FeatureBlock;

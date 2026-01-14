@@ -64,7 +64,7 @@
 
 /* Hero Card */
 .resource-hero-card {
-    background-color: #161616;
+    background-color: var(--surface-card);
     /* Dark card bg */
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 24px;
@@ -76,7 +76,7 @@
 }
 
 .hero-visual-side {
-    background: #000;
+    background: var(--surface-default);
     border-radius: 16px;
     overflow: hidden;
     /* Aspect ratio or flex sizing */
@@ -110,7 +110,7 @@
 
 .detail-label {
     display: block;
-    font-size: 12px;
+    font-size: var(--length-body-small);
     text-transform: uppercase;
     color: var(--text-muted);
     letter-spacing: 0.05em;
@@ -183,7 +183,7 @@
 }
 
 .embed-label-small {
-    font-size: 12px;
+    font-size: var(--length-body-small);
     text-transform: uppercase;
     color: var(--text-muted);
     display: block;
@@ -198,7 +198,7 @@
 }
 
 .embed-container-wrapper {
-    background: #161616;
+    background: var(--surface-card);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     overflow: hidden;

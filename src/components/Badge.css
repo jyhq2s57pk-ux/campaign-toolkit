@@ -6,24 +6,7 @@
 /* =====================================================
    CSS Custom Properties
    ===================================================== */
-:root {
-  /* Badge Colors - New Definition */
-  /* Premium (Pink) */
-  --badge-premium-bg: rgba(209, 43, 114, 0.15);
-  --badge-premium-text: #FF4D8D;
 
-  /* Executive (Blue) */
-  --badge-executive-bg: rgba(0, 115, 217, 0.15);
-  --badge-executive-text: #3395FF;
-
-  /* Standard (Orange) */
-  --badge-standard-bg: rgba(210, 98, 0, 0.15);
-  --badge-standard-text: #FF9500;
-
-  /* Legacy/Other */
-  --badge-new-bg: rgba(255, 102, 196, 0.2);
-  --badge-new-text: #FF66C4;
-}
 
 /* =====================================================
    Base Badge Styles
@@ -35,7 +18,7 @@
   border-radius: 9999px;
   overflow: hidden;
   white-space: nowrap;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-body);
 }
 
 /* =====================================================
@@ -47,7 +30,7 @@
 .badge--sm {
   height: 20px;
   padding: 2px 10px;
-  font-size: 12px;
+  font-size: var(--text-12);
   font-weight: 400;
   gap: 3px;
 }
@@ -56,7 +39,7 @@
 .badge--md {
   height: 26px;
   padding: 4px 14px;
-  font-size: 13px;
+  font-size: var(--text-13);
   font-weight: 500;
   gap: 4px;
 }
@@ -87,50 +70,52 @@
    Color Variants
    ===================================================== */
 
-/* New - Magenta/Pink */
+/* New / Available - Blue */
 .badge--new {
   background: var(--badge-new-bg);
   color: var(--badge-new-text);
 }
 
-/* Executive - Blue (Updated) */
+/* Success - Green */
+.badge--success {
+  background: var(--badge-success-bg);
+  color: var(--badge-success-text);
+}
+
+/* Executive - Blue */
 .badge--executive {
   background: var(--badge-executive-bg);
   color: var(--badge-executive-text);
 }
 
-/* Premium - Pink (Updated) */
+/* Premium - Magenta/Pink */
 .badge--premium {
   background: var(--badge-premium-bg);
   color: var(--badge-premium-text);
 }
 
-/* Standard - Orange (Updated) */
+/* Standard - Orange */
 .badge--standard {
   background: var(--badge-standard-bg);
   color: var(--badge-standard-text);
 }
 
-/* Keep legacy Generic classes if needed, or deprecate */
-.badge--purple {
-  background: rgba(175, 82, 222, 0.2);
-  color: #AF52DE;
-}
-
-.badge--success {
-  background: rgba(52, 199, 89, 0.2);
-  color: #34C759;
-}
-
+/* Default - Grey */
 .badge--default {
-  background: rgba(82, 82, 82, 1);
-  color: #E5E5EA;
+  background: var(--badge-default-bg);
+  color: var(--badge-default-text);
 }
 
-/* Optional - Light grey (alternative) */
+/* Legacy mappings - ensuring backward compatibility */
+/* Legacy mappings - ensuring backward compatibility */
+.badge--purple {
+  background: var(--badge-premium-bg);
+  color: var(--badge-premium-text);
+}
+
 .badge--optional {
-  background: rgba(255, 255, 255, 0.15);
-  color: #CCCCCC;
+  background: var(--badge-default-bg);
+  color: var(--badge-default-text);
 }
 
 /* =====================================================

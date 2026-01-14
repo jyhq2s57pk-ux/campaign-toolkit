@@ -1,91 +1,51 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import HeroCampaignCard from "../components/HeroCampaignCard";
+import ActivationIdeas from "../components/ActivationIdeas";
 import "../components/Badge.css";
 import "./HomePage.css";
 
-import HomePageTile from "../components/HomePageTile";
+import homePageTitle from "../assets/homepagetitle.svg";
 
 export default function HomePage() {
-  // Force HMR Update v5
-  const Card = ({ n, title, href = "#", className = "" }) => (
-    <Link
-      to={href}
-      className={`card ${className}`}
-    >
-      <div className="card-top">
-        <div className="card-number">{n}</div>
-      </div>
-      <div className="card-bottom">
-        <div className="card-title">{title}</div>
-      </div>
-    </Link>
-  );
-
   return (
     <div className="home-page">
       <Header />
 
       <main className="home-main">
-        {/* 1. Intro Section */}
-        <div className="intro-section">
-          <div className="intro-container">
-            <div className="intro-title">Digital Commerce<br />Trading Toolkit</div>
-            <div className="intro-subtitle">
-              Global frameworks to plan, launch and scale seasonal ecommerce activations across Reserve & Collect, App and Emporium.
-            </div>
-          </div>
+        {/* Homepage Title Image */}
+        <div className="homepage-title-container">
+          <img src={homePageTitle} alt="Campaign Toolkit" className="homepage-title-img" />
         </div>
 
-        {/* 2. Main Content Container */}
+        {/* Campaign Pill/Header Area */}
+        <div className="campaign-header-pill-area">
+          <span className="campaign-pill">2026 campaign</span>
+        </div>
+
+        {/* Main Content Container */}
         <div className="inner-content-wrapper">
 
-          {/* Section A: Campaign Hero */}
-          {/* Note: HomePageTile includes the wrapper and badge now */}
-          <HomePageTile />
-
-          {/* Section B: Grid */}
-          <section className="section-grid">
-            <span className="section-badge">Whats inside</span>
-
-            <div className="content-grid two-rows">
-              {/* 1. Customer Journey */}
-              <Card
-                n="01"
-                title="Customer Touchpoints"
-                href="/customer-journey"
-              />
-
-              {/* 2. Trading Calendar */}
-              <Card
-                n="02"
-                title="Trading calendar"
-                href="/calendar"
-              />
-
-              {/* 3. Omnichannel Consistency */}
-              <Card
-                n="03"
-                title="Omnichannel consistency"
-                href="/omnichannel"
-              />
-
-              {/* 4. Resources */}
-              <Card
-                n="04"
-                title="Resources"
-                href="/resources"
-              />
-
-              {/* 5. How to Activate */}
-              <Card
-                n="05"
-                title="How to activate"
-                href="/ways-of-working"
-              />
-            </div>
+          {/* 1. Hero Campaign Card */}
+          <section className="section-hero">
+            <HeroCampaignCard
+              links={[
+                { title: 'Customer Touchpoints', description: 'Explore touchpoints.', link: '/customer-journey' },
+                { title: 'Insights', description: 'View insights.', link: '/insights' },
+                { title: 'Activate', description: 'Activation guides.', link: '/ways-of-working' },
+                { title: 'Omnichannel', description: 'Omnichannel strategy.', link: '/omnichannel' },
+                { title: 'Calendar', description: 'Campaign calendar.', link: '/calendar' },
+                { title: 'Resources', description: 'Download resources.', link: '/resources' },
+              ]}
+            />
           </section>
+
+          {/* 3. Activation Ideas */}
+          <section className="section-activation">
+            <ActivationIdeas />
+          </section>
+
         </div>
       </main>
 

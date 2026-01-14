@@ -5,79 +5,79 @@
 
 /* Saans Font Family */
 @font-face {
-  font-family: 'Saans';
-  src: url('./fonts/Saans-Light.woff') format('woff');
-  font-weight: 300;
-  font-style: normal;
+    font-family: 'Saans';
+    src: url('./fonts/Saans-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'Saans';
-  src: url('./fonts/Saans-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
+    font-family: 'Saans';
+    src: url('./fonts/Saans-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'Saans';
-  src: url('./fonts/Saans-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
+    font-family: 'Saans';
+    src: url('./fonts/Saans-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'Saans';
-  src: url('./fonts/Saans-MediumItalic.woff') format('woff');
-  font-weight: 500;
-  font-style: italic;
+    font-family: 'Saans';
+    src: url('./fonts/Saans-MediumItalic.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
 }
 
 @font-face {
-  font-family: 'Saans';
-  src: url('./fonts/Saans-SemiBold.woff') format('woff');
-  font-weight: 600;
-  font-style: normal;
+    font-family: 'Saans';
+    src: url('./fonts/Saans-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: 'Saans';
-  src: url('./fonts/Saans-SemiBoldItalic.woff') format('woff');
-  font-weight: 600;
-  font-style: italic;
+    font-family: 'Saans';
+    src: url('./fonts/Saans-SemiBoldItalic.woff') format('woff');
+    font-weight: 600;
+    font-style: italic;
 }
 
 /* Base Resets */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: var(--font-body);
-  background-color: var(--surface-default);
-  color: var(--text-primary);
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-family: var(--font-body);
+    background-color: var(--surface-default);
+    color: var(--text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 button {
-  font-family: inherit;
+    font-family: inherit;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .animate-fade-in {
-  animation: fadeIn var(--transition-medium) forwards;
+    animation: fadeIn var(--transition-medium) forwards;
 }

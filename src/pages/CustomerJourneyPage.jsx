@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import '../components/Badge.css';
 import './CustomerJourneyPage.css';
 import ImplementationLevels from '../components/ImplementationLevels';
+import Badge from '../components/Badge';
 
 // Chevron Down Icon
 const ChevronDown = () => (
@@ -266,9 +267,9 @@ export default function CustomerJourneyPage() {
                                       {/* Badges */}
                                       <div className="feature-badges">
                                         {badges.map((badge, index) => (
-                                          <span key={index} className={`badge badge--${badge.variant}`}>
+                                          <Badge key={index} variant={badge.variant} size="sm">
                                             {badge.label}
-                                          </span>
+                                          </Badge>
                                         ))}
                                       </div>
                                     </div>

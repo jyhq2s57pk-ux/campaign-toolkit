@@ -13,7 +13,7 @@
 
   /* Text styling */
   color: #1e1e1e;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-body);
   font-size: 14px;
   font-weight: 500;
   line-height: 21.6px;

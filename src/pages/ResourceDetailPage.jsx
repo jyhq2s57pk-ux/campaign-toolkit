@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import { api } from '../lib/api';
 import './ResourceDetailPage.css';
 import ResourceEmbed from '../components/ResourceEmbed';
+import FlexibleHeroCard from '../components/FlexibleHeroCard';
 
 export default function ResourceDetailPage() {
     const { id } = useParams();
@@ -80,51 +81,24 @@ export default function ResourceDetailPage() {
                     </p>
                 </div>
 
-                {/* Hero Cards Loop */}
+                {/* Flexible Hero Cards Loop */}
                 {displayCards.map((card, index) => (
-                    <div className="resource-hero-card" key={index}>
-                        <div className="hero-visual-side">
-                            {card.image_url ? (
-                                <img src={card.image_url} alt={card.detail_headline || resource.title} className="hero-image" />
-                            ) : (
-                                <div className="hero-placeholder">
-                                    <span>No Preview Available</span>
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="hero-content-side">
-                            <div className="detail-group">
-                                <span className="detail-label">Campaign</span>
-                                <h2 className="detail-heading">{card.detail_headline || resource.title}</h2>
-                            </div>
-
-                            <div className="detail-group">
-                                <span className="detail-label">Channels</span>
-                                <div className="detail-value">Paid media platforms</div>
-                            </div>
-
-                            <div className="detail-group">
-                                <span className="detail-label">Details</span>
-                                <div className="detail-text">
-                                    {card.detail_content ? (
-                                        <div dangerouslySetInnerHTML={{ __html: card.detail_content }} />
-                                    ) : (
-                                        <>
-                                            <p>Please see below for {resource.title} assets to support your campaign activities.</p>
-                                            <p>To adapt the file, please duplicate the master file or download the assets using the link below.</p>
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-
-                            {card.link && (
-                                <a href={card.link} target="_blank" rel="noreferrer" className="primary-action-btn">
-                                    Primary Action
-                                </a>
-                            )}
-                        </div>
-                    </div>
+                    <FlexibleHeroCard
+                        key={index}
+                        image={card.image_url}
+                        eyebrow={card.eyebrow}
+                        title={card.detail_headline || resource.title}
+                        subtitleLabel={card.subtitle_label}
+                        subtitle={card.subtitle}
+                        detailsLabel={card.details_label}
+                        description={card.detail_content || (
+                            <>
+                                <p>Please see below for {resource.title} assets to support your campaign activities.</p>
+                                <p>To adapt the file, please duplicate the master file or download the assets using the link below.</p>
+                            </>
+                        )}
+                        actions={(card.link && card.show_cta !== false) ? [{ label: card.cta_text || "Primary Action", url: card.link }] : []}
+                    />
                 ))}
 
                 {/* Embed Section */}

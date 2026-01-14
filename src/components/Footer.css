@@ -2,21 +2,18 @@
 
 .footer {
   width: 100%;
-  background-color: #171717;
+  background-color: var(--surface-card);
   padding: 44px 0 48px 0;
-  /* As requested */
   display: flex;
   justify-content: center;
   align-items: flex-start;
   margin-top: 160px;
-  /* Keeping the margin-top from previous request if still desired, or should I remove it? The user specifically asked for it before. I'll keep it for safety unless told otherwise. */
-  font-family: 'Saans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-body);
 }
 
 .footer-container {
   width: 100%;
   max-width: 1400px;
-  /* height: 485px;  Removing fixed height to avoid overflow issues, using min-height if needed */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -32,7 +29,6 @@
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 64px;
-  /* Gap between top section and logo section */
 }
 
 /* Left Column */
@@ -41,10 +37,9 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 24px;
-  /* Space between textual title and button */
   width: 257px;
   height: 136px;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .footer-title {
@@ -55,28 +50,81 @@
   word-wrap: break-word;
 }
 
-.footer-admin-login-btn {
-  display: inline-flex;
-  padding: 6px 10px;
-  background: #F5F3ED;
-  border-radius: 980px;
-  justify-content: center;
+/* Admin Toggle Footer Styles */
+.admin-toggle-wrapper-footer {
+  display: flex;
   align-items: center;
+  gap: 12px;
+  cursor: pointer;
   text-decoration: none;
-  min-width: 60px;
-  transition: opacity 0.2s;
 }
 
-.footer-admin-login-btn:hover {
-  opacity: 0.9;
+.admin-toggle-switch-footer {
+  width: 48px;
+  height: 24px;
+  background-color: #555555;
+  border-radius: 12px;
+  position: relative;
+  transition: background-color 0.3s ease;
+  padding: 3px;
+  box-sizing: border-box;
 }
 
-.footer-admin-text {
-  color: #252525;
+.admin-toggle-switch-footer.active {
+  background-color: var(--accent-purple);
+  /* Core Purple */
+}
+
+.toggle-knob-footer {
+  width: 18px;
+  height: 18px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: left 0.3s ease;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.admin-toggle-switch-footer.active .toggle-knob-footer {
+  left: 27px;
+}
+
+.admin-label-footer {
+  color: #F1F1F1;
   font-size: 14px;
-  font-weight: 500;
-  line-height: 18px;
-  text-align: center;
+  font-weight: 400;
+}
+
+.footer-desktop-admin {
+  display: none;
+  /* Hidden by default on desktop if the user only wants it in mobile footer, 
+                   BUT usually footers are consistent. The request said "take out ... in mobile view and put it into the footer".
+                   It implies it's NOT in the footer normally? 
+                   "Take out the toggle admin in mobile view (from header I assume) and put it into the footer" 
+                   This phrasing could mean:
+                   1. Mobile view: Header has NO toggle, Footer HAS toggle.
+                   2. Desktop view: HEADER has toggle. FOOTER has ???
+                   
+                   Re-reading: "Make sure it works across mobile. Take out the toggle admin in mobile view and put it into the footer."
+                   This is a constraint for MOBILE. 
+                   
+                   I will assume for Desktop, we keep the Header toggle and NO Footer toggle (or keep the old button).
+                   Actually, let's keep the footer Admin toggle available on Mobile ONLY if that's the specific request.
+                   
+                   However, if I remove it from the header on mobile, I MUST have it somewhere. 
+                   If currently the footer has an "Admin Login" button on desktop, I should probably replace that with the toggle or hide it?
+                   The design shows "Admin Login" textual button in the footer original code.
+                   
+                   I'll implement:
+                   - Desktop: Header has toggle. Footer has NO toggle (or keeps old link? I'll hide it to be clean).
+                   - Mobile: Header has NO toggle. Footer HAS toggle.
+                   */
+}
+
+.footer-mobile-admin {
+  display: none;
 }
 
 /* Right Nav Column */
@@ -127,7 +175,6 @@
   flex-direction: column;
   align-items: flex-start;
   padding-top: 64px;
-  /* Spacing above logo */
 }
 
 .footer-logo-container {
@@ -151,7 +198,15 @@
 }
 
 /* Responsive Adjustments */
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
+
+  /* Matching Header breakpoint */
+  .footer-mobile-admin {
+    display: block;
+    /* Show in footer on mobile */
+    margin-top: 10px;
+  }
+
   .footer-top-section {
     flex-direction: column;
     gap: 40px;
@@ -175,11 +230,6 @@
   .footer-logo svg {
     height: auto;
     max-width: 200px;
-    /* Limit logo width on mobile */
-  }
-
-  .footer-admin-text {
-    /* Keep admin login visible/accessible */
   }
 
   .footer-top-section {

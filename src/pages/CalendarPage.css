@@ -42,7 +42,7 @@
 /* Headers */
 .timeline-header {
   padding: 24px;
-  font-size: 11px;
+  font-size: var(--text-xs);
   font-weight: 700;
   color: var(--text-muted);
   border-bottom: 1px solid var(--border-glass);
@@ -85,7 +85,7 @@
 
 .tier-name-text,
 .local-tier-label {
-  font-size: 13px;
+  font-size: var(--text-sm);
   font-weight: 600;
   color: #ffffff;
   line-height: 1.2;
@@ -128,7 +128,7 @@
   padding: 8px;
   /* Internal padding */
   border: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: #1A1A1A;
+  background-color: var(--surface-card);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
 }
@@ -160,7 +160,7 @@
 
 .calendar-campaign-title {
   font-weight: 700;
-  font-size: 11px;
+  font-size: var(--text-xs);
   color: #ffffff;
   white-space: normal;
   overflow: visible;
@@ -168,7 +168,7 @@
 }
 
 .calendar-campaign-date {
-  font-size: 11px;
+  font-size: var(--text-xs);
   color: rgba(255, 255, 255, 0.6);
   font-weight: 500;
   line-height: 1.2;
@@ -197,7 +197,6 @@
 
 @media (max-width: 480px) {
   .page-header h1 {
-    font-size: 42px !important;
     word-wrap: break-word;
   }
 

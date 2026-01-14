@@ -1,0 +1,223 @@
+.hero-campaign-card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* Dark background for the whole section */
+    background-color: var(--surface-card);
+    border-radius: 40px;
+    /* Large radius per design */
+    overflow: hidden;
+    color: white;
+}
+
+/* ================= HERO BANNER ================= */
+.hero-banner {
+    background-color: #E87722;
+    /* Matches design orange */
+    padding: 32px 24px;
+    position: relative;
+    /* Mobile: just text */
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hero-banner-content {
+    max-width: 100%;
+    z-index: 2;
+}
+
+.hero-title {
+    font-family: var(--font-body, 'Saans', sans-serif);
+    font-size: var(--h-xxxl);
+    color: var(--surface-card) !important;
+    font-weight: 600;
+    /* semi-bold */
+    /* Dark text on orange */
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+    /* Reset any potential gradient text styles */
+    background: none !important;
+    -webkit-background-clip: border-box !important;
+    background-clip: border-box !important;
+    -webkit-text-fill-color: var(--surface-card) !important;
+    opacity: 1 !important;
+    line-height: 1.1;
+}
+
+.hero-logo-row {
+    display: flex;
+    flex-direction: column;
+    /* Stacked on mobile */
+    gap: 8px;
+    margin-top: auto;
+}
+
+.hero-logo {
+    font-family: var(--font-body, 'Saans', sans-serif);
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--surface-card);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.hero-year {
+    font-family: var(--font-body, 'Saans', sans-serif);
+    font-size: 14px;
+    color: var(--surface-card);
+}
+
+.hero-image {
+    display: none;
+    /* Hidden on mobile */
+}
+
+/* ================= CAMPAIGN CONTENT ================= */
+.campaign-content {
+    display: flex;
+    flex-direction: column;
+    /* Stacked on mobile */
+    gap: 40px;
+    padding: 32px 24px;
+}
+
+/* LEFT SIDE - INFO */
+.campaign-info {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.info-label {
+    font-family: var(--font-body, 'Saans', sans-serif);
+    font-size: 14px;
+    color: #9CA3AF;
+    /* Grey text */
+    margin: 0;
+}
+
+.info-value {
+    font-family: var(--font-body, 'Saans', sans-serif);
+    font-size: 16px;
+    color: white;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Badge Legend */
+.badge-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.legend-text {
+    font-family: var(--font-body, 'Saans', sans-serif);
+    font-size: 14px;
+    color: #E5E7EB;
+}
+
+/* RIGHT SIDE - LINKS GRID */
+.campaign-links {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.links-title {
+    font-family: var(--font-body, 'Saans', sans-serif);
+    font-size: 24px;
+    font-weight: 500;
+    color: white;
+    margin-bottom: 24px;
+}
+
+.links-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    /* 1 col on mobile */
+    gap: 16px;
+}
+
+
+/* ================= DESKTOP BREAKPOINT ================= */
+@media (min-width: 900px) {
+
+    /* Slightly wider breakpoint for complex layout */
+    .hero-campaign-card {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Hero Banner Split */
+    .hero-banner {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 48px 64px;
+        min-height: 320px;
+    }
+
+    .hero-banner-content {
+        max-width: 50%;
+    }
+
+    .hero-title {
+        margin-bottom: 32px;
+    }
+
+    .hero-image {
+        display: block;
+        width: 45%;
+        max-width: 500px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .hero-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* Layout Split */
+    .campaign-content {
+        flex-direction: row;
+        padding: 48px 64px;
+        gap: 64px;
+    }
+
+    .campaign-info {
+        width: 300px;
+        /* Fixed width sidebar */
+        flex-shrink: 0;
+    }
+
+    .campaign-links {
+        flex-grow: 1;
+    }
+
+    /* 2 Column Grid for links */
+    .links-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        /* Tightened from 24px per feedback */
+    }
+}

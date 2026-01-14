@@ -3,32 +3,39 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 72px;
-  background-color: rgba(15, 15, 15, 0.7);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
-  border-bottom: 1px solid var(--border-glass);
+  height: 50px;
+  background-color: #161616;
+  border-bottom: 1px solid #2B2B2B;
   display: flex;
   justify-content: center;
-  /* Center the container */
-  padding: 0 40px;
+  padding: 0 12px;
   z-index: 1000;
-  transition: all var(--transition-fast);
+  font-family: 'DM Sans', sans-serif;
+  transition: background-color 0.3s ease;
 }
 
-@media (max-width: 480px) {
-  .header {
-    padding: 0 20px;
-  }
+.header.admin-mode {
+  background-color: #8F53F0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .header-container {
   width: 100%;
+  /* max-width: 1400px; Remove max-width constraint to match "alignSelf: stretch" in figma or keep it reasonable? 
+     Figma layout shows a container width of 1400 but also "width: 1400" on the request. 
+     I'll keep it full width or max-width 1400 centered. */
   max-width: 1400px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 100%;
+}
+
+.header-left {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .header-logo {
@@ -38,44 +45,118 @@
 }
 
 .logo-image {
-  width: 240px;
-  height: 34px;
-  object-fit: contain;
+  height: 26px;
+  width: auto;
+  display: block;
+}
+
+.header-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .header-nav {
   display: flex;
-  gap: 8px;
+  gap: 4px;
+  padding: 4px;
+  /* Optional: background for the nav container if needed, but looks transparent in default */
+  align-items: center;
 }
 
 .nav-btn {
   background: none;
   border: none;
-  color: var(--text-secondary);
+  color: #F1F1F1;
+  /* var(--Day, white) */
   font-size: 14px;
-  font-weight: 500;
+  font-family: inherit;
+  font-weight: 400;
   cursor: pointer;
-  padding: 8px 16px;
-  border-radius: 100px;
-  transition: all 0.2s;
+  padding: 6px 16px;
+  border-radius: 20px;
   text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  height: 32px;
 }
 
 .nav-btn:hover {
-  color: var(--text-primary);
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 .nav-btn-active {
-  background-color: var(--text-primary);
-  color: var(--text-inverse);
+  background-color: #333333;
+  color: #FFFFFF;
+  font-weight: 500;
 }
 
 .nav-btn-active:hover {
-  background-color: var(--text-primary);
-  color: var(--text-inverse);
+  background-color: #444444;
 }
 
+.header-right {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.admin-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.admin-toggle-switch {
+  width: 48px;
+  height: 24px;
+  background-color: #555555;
+  border-radius: 12px;
+  position: relative;
+  transition: background-color 0.3s ease;
+  padding: 3px;
+  box-sizing: border-box;
+}
+
+.admin-toggle-switch.active {
+  background-color: #2B2B2B;
+  /* Dark Grey */
+}
+
+.toggle-knob {
+  width: 18px;
+  height: 18px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: left 0.3s ease;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.admin-toggle-switch.active .toggle-knob {
+  left: 27px;
+}
+
+.admin-label {
+  color: #F1F1F1;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.mobile-admin-wrapper {
+  display: none;
+  /* Hidden by default on desktop */
+}
+
+/* Mobile Menu Toggle */
 .mobile-menu-toggle {
   display: none;
   background: none;
@@ -83,105 +164,91 @@
   cursor: pointer;
   padding: 10px;
   z-index: 1002;
-  /* Ensure it stays above the mobile menu overlay */
 }
 
-.hamburger {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background-color: #fff;
-  position: relative;
-  transition: all 0.3s ease-in-out;
+.menu-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F1F1F1;
+  transition: transform 0.3s ease-in-out;
 }
 
-.hamburger::before,
-.hamburger::after {
-  content: '';
-  position: absolute;
-  width: 24px;
-  height: 2px;
-  background-color: #fff;
-  left: 0;
-  transition: all 0.3s ease-in-out;
-}
-
-.hamburger::before {
-  top: -8px;
-}
-
-.hamburger::after {
-  top: 8px;
-}
-
-/* Hamburger Animation State */
-.hamburger.open {
-  background-color: transparent;
-}
-
-.hamburger.open::before {
+.menu-icon.open {
   transform: rotate(45deg);
-  top: 0;
-}
-
-.hamburger.open::after {
-  transform: rotate(-45deg);
-  top: 0;
 }
 
 @media (max-width: 1100px) {
-  .header-nav {
+  .header-center {
+    display: none;
+  }
+
+  .header-center.open {
+    display: block;
+  }
+
+  .header-right {
     display: none;
   }
 
   .mobile-menu-toggle {
     display: block;
   }
-}
 
-/* Mobile Menu Open State */
-/* Mobile Menu Open State */
-.header-nav.mobile-open {
-  display: flex;
-  position: fixed;
-  top: 72px;
-  /* Start below the header */
-  left: 0;
-  right: 0;
-  height: calc(100vh - 72px);
-  /* Fill remaining viewport height */
-  bottom: auto;
-  background: var(--surface-default);
-  flex-direction: column;
-  justify-content: flex-start;
-  /* Start items from top */
-  padding-top: 40px;
-  align-items: center;
-  gap: 24px;
-  z-index: 1001;
-  overflow-y: auto;
-  /* Allow scrolling if content overflows */
-
-  /* Animation */
-  opacity: 0;
-  animation: slideDownMobile 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes slideDownMobile {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
+  .header-nav.mobile-open {
+    display: flex;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    height: calc(100vh - 50px);
+    background: #161616;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 0;
+    align-items: stretch;
+    /* Stretch to full width */
+    gap: 0;
+    z-index: 1001;
+    overflow-y: auto;
   }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .header-nav.mobile-open .nav-btn {
+    font-size: 16px;
+    height: auto;
+    padding: 24px;
+    width: 100%;
+    border-bottom: 1px solid #2B2B2B;
+    border-radius: 0;
+    justify-content: flex-start;
   }
-}
 
-.header-nav.mobile-open .nav-btn {
-  font-size: 24px;
-  /* Slightly smaller for better fit */
-  width: 100%;
-  text-align: center;
+  /* Make active state look different on mobile if needed, or keep same */
+  .header-nav.mobile-open .nav-btn-active {
+    background-color: #161616;
+    /* Keep dark background specifically for mobile list item if per design, or use the white pill? */
+    /* Screenshot shows simple list. Active state styling on mobile is often different. 
+       Let's assume text color highlight or white pill. 
+       If I look at screenshot, mobile menu links just look like text. 
+       I will reset the active background for mobile to look cleaner if it spans full width. */
+    background-color: transparent;
+    color: #FFFFFF;
+    font-weight: 600;
+  }
+
+  .mobile-admin-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Label left/right? Or Toggle right? */
+    padding: 24px;
+    border-bottom: 1px solid #2B2B2B;
+    width: 100%;
+    box-sizing: border-box;
+    /* Position at bottom or just end of list? Screenshot shows at bottom.
+       If list is short, mt-auto pushes it down? 
+       .header-nav is flex column. */
+    /* margin-top: auto; */
+    /* Only if height is 100% and we want it at bottom */
+  }
 }

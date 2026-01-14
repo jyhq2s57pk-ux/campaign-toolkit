@@ -21,7 +21,7 @@
 }
 
 .tips-headline-col h2 {
-    font-family: var(--font-saans);
+    font-family: var(--font-display);
     font-size: 45px;
     font-weight: 500;
     line-height: 1;
@@ -51,7 +51,7 @@
 
 
 .tip-number {
-    font-family: var(--font-saans);
+    font-family: var(--font-display);
     font-size: 60px;
     /* Heading XXXL */
     line-height: 1;
@@ -78,7 +78,7 @@
 }
 
 .tip-text {
-    font-family: var(--font-saans);
+    font-family: var(--font-body);
     font-size: 14px;
     line-height: 1.5;
     /* Reduced from 1.5 (approx 4px less per line, maybe total height reduction?) 

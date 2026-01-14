@@ -1,5 +1,5 @@
 import NumberMarker from './NumberMarker';
-import { FeatureBadge } from './FeatureBlock';
+import Badge from './Badge';
 import './TouchpointItem.css';
 
 export default function TouchpointItem({
@@ -14,10 +14,10 @@ export default function TouchpointItem({
 }) {
   // Build badges array based on props
   const badges = [];
-  if (isNew) badges.push({ label: 'New', color: 'magenta' });
-  if (isPremium) badges.push({ label: 'Premium', color: 'purple' });
-  if (isExecutive) badges.push({ label: 'Executive', color: 'success' });
-  if (isStandard) badges.push({ label: 'Standard', color: 'default' });
+  if (isNew) badges.push({ label: 'New', color: 'new' });
+  if (isPremium) badges.push({ label: 'Premium', color: 'premium' });
+  if (isExecutive) badges.push({ label: 'Executive', color: 'executive' });
+  if (isStandard) badges.push({ label: 'Standard', color: 'standard' });
 
   return (
     <div className="touchpoint-item">
@@ -31,9 +31,9 @@ export default function TouchpointItem({
       {badges.length > 0 && (
         <div className="touchpoint-badges">
           {badges.map((badge, index) => (
-            <FeatureBadge key={index} color={badge.color}>
+            <Badge key={index} variant={badge.color} size="sm">
               {badge.label}
-            </FeatureBadge>
+            </Badge>
           ))}
         </div>
       )}

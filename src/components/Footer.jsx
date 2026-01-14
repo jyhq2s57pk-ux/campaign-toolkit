@@ -1,16 +1,29 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import FooterLogo from './FooterLogo';
 import './Footer.css';
 
 export default function Footer() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isAdmin = location.pathname.startsWith('/admin');
+
   const footerLinks = [
     { name: 'Customer Touchpoints', path: '/customer-journey' },
     { name: 'Calendar', path: '/calendar' },
     { name: 'Omnichannel', path: '/omnichannel' },
     { name: 'Insights', path: '/insights' },
     { name: 'Resources', path: '/resources' },
-    { name: 'Activate', path: '/activate' },
+    { name: 'Activate', path: '/ways-of-working' },
+    { name: 'Design System', path: '/design-system' },
   ];
+
+  const toggleAdmin = () => {
+    if (isAdmin) {
+      navigate('/');
+    } else {
+      navigate('/admin');
+    }
+  };
 
   return (
     <footer className="footer" data-layer="Footer">
@@ -25,9 +38,27 @@ export default function Footer() {
               Digital Commerce <br />
               Trading Toolkit
             </div>
-            <Link to="/admin" className="footer-admin-login-btn" data-layer="Component 3">
-              <div className="footer-admin-text" data-layer="Text">Admin login</div>
-            </Link>
+
+            {/* Desktop Admin Login Button */}
+            <div className="footer-desktop-admin">
+              <div className="admin-toggle-wrapper-footer" onClick={toggleAdmin}>
+                <div className={`admin-toggle-switch-footer ${isAdmin ? 'active' : ''}`}>
+                  <div className="toggle-knob-footer"></div>
+                </div>
+                <span className="admin-label-footer">Admin</span>
+              </div>
+            </div>
+
+            {/* Mobile Admin Toggle (shown via CSS media query) */}
+            <div className="footer-mobile-admin">
+              <div className="admin-toggle-wrapper-footer" onClick={toggleAdmin}>
+                <div className={`admin-toggle-switch-footer ${isAdmin ? 'active' : ''}`}>
+                  <div className="toggle-knob-footer"></div>
+                </div>
+                <span className="admin-label-footer">Admin</span>
+              </div>
+            </div>
+
           </div>
 
           {/* Right Column: Navigation Links */}

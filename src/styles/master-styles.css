@@ -15,8 +15,9 @@
     /* Main background */
     --surface-elevated: #111111;
     /* Cards, Panels, Modals */
-    --surface-card: #161616;
-    /* Secondary/Nested cards */
+    /* Cards, Panels, Modals */
+    --surface-card: #1a1a1a;
+    /* Secondary/Nested cards (Updated from #161616 to match live usage) */
     --surface-glass: rgba(255, 255, 255, 0.02);
     /* Glass overlays */
 
@@ -37,19 +38,29 @@
     --accent-orange: #F97316;
     /* Homepage Hover */
 
-    /* Status Colors (Badges) */
-    /* Magenta */
-    --magenta-bg: rgba(255, 102, 196, 0.2);
-    --magenta-text: #FF66C4;
+    /* Premium (Purple) */
+    --badge-premium-text: #A772FF;
+    --badge-premium-bg: rgba(128, 86, 240, 0.15);
+
+    /* Executive (Teal/Green) */
+    --badge-executive-text: #26C8AD;
+    --badge-executive-bg: rgba(0, 151, 20, 0.15);
+
+    /* New (Orange Text / Pink BG) */
+    --badge-new-text: #EF9653;
+    --badge-new-bg: rgba(209, 43, 114, 0.15);
+
+    /* Standard (Grey) */
+    --badge-standard-text: #D8D8D8;
+    --badge-standard-bg: #262626;
+
     /* Success (Green) */
-    --success-bg: rgba(52, 199, 89, 0.2);
-    --success-text: #34C759;
-    /* Purple */
-    --purple-bg: rgba(175, 82, 222, 0.2);
-    --purple-text: #AF52DE;
+    --badge-success-text: #26C8AD;
+    --badge-success-bg: rgba(0, 151, 20, 0.15);
+
     /* Default (Grey) */
-    --default-bg: rgba(82, 82, 82, 1);
-    --default-text: #E5E5EA;
+    --badge-default-text: #D8D8D8;
+    --badge-default-bg: #262626;
 
     /* Borders */
     --border-default: rgba(255, 255, 255, 0.08);
@@ -61,16 +72,48 @@
 
     /* 2. TYPOGRAPHY
      -------------------------------------------------------------------------- */
-    --font-display: 'Saans', 'Inter', system-ui, sans-serif;
-    --font-body: 'Saans', 'Inter', system-ui, sans-serif;
+    --font-display: 'Saans', sans-serif;
+    --font-body: 'Saans', sans-serif;
+    --font-mono: 'Courier New', monospace;
 
-    /* Font Sizes - Headings */
-    --h-xxxl: 60px;
-    --h-xxl: 45px;
-    --h-xl: 36px;
-    --h-l: 28px;
-    --h-m: 20px;
-    --h-s: 18px;
+    /* Font Sizes - Headings (Fluid Scaling: Desktop 1440px -> Mobile 375px) */
+    /* Formula: calc(Min + (Max - Min) * ((100vw - 375px) / (1440 - 375))) */
+
+    /* 64px -> 36px (Updated H1 to better match live site 60px usage) */
+    --h-xxxl: clamp(36px, 2.5vw + 24px, 64px);
+    /* 48px -> 32px (Insights Title) */
+    --h-xxl-alt: clamp(32px, 1.5vw + 26px, 48px);
+    /* 45px -> 30px */
+    --h-xxl: clamp(30px, 1.5vw + 24px, 45px);
+    /* 36px -> 26px */
+    --h-xl: clamp(26px, 1vw + 22px, 36px);
+    /* 28px -> 22px */
+    --h-l: clamp(22px, 0.6vw + 20px, 28px);
+    /* 20px -> 18px */
+    --h-m: clamp(18px, 0.2vw + 17px, 20px);
+    /* 18px -> 16px */
+    --h-s: clamp(16px, 0.2vw + 15px, 18px);
+
+    /* Display / Infographic Sizes (Insights) */
+    --display-huge: clamp(64px, 5vw + 40px, 96px);
+    /* 96px -> 64px */
+
+    /* Body & Utility Sizes (Calendar/UI) */
+    --length-body-large: 16px;
+    --length-body-default: 14px;
+    --length-body-small: 12px;
+
+    /* Missing Tokens Identified in Audit */
+    --radius-card-display: 20px;
+    --blur-glass: 20px;
+    --text-sm: 13px;
+    /* Calendar/Table data */
+    --text-xs: 11px;
+    /* Micro labels/Tags */
+
+    /* Requested Utility Sizes */
+    --text-12: 12px;
+    --text-13: 13px;
 
 
     /* 3. LAYOUT & GEOMETRY
@@ -145,7 +188,7 @@
 
 .page-header h1 {
     font-family: var(--font-display);
-    font-size: 72px;
+    font-size: var(--h-xxxl);
     font-weight: 600;
     line-height: 1.1;
     letter-spacing: -1.68px;

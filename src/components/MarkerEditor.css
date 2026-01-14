@@ -25,7 +25,7 @@
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: var(--text-13);
   font-weight: 500;
   cursor: pointer;
   transition: opacity 0.2s;
@@ -45,20 +45,28 @@
   position: relative;
   max-height: 500px;
   overflow-y: auto;
-  background-color: #1a1a1a;
+  background-color: var(--surface-card);
   border-radius: 12px;
 }
 
 .marker-image-wrapper {
   position: relative;
   width: 100%;
+  max-width: 100%;
   display: block;
   /* Space for markers on the right */
   padding-right: 50px;
   cursor: crosshair;
-  background: #1a1a1a;
+  background: var(--surface-card);
   /* Match background */
   border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.marker-image-wrapper img {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 .editor-markers-container {
@@ -107,8 +115,8 @@
 }
 
 .editor-marker-row .number-label-text {
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
+  font-family: var(--font-body);
+  font-size: var(--text-12);
   font-weight: 500;
   color: #1C1917;
   line-height: 1;
@@ -140,7 +148,7 @@
 }
 
 .marker-instructions {
-  font-size: 13px;
+  font-size: var(--text-13);
   color: var(--text-secondary);
   padding: 12px;
   background-color: rgba(255, 255, 255, 0.03);
@@ -179,7 +187,7 @@
   background: none;
   border: none;
   color: var(--text-primary);
-  font-size: 13px;
+  font-size: var(--text-13);
   text-align: left;
   cursor: pointer;
   border-radius: 4px;
@@ -200,7 +208,7 @@
   background-color: var(--accent-green);
   color: white;
   font-weight: 600;
-  font-size: 12px;
+  font-size: var(--text-12);
 }
 
 .marker-item.active .marker-number {
@@ -209,7 +217,7 @@
 
 .marker-coords {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: var(--text-12);
 }
 
 .marker-remove-btn {
