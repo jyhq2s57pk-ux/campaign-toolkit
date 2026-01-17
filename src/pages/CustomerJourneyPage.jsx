@@ -7,26 +7,11 @@ import './CustomerJourneyPage.css';
 import ImplementationLevels from '../components/ImplementationLevels';
 import Badge from '../components/Badge';
 
-// Chevron Down Icon
-const ChevronDown = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M8 10.9998L3 5.9998L3.7 5.2998L8 9.5998L12.3 5.2998L13 5.9998L8 10.9998Z" fill="var(--theme-icon-1, #F1F1F1)" />
-  </svg>
-);
-
-// Chevron Up Icon
-const ChevronUp = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M8 5L13 10L12.3 10.7L8 6.4L3.7 10.7L3 10L8 5Z" fill="var(--theme-icon-1, #F1F1F1)" />
-  </svg>
-);
-
-// Marker Line SVG
-const MarkerLine = () => (
-  <svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M21.375 9L0.375001 9" stroke="#D6D6D6" strokeWidth="0.75" strokeLinecap="round" />
-  </svg>
-);
+const ChevronDown = () => (<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 10.9998L3 5.9998L3.7 5.2998L8 9.5998L12.3 5.2998L13 5.9998L8 10.9998Z" fill="var(--theme-icon-1, #F1F1F1)" /></svg>);
+const ChevronUp = () => (<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 5L13 10L12.3 10.7L8 6.4L3.7 10.7L3 10L8 5Z" fill="var(--theme-icon-1, #F1F1F1)" /></svg>);
+const MarkerLine = () => (<svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.375 9L0.375001 9" stroke="#D6D6D6" strokeWidth="0.75" strokeLinecap="round" /></svg>);
+const PLATFORM_COLORS = { 'Web': { bg: 'rgba(232, 92, 74, 0.15)', text: '#E85C4A', border: '#E85C4A' }, 'App': { bg: 'rgba(139, 92, 246, 0.15)', text: '#8B5CF6', border: '#8B5CF6' }, 'Email': { bg: 'rgba(59, 130, 246, 0.15)', text: '#3B82F6', border: '#3B82F6' }, 'Social': { bg: 'rgba(236, 72, 153, 0.15)', text: '#EC4899', border: '#EC4899' }, 'In-Store': { bg: 'rgba(34, 197, 94, 0.15)', text: '#22C55E', border: '#22C55E' } };
+const ChevronRight = () => (<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>);
 
 export default function CustomerJourneyPage() {
   const [pages, setPages] = useState([]);
@@ -34,261 +19,33 @@ export default function CustomerJourneyPage() {
   const [expandedPage, setExpandedPage] = useState(null);
   const [activeComponent, setActiveComponent] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [expandedCopyIdeas, setExpandedCopyIdeas] = useState(null);
   const detailRefs = useRef({});
   const screenshotRef = useRef(null);
 
-  useEffect(() => {
-    fetchPages();
-  }, []);
+  useEffect(() => { fetchPages(); }, []);
 
   const fetchPages = async () => {
     setLoading(true);
-
-    // 1. Fetch Platforms (acts as "Pages" or "Accordion Items")
-    const { data: platformsData, error: platformsError } = await supabase
-      .from('platforms')
-      .select('*')
-      .order('name'); // or sort_order if you add it
-
-    if (platformsError) {
-      console.error('Error fetching platforms:', platformsError);
-      setLoading(false);
-      return;
-    }
-
-    // Map platforms to expected "page" structure
-    const mappedPages = (platformsData || []).map(p => ({
-      id: p.name, // using name as ID for grouping since touchpoints link via name
-      title: p.name,
-      platform_type: p.type || 'Web', // Default or from DB
-      screenshot_url: p.screenshot_url
-    }));
-
-    setPages(mappedPages);
-
-    // 2. Fetch Touchpoints (acts as "Components")
-    const { data: touchpointsData, error: touchpointsError } = await supabase
-      .from('touchpoints')
-      .select('*')
-      .order('sort_order', { ascending: true });
-
-    if (!touchpointsError && touchpointsData) {
-      // Group touchpoints by platform name
+    const { data: platformsData, error: platformsError } = await supabase.from('platforms').select('*').order('name');
+    if (platformsError) { setLoading(false); return; }
+    setPages((platformsData || []).map(p => ({ id: p.name, title: p.name, platform_type: p.type || 'Web', screenshot_url: p.screenshot_url })));
+    const { data: touchpointsData } = await supabase.from('touchpoints').select('*').order('sort_order', { ascending: true });
+    if (touchpointsData) {
       const grouped = {};
-      touchpointsData.forEach((comp, index) => {
-        const key = comp.platform;
-        if (!grouped[key]) grouped[key] = [];
-
-        // Add a virtual marker number if not present (simple 1-based index per group)
-        comp.marker_number = grouped[key].length + 1;
-
-        grouped[key].push(comp);
-      });
+      touchpointsData.forEach((comp) => { const key = comp.platform; if (!grouped[key]) grouped[key] = []; comp.marker_number = grouped[key].length + 1; grouped[key].push(comp); });
       setComponents(grouped);
     }
-
     setLoading(false);
   };
 
-  const handlePageClick = (page) => {
-    if (expandedPage?.id === page.id) {
-      setExpandedPage(null);
-      setActiveComponent(null);
-    } else {
-      setExpandedPage(page);
-      const pageComponents = components[page.id] || [];
-      if (pageComponents.length > 0) {
-        setActiveComponent(pageComponents[0]);
-      }
-    }
-  };
-
-  const handleComponentClick = (component) => {
-    setActiveComponent(component);
-    // Scroll to component detail
-    if (detailRefs.current[component.id]) {
-      detailRefs.current[component.id].scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-  };
-
-  // Scroll sync: as user scrolls through details, highlight active component
-  const handleDetailScroll = useCallback(() => {
-    if (!expandedPage) return;
-    const pageComponents = components[expandedPage.id] || [];
-
-    for (const comp of pageComponents) {
-      const el = detailRefs.current[comp.id];
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-        // Check if element is roughly in the center of viewport
-        if (rect.top < viewportHeight * 0.5 && rect.bottom > viewportHeight * 0.3) {
-          if (activeComponent?.id !== comp.id) {
-            setActiveComponent(comp);
-          }
-          break;
-        }
-      }
-    }
-  }, [expandedPage, components, activeComponent]);
-
-  useEffect(() => {
-    const container = document.querySelector('.detail-scroll-container');
-    if (container) {
-      container.addEventListener('scroll', handleDetailScroll);
-      return () => container.removeEventListener('scroll', handleDetailScroll);
-    }
-  }, [handleDetailScroll]);
-
+  const handlePageClick = (page) => { if (expandedPage?.id === page.id) { setExpandedPage(null); setActiveComponent(null); } else { setExpandedPage(page); const pc = components[page.id] || []; if (pc.length > 0) setActiveComponent(pc[0]); } };
+  const handleComponentClick = (component) => { setActiveComponent(component); if (detailRefs.current[component.id]) detailRefs.current[component.id].scrollIntoView({ behavior: 'smooth', block: 'center' }); };
+  const handleDetailScroll = useCallback(() => { if (!expandedPage) return; for (const comp of (components[expandedPage.id] || [])) { const el = detailRefs.current[comp.id]; if (el) { const rect = el.getBoundingClientRect(); if (rect.top < window.innerHeight * 0.5 && rect.bottom > window.innerHeight * 0.3) { if (activeComponent?.id !== comp.id) setActiveComponent(comp); break; } } } }, [expandedPage, components, activeComponent]);
+  useEffect(() => { const c = document.querySelector('.detail-scroll-container'); if (c) { c.addEventListener('scroll', handleDetailScroll); return () => c.removeEventListener('scroll', handleDetailScroll); } }, [handleDetailScroll]);
   const pageComponents = expandedPage ? (components[expandedPage.id] || []) : [];
+  const toggleCopyIdeas = (compId, e) => { e.stopPropagation(); setExpandedCopyIdeas(expandedCopyIdeas === compId ? null : compId); };
+  const getPlatformStyle = (pt) => { const c = PLATFORM_COLORS[pt] || PLATFORM_COLORS['Web']; return { background: c.bg, color: c.text, border: '1px solid ' + c.border }; };
 
-  return (
-    <div className="page-wrapper">
-      <Header />
-      <main className="journey-page">
-        <div className="outer-container">
-          <section className="page-header">
-            <h1>Customer Touchpoints</h1>
-            <p>Explore touchpoints across the customer experience</p>
-          </section>
-        </div>
-
-
-        <div className="inner-content-wrapper">
-          <ImplementationLevels />
-
-          <div className="journey-content">
-            <div className="journey-section-header">
-              <h2>Customer Touchpoints</h2>
-            </div>
-            {loading ? (
-              <div className="loading-state">Loading journey data...</div>
-            ) : (
-              <div className="accordion-container">
-                {pages.map((page) => {
-                  const isExpanded = expandedPage?.id === page.id;
-                  const componentCount = (components[page.id] || []).length;
-
-                  return (
-                    <div key={page.id} className={`accordion-item ${isExpanded ? 'expanded' : ''}`}>
-                      {/* Accordion Header */}
-                      <div
-                        className="accordion-header"
-                        onClick={() => handlePageClick(page)}
-                      >
-                        <div className="accordion-title-area">
-                          <div className="accordion-title">{page.title}</div>
-                          <div className="platform-badge">
-                            <span className="platform-badge-text">{page.platform_type}</span>
-                          </div>
-                        </div>
-                        <div className="accordion-meta">
-                          <span className="component-count">{componentCount} Touchpoints</span>
-                          <div className="accordion-chevron">
-                            {isExpanded ? <ChevronUp /> : <ChevronDown />}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Expanded Content */}
-                      {isExpanded && (
-                        <div className="accordion-body">
-                          <div className="content-layout">
-                            {/* Left: Image Frame with Screenshot */}
-                            <div className="image-frame" ref={screenshotRef}>
-                              {page.screenshot_url ? (
-                                <div className="screenshot-wrapper">
-                                  <img src={page.screenshot_url} alt={page.title} className="screenshot-image" />
-                                  {/* Number markers with connecting lines */}
-                                  <div className="markers-container">
-                                    {pageComponents.map((comp, index) => {
-                                      const markers = comp.marker_positions || [];
-                                      // Calculate position - distribute evenly or use saved positions
-                                      const topPercent = markers.length > 0 && markers[0]?.top
-                                        ? markers[0].top
-                                        : `${(index * 140) + 58}px`;
-
-                                      return (
-                                        <div
-                                          key={comp.id}
-                                          className={`marker-row ${activeComponent?.id === comp.id ? 'active' : ''}`}
-                                          style={{ top: topPercent }}
-                                        >
-                                          <MarkerLine />
-                                          <div className="number-label">
-                                            <span className="number-label-text">{comp.marker_number}</span>
-                                          </div>
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                </div>
-                              ) : (
-                                <div className="no-screenshot">
-                                  <span>No screenshot available</span>
-                                  <p>Add a screenshot URL in the Admin panel</p>
-                                </div>
-                              )}
-                            </div>
-
-                            {/* Right: Feature Descriptions */}
-                            <div className="descriptions-container">
-                              {pageComponents.map((comp) => {
-                                // Build badges array using unified badge variant names
-                                const badges = [];
-                                if (comp.is_new) badges.push({ label: 'New', variant: 'new' });
-                                if (comp.tier_executive) badges.push({ label: 'Executive', variant: 'executive' });
-                                if (comp.tier_premium) badges.push({ label: 'Premium', variant: 'premium' });
-                                // Show Standard badge unless explicitly disabled
-                                if (comp.tier_standard !== false) badges.push({ label: 'Standard', variant: 'standard' });
-
-                                return (
-                                  <div
-                                    key={comp.id}
-                                    ref={(el) => detailRefs.current[comp.id] = el}
-                                    className={`feature-item ${activeComponent?.id === comp.id ? 'active' : ''}`}
-                                    onClick={() => handleComponentClick(comp)}
-                                  >
-                                    <div className="feature-content">
-                                      {/* Header with number and title */}
-                                      <div className="feature-header">
-                                        <div className="feature-number">
-                                          <span className="feature-number-text">{comp.marker_number}</span>
-                                        </div>
-                                        <div className="feature-title">{comp.title}</div>
-                                      </div>
-
-                                      {/* Description */}
-                                      <div className="feature-description">
-                                        {comp.description}
-                                      </div>
-
-                                      {/* Badges */}
-                                      <div className="feature-badges">
-                                        {badges.map((badge, index) => (
-                                          <Badge key={index} variant={badge.variant} size="sm">
-                                            {badge.label}
-                                          </Badge>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </div>
-      </main>
-      <Footer />
-    </div>
-  );
+  return (<div className="page-wrapper"><Header /><main className="journey-page"><div className="outer-container"><section className="page-header"><h1>Customer Touchpoints</h1><p>Explore touchpoints across the customer experience</p></section></div><div className="inner-content-wrapper">{!loading && pages.length > 0 && (<section className="key-touchpoints-nav"><h3 className="key-touchpoints-title">Key Touchpoints</h3><div className="key-touchpoints-scroll"><div className="key-touchpoints-cards">{pages.map((page) => { const cc = (components[page.id] || []).length; const isActive = expandedPage?.id === page.id; return (<div key={page.id} className={'key-touchpoint-card ' + (isActive ? 'active' : '')} onClick={() => handlePageClick(page)}><div className="key-touchpoint-content"><span className="key-touchpoint-name">{page.title}</span><div className="key-touchpoint-meta"><span className="key-touchpoint-platform" style={getPlatformStyle(page.platform_type)}>{page.platform_type}</span><span className="key-touchpoint-count">{cc} touchpoints</span></div></div></div>); })}</div></div></section>)}<ImplementationLevels /><div className="journey-content"><div className="journey-section-header"><h2>Customer Touchpoints</h2></div>{loading ? (<div className="loading-state">Loading...</div>) : (<div className="accordion-container">{pages.map((page) => { const isExp = expandedPage?.id === page.id; const cc = (components[page.id] || []).length; return (<div key={page.id} className={'accordion-item ' + (isExp ? 'expanded' : '')}><div className="accordion-header" onClick={() => handlePageClick(page)}><div className="accordion-title-area"><div className="accordion-title">{page.title}</div><div className="platform-badge platform-badge-colored" style={getPlatformStyle(page.platform_type)}><span className="platform-badge-text">{page.platform_type}</span></div></div><div className="accordion-meta"><span className="component-count">{cc} Touchpoints</span><div className="accordion-chevron">{isExp ? <ChevronUp /> : <ChevronDown />}</div></div></div>{isExp && (<div className="accordion-body"><div className="content-layout"><div className="image-frame" ref={screenshotRef}>{page.screenshot_url ? (<div className="screenshot-wrapper"><img src={page.screenshot_url} alt={page.title} className="screenshot-image" /><div className="markers-container">{pageComponents.map((comp, i) => { const t = comp.marker_positions?.[0]?.top || ((i * 140) + 58 + 'px'); return (<div key={comp.id} className={'marker-row ' + (activeComponent?.id === comp.id ? 'active' : '')} style={{ top: t }}><MarkerLine /><div className="number-label"><span className="number-label-text">{comp.marker_number}</span></div></div>); })}</div></div>) : (<div className="no-screenshot"><span>No screenshot</span></div>)}</div><div className="descriptions-container">{pageComponents.map((comp) => { const badges = []; if (comp.is_new) badges.push({ label: 'New', variant: 'new' }); if (comp.tier_executive) badges.push({ label: 'Executive', variant: 'executive' }); if (comp.tier_premium) badges.push({ label: 'Premium', variant: 'premium' }); if (comp.tier_standard !== false) badges.push({ label: 'Standard', variant: 'standard' }); const hasCopy = comp.copy_ideas?.length > 0; const isCopyExp = expandedCopyIdeas === comp.id; return (<div key={comp.id} ref={(el) => detailRefs.current[comp.id] = el} className={'feature-item ' + (activeComponent?.id === comp.id ? 'active' : '')} onClick={() => handleComponentClick(comp)}><div className="feature-content"><div className="feature-header"><div className="feature-number"><span className="feature-number-text">{comp.marker_number}</span></div><div className="feature-title">{comp.title}</div></div><div className="feature-description">{comp.description}</div><div className="feature-badges">{badges.map((b, i) => (<Badge key={i} variant={b.variant} size="sm">{b.label}</Badge>))}</div>{hasCopy && (<div className="copy-ideas-section"><button className={'copy-ideas-toggle ' + (isCopyExp ? 'expanded' : '')} onClick={(e) => toggleCopyIdeas(comp.id, e)}><span>Copy Ideas</span><span className={'copy-ideas-chevron ' + (isCopyExp ? 'rotated' : '')}><ChevronRight /></span></button>{isCopyExp && (<div className="copy-ideas-content">{comp.copy_ideas.map((idea, idx) => (<div key={idx} className="copy-idea-item"><p>{idea}</p></div>))}</div>)}</div>)}</div></div>); })}</div></div></div>)}</div>); })}</div>)}</div></div></main><Footer /></div>);
 }
