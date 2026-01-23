@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Papa from 'papaparse';
 import { supabase } from '../lib/supabase';
 import { api } from '../lib/api';
+import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import './AdminPage.css';
 import CampaignAdmin from '../components/CampaignAdmin';
@@ -60,6 +62,13 @@ export default function AdminPage() {
   const [campaign, setCampaign] = useState(null);
   const [csvPreview, setCsvPreview] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   // Fetch calendar events from Supabase
   const fetchCalendarEvents = async () => {
@@ -298,7 +307,17 @@ export default function AdminPage() {
       <main style={{ paddingTop: '56px' }}>
         <div className="admin-container inner-content-wrapper">
           <div className="admin-header">
-            <h1>Admin</h1>
+            <div>
+              <h1>Admin</h1>
+              {user && (
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: '0.5rem 0 0 0' }}>
+                  Logged in as: {user.email}
+                </p>
+              )}
+            </div>
+            <button onClick={handleSignOut} className="btn-secondary">
+              Sign Out
+            </button>
           </div>
 
           {/* Tab Navigation */}
