@@ -3,6 +3,7 @@ import Papa from 'papaparse';
 import { supabase } from '../lib/supabase';
 import Header from '../components/Header';
 import './AdminPage.css';
+import CampaignAdmin from '../components/CampaignAdmin';
 import JourneyAdmin from '../components/JourneyAdmin';
 import ResourcesAdmin from '../components/ResourcesAdmin';
 
@@ -50,7 +51,7 @@ function calendarToCSV(items) {
 }
 
 export default function AdminPage() {
-  const [activeTab, setActiveTab] = useState('journey');
+  const [activeTab, setActiveTab] = useState('campaign');
   const [calendarEvents, setCalendarEvents] = useState([]);
   const [csvError, setCsvError] = useState(null);
 
@@ -274,6 +275,12 @@ export default function AdminPage() {
           {/* Tab Navigation */}
           <div className="admin-tabs">
             <button
+              className={activeTab === 'campaign' ? 'btn-primary' : 'btn-secondary'}
+              onClick={() => setActiveTab('campaign')}
+            >
+              Campaign
+            </button>
+            <button
               className={activeTab === 'journey' ? 'btn-primary' : 'btn-secondary'}
               onClick={() => setActiveTab('journey')}
             >
@@ -293,12 +300,14 @@ export default function AdminPage() {
             </button>
           </div>
 
-          {activeTab === 'resources' && <ResourcesAdmin />}
+          {/* Campaign Tab */}
+          {activeTab === 'campaign' && <CampaignAdmin />}
 
-          {/* Calendar Tab */}
-          {activeTab === 'journey' && (
-            <JourneyAdmin />
-          )}
+          {/* Journey Tab */}
+          {activeTab === 'journey' && <JourneyAdmin />}
+
+          {/* Resources Tab */}
+          {activeTab === 'resources' && <ResourcesAdmin />}
 
           {activeTab === 'calendar' && (
             <div className="calendar-admin-section">

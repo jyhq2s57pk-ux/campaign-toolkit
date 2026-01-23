@@ -3,16 +3,27 @@ import { supabase } from './supabase';
 
 export const api = {
     async getCampaign() {
-        // Fetches the first campaign found. In a real app, you might want a specific ID.
+        // Fetch the primary campaign (campaign-2026)
         const { data, error } = await supabase
             .from('campaigns')
             .select('*')
-            .limit(1)
+            .eq('id', 'campaign-2026')
             .single();
 
         if (error) {
             console.error('Error fetching campaign:', error);
-            return null;
+            // Return fallback data
+            return {
+                id: 'campaign-2026',
+                name: 'The Magic of Joy Holiday Season',
+                subtitle: 'A global celebration bringing joy to travelers worldwide',
+                year: '2026',
+                scope: 'Global',
+                channels: 'Reserve & Collect (Web / APP) Emporium',
+                activation_start_date: '2025-10-01',
+                activation_end_date: '2025-12-31',
+                activation_dates: 'October-December 2025 (Activation date may vary by location)'
+            };
         }
         return data;
     },
