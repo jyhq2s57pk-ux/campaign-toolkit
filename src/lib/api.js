@@ -133,5 +133,19 @@ export const api = {
             return [];
         }
         return data;
+    },
+
+    async getOmnichannelIdeas() {
+        const { data, error } = await supabase
+            .from('omnichannel_ideas')
+            .select('*')
+            .eq('is_active', true)
+            .order('sort_order');
+
+        if (error) {
+            console.error('Error fetching omnichannel ideas:', error);
+            return [];
+        }
+        return data;
     }
 };

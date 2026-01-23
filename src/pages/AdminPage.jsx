@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import './AdminPage.css';
 import CampaignAdmin from '../components/CampaignAdmin';
 import WaysOfWorkingAdmin from '../components/WaysOfWorkingAdmin';
+import OmnichannelIdeasAdmin from '../components/OmnichannelIdeasAdmin';
 import JourneyAdmin from '../components/JourneyAdmin';
 import ResourcesAdmin from '../components/ResourcesAdmin';
 
@@ -298,6 +299,12 @@ export default function AdminPage() {
               Ways of Working
             </button>
             <button
+              className={activeTab === 'omnichannel' ? 'btn-primary' : 'btn-secondary'}
+              onClick={() => setActiveTab('omnichannel')}
+            >
+              Omnichannel Ideas
+            </button>
+            <button
               className={activeTab === 'journey' ? 'btn-primary' : 'btn-secondary'}
               onClick={() => setActiveTab('journey')}
             >
@@ -322,6 +329,9 @@ export default function AdminPage() {
 
           {/* Ways of Working Tab */}
           {activeTab === 'wow' && <WaysOfWorkingAdmin />}
+
+          {/* Omnichannel Ideas Tab */}
+          {activeTab === 'omnichannel' && <OmnichannelIdeasAdmin />}
 
           {/* Journey Tab */}
           {activeTab === 'journey' && <JourneyAdmin />}
