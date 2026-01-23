@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
 import Header from '../components/Header';
 import './AdminPage.css';
 import CampaignAdmin from '../components/CampaignAdmin';
@@ -54,6 +55,7 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState('campaign');
   const [calendarEvents, setCalendarEvents] = useState([]);
   const [csvError, setCsvError] = useState(null);
+  const [campaign, setCampaign] = useState(null);
 
   // Fetch calendar events from Supabase
   const fetchCalendarEvents = async () => {
@@ -69,8 +71,15 @@ export default function AdminPage() {
     }
   };
 
+  // Fetch campaign data for dynamic year
+  const fetchCampaign = async () => {
+    const data = await api.getCampaign();
+    setCampaign(data);
+  };
+
   useEffect(() => {
     fetchCalendarEvents();
+    fetchCampaign();
   }, []);
 
   // Calendar management functions
@@ -222,11 +231,12 @@ export default function AdminPage() {
       tier: e.tier
     })) : seededCalendarEvents;
 
+    const year = campaign?.year || '2026';
     const blob = new Blob([calendarToCSV(itemsToExport)], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "campaign-calendar-2026.csv";
+    a.download = `campaign-calendar-${year}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -317,7 +327,7 @@ export default function AdminPage() {
 
               <div className="calendar-admin-card">
                 <p className="calendar-admin-info">
-                  Manage your 2026 campaign calendar data. Import/export campaigns as CSV or reset to defaults.
+                  Manage your {campaign?.year || '2026'} campaign calendar data. Import/export campaigns as CSV or reset to defaults.
                 </p>
                 {csvError && <div className="import-error">{csvError}</div>}
 
