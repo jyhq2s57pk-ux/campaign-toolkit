@@ -19,7 +19,8 @@ export default function CampaignAdmin() {
     activation_start_date: '',
     activation_end_date: '',
     activation_dates: '',
-    overview: ''
+    overview: '',
+    hero_image_url: ''
   });
 
   useEffect(() => {
@@ -50,7 +51,8 @@ export default function CampaignAdmin() {
           activation_start_date: data.activation_start_date || '',
           activation_end_date: data.activation_end_date || '',
           activation_dates: data.activation_dates || '',
-          overview: data.overview || ''
+          overview: data.overview || '',
+          hero_image_url: data.hero_image_url || 'https://placehold.co/600x400'
         });
       }
     } catch (err) {
@@ -236,6 +238,35 @@ export default function CampaignAdmin() {
               rows="4"
               placeholder="Campaign overview and description..."
             />
+          </div>
+
+          {/* Hero Image URL */}
+          <div className="form-group full-width">
+            <label htmlFor="hero_image_url">Hero Image URL</label>
+            <input
+              type="text"
+              id="hero_image_url"
+              name="hero_image_url"
+              value={formData.hero_image_url}
+              onChange={handleChange}
+              placeholder="https://example.com/image.jpg or /src/assets/hero.png"
+            />
+            <small className="form-help">URL or path to the hero image displayed on homepage (recommended: 600x400px)</small>
+            {formData.hero_image_url && (
+              <div style={{ marginTop: '0.5rem' }}>
+                <img
+                  src={formData.hero_image_url}
+                  alt="Hero preview"
+                  style={{
+                    maxWidth: '200px',
+                    height: 'auto',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255,255,255,0.1)'
+                  }}
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                />
+              </div>
+            )}
           </div>
         </div>
 

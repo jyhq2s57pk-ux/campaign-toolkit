@@ -51,7 +51,7 @@
     flex-direction: column;
     /* Stacked on mobile */
     gap: 8px;
-    margin-top: auto;
+    margin-top: 24px;
 }
 
 .hero-logo {

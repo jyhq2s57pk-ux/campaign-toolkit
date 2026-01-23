@@ -52,6 +52,7 @@ export default function HomePage() {
               <HeroCampaignCard
                 title={campaign.name}
                 year={`${campaign.year} Global campaign`}
+                image={campaign.hero_image_url || 'https://placehold.co/600x400'}
                 scope={campaign.scope}
                 channels={campaign.channels}
                 activationDates={campaign.activation_dates}
