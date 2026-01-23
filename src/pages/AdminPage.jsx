@@ -5,6 +5,7 @@ import { api } from '../lib/api';
 import Header from '../components/Header';
 import './AdminPage.css';
 import CampaignAdmin from '../components/CampaignAdmin';
+import WaysOfWorkingAdmin from '../components/WaysOfWorkingAdmin';
 import JourneyAdmin from '../components/JourneyAdmin';
 import ResourcesAdmin from '../components/ResourcesAdmin';
 
@@ -291,6 +292,12 @@ export default function AdminPage() {
               Campaign
             </button>
             <button
+              className={activeTab === 'wow' ? 'btn-primary' : 'btn-secondary'}
+              onClick={() => setActiveTab('wow')}
+            >
+              Ways of Working
+            </button>
+            <button
               className={activeTab === 'journey' ? 'btn-primary' : 'btn-secondary'}
               onClick={() => setActiveTab('journey')}
             >
@@ -312,6 +319,9 @@ export default function AdminPage() {
 
           {/* Campaign Tab */}
           {activeTab === 'campaign' && <CampaignAdmin />}
+
+          {/* Ways of Working Tab */}
+          {activeTab === 'wow' && <WaysOfWorkingAdmin />}
 
           {/* Journey Tab */}
           {activeTab === 'journey' && <JourneyAdmin />}
