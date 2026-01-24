@@ -82,7 +82,8 @@ export const api = {
         const { data, error } = await supabase
             .from('resources')
             .select('*')
-            .order('title');
+            .eq('active', true)
+            .order('sort_order');
 
         if (error) {
             console.error('Error fetching resources:', error);

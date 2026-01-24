@@ -178,11 +178,8 @@ export default function ResourcesPage() {
 
   useEffect(() => {
     api.getResources().then(data => {
-      // Enforce formats if not in DB (original sample data had no formats, so I'll add them based on title match or default)
-      // Actually sample data didn't have formats. The previous code hardcoded them. I'll re-add hardcoded formats mapping or defaults for now.
       const enhancedData = (data || []).map(r => ({
         ...r,
-        title: r.title === "ard title" ? "Card title" : r.title,
         formats: getFormatsForTitle(r.title)
       }));
       setResources(enhancedData);
