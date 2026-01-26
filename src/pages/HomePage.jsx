@@ -68,10 +68,6 @@ export default function HomePage() {
             ) : null}
           </section>
 
-          {/* 3. Activation Ideas */}
-          <section className="section-activation">
-            <ActivationIdeas />
-          </section>
 
         </div>
       </main>
