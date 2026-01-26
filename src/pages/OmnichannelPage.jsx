@@ -24,6 +24,19 @@ export default function OmnichannelPage() {
     const gridRef = useRef(null);
     const [gridVisible, setGridVisible] = useState(false);
     const [harmonySteps, setHarmonySteps] = useState([]);
+    const [ideas, setIdeas] = useState([]);
+
+    // Map of default images for fallback
+    const imageMap = {
+        '/src/assets/omni/gen/balloon.png': imgBalloon,
+        '/src/assets/omni/gen/magic.png': imgMagic,
+        '/src/assets/omni/gen/tasting.png': imgTasting,
+        '/src/assets/omni/gen/origami.png': imgOrigami,
+        '/src/assets/omni/gen/face.png': imgFace,
+        '/src/assets/omni/gen/postcard.png': imgPostcard,
+        '/src/assets/omni/gen/buzz.png': imgBuzz,
+        '/src/assets/omni/gen/balance.png': imgBalance
+    };
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -43,32 +56,34 @@ export default function OmnichannelPage() {
     }, []);
 
     useEffect(() => {
+        // Fetch omnichannel strategy grid data
         api.getOmnichannel().then(data => {
             if (data) {
                 const colors = ['blue', 'green', 'purple', 'orange', 'red', 'indigo', 'pink'];
                 const steps = data.map((item, index) => ({
                     id: String(item.id).padStart(2, '0'),
                     title: item.channel,
-                    desc: item.description, // using description from DB
+                    desc: item.description,
                     color: colors[index % colors.length]
                 }));
-                // If DB has less items than originally in UI, we just show what's in DB.
                 setHarmonySteps(steps);
             }
         });
-    }, []);
 
-    // Data for Summer Joy Carousel
-    const ideas = [
-        { id: 1, title: 'Balloon Modelling + Loyalty Boost', desc: 'Delight customers with custom balloon shapes - each tagged with a scannable loyalty QR code to drive sign-ups.', image: imgBalloon, tag: 'Loyalty' },
-        { id: 2, title: 'Barcode Magic Reveal', desc: 'Surprise guests with a mind-blowing magic trick - watch their chosen number appear from a product barcode.', image: imgMagic, tag: 'Wow Factor' },
-        { id: 3, title: 'Tasting Bar Illusion', desc: 'Engage curious minds with the “Impossible Cups” puzzle - a magic moment at any tasting station.', image: imgTasting, tag: 'Engagement' },
-        { id: 4, title: 'Origami Perfume Art', desc: 'Elevate fragrance demos by spraying onto beautiful folded origami artwork—memorable, elegant, and take-home ready.', image: imgOrigami, tag: 'Elegant' },
-        { id: 5, title: 'Face Painting Perks', desc: 'Offer artistic face painting linked to a product purchase or photo print-outs of their designs creating smiles and sales.', image: imgFace, tag: 'Sales' },
-        { id: 6, title: 'The Great Postcard Adventure', desc: 'Pick a postcard, reveal your prize, and send a little sunshine to someone you love!', image: imgPostcard, tag: 'Summer' },
-        { id: 7, title: 'Surfside Buzz Wire Challenge', desc: 'Steady hands win big! Navigate the Surfside Buzz Wire, reach the finish line, and win cool prizes.', image: imgBuzz, tag: 'Fun' },
-        { id: 8, title: 'Sunset Surf Balance Challenge', desc: 'Balance the umbrella on the surfboard, win prizes, and share your fun summer moments with friends.', image: imgBalance, tag: 'Active' },
-    ];
+        // Fetch omnichannel ideas from database
+        api.getOmnichannelIdeas().then(data => {
+            if (data) {
+                const ideasData = data.map(idea => ({
+                    id: idea.id,
+                    title: idea.title,
+                    desc: idea.description,
+                    image: imageMap[idea.image_url] || idea.image_url,
+                    tag: idea.tag
+                }));
+                setIdeas(ideasData);
+            }
+        });
+    }, []);
 
     return (
         <div className="omnichannel-page">

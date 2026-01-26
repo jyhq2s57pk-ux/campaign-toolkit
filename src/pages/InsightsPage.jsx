@@ -1,23 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './InsightsPage.css';
+import { api } from '../lib/api';
 
 // Imported Images
 import mapBg from '../assets/omni/gen/map-bg.png';
 
 export default function InsightsPage() {
+    const [pageData, setPageData] = useState({
+        title: "Insights & Performance",
+        subtitle: "Summer Season Insights.\nData-driven opportunities for the season"
+    });
+
+    useEffect(() => {
+        const fetchData = async () => {
+            // Get campaign using existing pattern
+            const campaign = await api.getCampaign();
+
+            // Get insight page data if campaign exists
+            if (campaign?.id) {
+                const insightPage = await api.getInsightPage(campaign.id);
+                if (insightPage) {
+                    setPageData({
+                        title: insightPage.title || "Insights & Performance",
+                        subtitle: insightPage.subtitle || "Summer Season Insights.\nData-driven opportunities for the season"
+                    });
+                }
+            }
+        };
+        fetchData();
+    }, []);
+
     return (
         <div className="insights-page">
             <Header />
             <main className="insights-main">
                 <div className="outer-container">
                     <section className="page-header">
-                        <h1>Insights & Performance</h1>
-                        <p>
-                            Summer Season Insights.
-                            <br />
-                            Data-driven opportunities for the season
+                        <h1>{pageData.title}</h1>
+                        <p style={{ whiteSpace: 'pre-line' }}>
+                            {pageData.subtitle}
                         </p>
                     </section>
 

@@ -3,16 +3,27 @@ import { supabase } from './supabase';
 
 export const api = {
     async getCampaign() {
-        // Fetches the first campaign found. In a real app, you might want a specific ID.
+        // Fetch the primary campaign (campaign-2026)
         const { data, error } = await supabase
             .from('campaigns')
             .select('*')
-            .limit(1)
+            .eq('id', 'campaign-2026')
             .single();
 
         if (error) {
             console.error('Error fetching campaign:', error);
-            return null;
+            // Return fallback data
+            return {
+                id: 'campaign-2026',
+                name: 'The Magic of Joy Holiday Season',
+                subtitle: 'A global celebration bringing joy to travelers worldwide',
+                year: '2026',
+                scope: 'Global',
+                channels: 'Reserve & Collect (Web / APP) Emporium',
+                activation_start_date: '2025-10-01',
+                activation_end_date: '2025-12-31',
+                activation_dates: 'October-December 2025 (Activation date may vary by location)'
+            };
         }
         return data;
     },
@@ -71,7 +82,8 @@ export const api = {
         const { data, error } = await supabase
             .from('resources')
             .select('*')
-            .order('title');
+            .eq('active', true)
+            .order('sort_order');
 
         if (error) {
             console.error('Error fetching resources:', error);
@@ -120,6 +132,34 @@ export const api = {
         if (error) {
             console.error('Error fetching omnichannel:', error);
             return [];
+        }
+        return data;
+    },
+
+    async getOmnichannelIdeas() {
+        const { data, error } = await supabase
+            .from('omnichannel_ideas')
+            .select('*')
+            .eq('is_active', true)
+            .order('sort_order');
+
+        if (error) {
+            console.error('Error fetching omnichannel ideas:', error);
+            return [];
+        }
+        return data;
+    },
+
+    async getInsightPage(campaignId) {
+        const { data, error } = await supabase
+            .from('insight_pages')
+            .select('*')
+            .eq('campaign_id', campaignId)
+            .maybeSingle();
+
+        if (error) {
+            console.error(`Error fetching insight page for ${campaignId}:`, error);
+            return null;
         }
         return data;
     }

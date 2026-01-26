@@ -44,7 +44,7 @@ const HeroCampaignCard = ({
                     <h1 className="hero-title">{title}</h1>
                     <div className="hero-logo-row">
                         <div className="hero-logo">
-                            <AvoltaLogo color="var(--surface-card)" style={{ height: '24px', width: 'auto' }} />
+                            <AvoltaLogo color="var(--surface-card)" style={{ height: '16px', width: 'auto' }} />
                         </div>
                         <span className="hero-year">{year}</span>
                     </div>
