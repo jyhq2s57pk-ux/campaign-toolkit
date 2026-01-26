@@ -148,5 +148,19 @@ export const api = {
             return [];
         }
         return data;
+    },
+
+    async getInsightPage(campaignId) {
+        const { data, error } = await supabase
+            .from('insight_pages')
+            .select('*')
+            .eq('campaign_id', campaignId)
+            .maybeSingle();
+
+        if (error) {
+            console.error(`Error fetching insight page for ${campaignId}:`, error);
+            return null;
+        }
+        return data;
     }
 };

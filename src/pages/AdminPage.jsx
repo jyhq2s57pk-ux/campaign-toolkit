@@ -11,6 +11,7 @@ import WaysOfWorkingAdmin from '../components/WaysOfWorkingAdmin';
 import OmnichannelIdeasAdmin from '../components/OmnichannelIdeasAdmin';
 import JourneyAdmin from '../components/JourneyAdmin';
 import ResourcesAdmin from '../components/ResourcesAdmin';
+import InsightPagesAdmin from '../components/InsightPagesAdmin';
 
 const STORAGE_KEY = "avolta_toolkit_calendar_v1";
 
@@ -358,6 +359,12 @@ export default function AdminPage() {
             >
               Resources
             </button>
+            <button
+              className={activeTab === 'insights' ? 'btn-primary' : 'btn-secondary'}
+              onClick={() => setActiveTab('insights')}
+            >
+              Insight Pages
+            </button>
           </div>
 
           {/* Campaign Tab */}
@@ -374,6 +381,9 @@ export default function AdminPage() {
 
           {/* Resources Tab */}
           {activeTab === 'resources' && <ResourcesAdmin />}
+
+          {/* Insight Pages Tab */}
+          {activeTab === 'insights' && <InsightPagesAdmin />}
 
           {activeTab === 'calendar' && (
             <div className="calendar-admin-section">
