@@ -122,29 +122,31 @@ export default function OmnichannelPage() {
 
 
 
-                {/* Apple-style Carousel: Summer Joy Ideas */}
-                <section className="ideas-carousel-section">
-                    <div className="section-header centered">
-                        <img src={logomark} alt="Logo" className="logo-small" />
-                        <h2 className="h-xxxl section-title">Summer Joy Ideas</h2>
-                        <p className="section-subtitle">To be considered and delivered if desired by regions</p>
+                {/* Summer Joy Ideas Carousel */}
+                <section className="ideas-grid-section">
+                    <div className="inner-content-wrapper">
+                        <div className="section-header centered">
+                            <img src={logomark} alt="Logo" className="logo-small" />
+                            <h2 className="h-xxxl section-title">Summer Joy Ideas</h2>
+                            <p className="section-subtitle">To be considered and delivered if desired by regions</p>
+                        </div>
                     </div>
 
-                    <div className="carousel-wrapper" ref={carouselRef}>
-                        <div className="carousel-track">
+                    <div className="ideas-carousel-wrapper">
+                        <div className="ideas-grid">
                             {ideas.map((idea) => (
-                                <div key={idea.id} className="carousel-item">
-                                    <div className="carousel-image-container">
+                                <div key={idea.id} className="idea-card glass">
+                                    <div className="idea-image-container">
                                         <img src={idea.image} alt={idea.title} />
-                                        <div className="carousel-overlay">
-                                        </div>
-                                        <div className="carousel-badges">
-                                            <span className="carousel-tag">{idea.tag}</span>
-                                        </div>
+                                        {idea.tag && (
+                                            <div className="idea-tag-badge">
+                                                {idea.tag}
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className="carousel-text">
-                                        <h3>{idea.title}</h3>
-                                        <p>{idea.desc}</p>
+                                    <div className="idea-content">
+                                        <h3 className="idea-title">{idea.title}</h3>
+                                        <p className="idea-desc">{idea.desc}</p>
                                     </div>
                                 </div>
                             ))}
