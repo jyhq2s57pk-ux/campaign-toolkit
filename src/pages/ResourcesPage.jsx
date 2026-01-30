@@ -3,7 +3,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "./ResourcesPage.css";
 import { api } from "../lib/api";
-
+import "../components/UniversalCard.css"; // Ensure styles are loaded if not globally
+import UniversalCard from "../components/UniversalCard";
 export default function ResourcesPage() {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -57,49 +58,21 @@ export default function ResourcesPage() {
               ) : (
                 <div className="resources-grid animate-fade-in">
                   {resources.map((resource) => (
-                    <div
+                    <UniversalCard
                       key={resource.id}
-                      className="resource-asset-card glass"
+                      title={resource.title}
+                      description={resource.description}
+                      image={resource.thumbnail_url} // If null, UniversalCard shows placeholder
+                      category={resource.category}
+                      categoryStyle="badge"
+                      buttonText={resource.cta_url ? (resource.cta_label || 'View Resource') : null}
                       onClick={() => handleResourceClick(resource.cta_url)}
-                      style={{ cursor: resource.cta_url ? 'pointer' : 'default' }}
-                    >
-                      {/* Thumbnail or placeholder */}
-                      <div className="asset-preview">
-                        {resource.thumbnail_url ? (
-                          <img src={resource.thumbnail_url} alt={resource.title} />
-                        ) : (
-                          <div className="preview-placeholder">Graphic</div>
-                        )}
-                      </div>
-
-                      {/* Category badge */}
-                      {resource.category && (
-                        <div className="asset-category-badge">
-                          {resource.category}
-                        </div>
-                      )}
-
-                      {/* Content */}
-                      <div className="asset-info">
-                        <h3 className="asset-title">{resource.title}</h3>
-                        {resource.description && (
-                          <p className="asset-desc">{resource.description}</p>
-                        )}
-                      </div>
-
-                      {/* CTA Button */}
-                      {resource.cta_url && (
-                        <button
-                          className="download-btn"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleResourceClick(resource.cta_url);
-                          }}
-                        >
-                          {resource.cta_label || 'View Resource'}
-                        </button>
-                      )}
-                    </div>
+                      onButtonClick={(e) => {
+                        // e.stopPropagation handled in UniversalCard, but good to be safe if passed
+                        handleResourceClick(resource.cta_url);
+                      }}
+                      className="animate-fade-in" // Or just keep passing styles via class if needed
+                    />
                   ))}
                 </div>
               )}

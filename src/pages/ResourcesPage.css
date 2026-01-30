@@ -54,129 +54,14 @@
   gap: 24px;
 }
 
-.resource-asset-card {
-  border-radius: 32px;
-  /* Master Style 01 */
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  transition: transform var(--transition-medium);
-  background: rgba(255, 255, 255, 0.05);
-  /* Applied to wrapper */
-  border: 0.5px solid rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-}
-
-/* Hover effect removed */
-
-.asset-preview {
-  height: 220px;
-  /* Increased height for better visual proportion */
-  background: var(--surface-card);
-  /* Default background */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid var(--border-glass);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Ensure images fill the container */
-.asset-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.preview-placeholder {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--text-muted);
-  opacity: 0.3;
-}
-
-/* Category badge positioned over thumbnail */
-.asset-category-badge {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  padding: 6px 12px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.9);
-  z-index: 1;
-}
-
-.preview-placeholder-text {
-  font-size: 40px;
-  font-weight: 700;
-  color: var(--text-muted);
-  opacity: 0.2;
-}
-
-.asset-info {
-  padding: 24px;
-  flex: 1;
-}
-
-.asset-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.asset-desc {
-  font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 20px;
-}
-
-.asset-meta {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.format-tag {
-  font-size: 10px;
-  font-weight: 700;
-  padding: 4px 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-}
-
-.download-btn {
-  margin: 0 24px 24px;
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid var(--border-glass);
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.download-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
+/* 
+  Previous .resource-asset-card styles are now in UniversalCard.css 
+  Removed duplicated styles.
+*/
 
 .access-note {
   padding: 32px;
-  border-radius: 24px;
+  border-radius: var(--card-radius);
   text-align: center;
 }
 
@@ -207,7 +92,6 @@
     gap: 24px;
   }
 
-  .asset-title {
-    font-size: 16px;
-  }
+  /* UniversalCard title size override for mobile if needed, 
+     but keeping it standard for now. */
 }

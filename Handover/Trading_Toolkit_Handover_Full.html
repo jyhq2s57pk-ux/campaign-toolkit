@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Toolkit - Handover &amp; Onboarding Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --bg-card: #262626;
+            --bg-card-hover: #333333;
+            --text-primary: #ffffff;
+            --text-secondary: #a3a3a3;
+            --text-muted: #737373;
+            --accent-orange: #f97316;
+            --accent-purple: #a855f7;
+            --accent-green: #22c55e;
+            --accent-blue: #3b82f6;
+            --accent-pink: #ec4899;
+            --border-color: #404040;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .logo-icon {
+            color: var(--accent-purple);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 280px;
+            height: calc(100vh - 60px);
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 0.375rem;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .sidebar-nav a:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .sidebar-nav a.active {
+            background: var(--accent-purple);
+            color: white;
+        }
+
+        .sidebar-nav .sub-items {
+            padding-left: 1rem;
+            margin-top: 0.25rem;
+        }
+
+        .sidebar-nav .sub-items a {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            margin-top: 60px;
+            padding: 2rem 3rem;
+            max-width: 1000px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--accent-purple) 0%, var(--accent-orange) 100%);
+            border-radius: 1rem;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .hero-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-number {
+            background: var(--accent-purple);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .section h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+
+        .section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--accent-orange);
+            margin: 2rem 0 1rem;
+        }
+
+        .section h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        .section p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-purple);
+            transform: translateY(-2px);
+        }
+
+        .feature-card h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Screenshots */
+        .screenshot {
+            background: var(--bg-card);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .screenshot img {
+            width: 100%;
+            display: block;
+        }
+
+        .screenshot-caption {
+            padding: 0.75rem 1rem;
+            background: var(--bg-secondary);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .screenshot-caption::before {
+            content: "📸";
+        }
+
+        /* Callout Boxes */
+        .callout {
+            border-radius: 0.5rem;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .callout-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .callout-content {
+            flex: 1;
+        }
+
+        .callout-content strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .callout.tip {
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 3px solid var(--accent-green);
+        }
+
+        .callout.warning {
+            background: rgba(249, 115, 22, 0.1);
+            border-left: 3px solid var(--accent-orange);
+        }
+
+        .callout.note {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        .callout.important {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid #ef4444;
+        }
+
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: var(--accent-purple);
+            color: white;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-card);
+        }
+
+        tr:hover {
+            background: var(--bg-card-hover);
+        }
+
+        /* Code */
+        code {
+            background: var(--bg-card);
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-pink);
+        }
+
+        pre {
+            background: var(--bg-card);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        /* Lists */
+        ul,
+        ol {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Steps */
+        .steps {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+        }
+
+        .steps li {
+            counter-increment: step;
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .steps li::before {
+            content: counter(step);
+            background: var(--accent-purple);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-purple {
+            background: var(--accent-purple);
+            color: white;
+        }
+
+        .badge-green {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .badge-orange {
+            background: var(--accent-orange);
+            color: white;
+        }
+
+        .badge-blue {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        /* Checklist */
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--bg-card);
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .checklist li::before {
+            content: "☐";
+            font-size: 1.25rem;
+            color: var(--accent-purple);
+        }
+
+        /* URL display */
+        .url-display {
+            background: var(--bg-card);
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--accent-blue);
+            margin: 0.5rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Admin tabs display */
+        .admin-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .admin-tab {
+            background: var(--bg-card);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .admin-tab.active {
+            background: white;
+            color: var(--bg-primary);
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-radius: 0.75rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .hero {
+                padding: 2rem 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Active section highlighting */
+        :target {
+            scroll-margin-top: 80px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-icon">(((•)))</span>
+            <span>Trading Toolkit Guide</span>
+        </div>
+        <div class="nav-links">
+            <a href="#introduction">Introduction</a>
+            <a href="#accessing">Access</a>
+            <a href="#frontend">Front-End</a>
+            <a href="#admin">Admin Panel</a>
+            <a href="#quickstart">Quick Start</a>
+            <a href="#troubleshooting">Troubleshooting</a>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <h3>Table of Contents</h3>
+        <ul class="sidebar-nav">
+            <li><a href="#introduction">1. Introduction</a>
+                <ul class="sub-items">
+                    <li><a href="#what-is">What is the Trading Toolkit?</a></li>
+                    <li><a href="#who-for">Who is this guide for?</a></li>
+                    <li><a href="#how-to-use">How to use this guide</a></li>
+                </ul>
+            </li>
+            <li><a href="#accessing">2. Accessing the System</a>
+                <ul class="sub-items">
+                    <li><a href="#login">Logging in</a></li>
+                    <li><a href="#admin-access">Admin panel access</a></li>
+                    <li><a href="#roles">User roles</a></li>
+                </ul>
+            </li>
+            <li><a href="#frontend">3. Front-End Pages</a>
+                <ul class="sub-items">
+                    <li><a href="#home">Home / Overview</a></li>
+                    <li><a href="#touchpoints">Customer Touchpoints</a></li>
+                    <li><a href="#insights">Insights</a></li>
+                    <li><a href="#activate">Activate</a></li>
+                    <li><a href="#omnichannel">Omnichannel</a></li>
+                    <li><a href="#calendar">Calendar</a></li>
+                    <li><a href="#resources">Resources</a></li>
+                </ul>
+            </li>
+            <li><a href="#admin">4. Admin Panel</a>
+                <ul class="sub-items">
+                    <li><a href="#admin-overview">Overview</a></li>
+                    <li><a href="#admin-campaign">Campaign Metadata</a></li>
+                    <li><a href="#admin-wow">Ways of Working</a></li>
+                    <li><a href="#admin-omni">Omnichannel</a></li>
+                    <li><a href="#admin-touchpoints">Touchpoints</a></li>
+                    <li><a href="#admin-resources">Resources</a></li>
+                    <li><a href="#admin-insights">Insight Pages</a></li>
+                </ul>
+            </li>
+            <li><a href="#quickstart">5. Quick Start</a></li>
+            <li><a href="#troubleshooting">6. Troubleshooting</a></li>
+            <li><a href="#appendix">7. Appendix</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero -->
+        <div class="hero">
+            <h1>Trading Toolkit</h1>
+            <p>Handover &amp; Onboarding Guide</p>
+            <div class="hero-meta">
+                <span>Last Updated: 27 January 2026</span>
+                <span>•</span>
+                <span>Version 1.1 (Full)</span>
+            </div>
+        </div>
+
+        <!-- Section 1: Introduction -->
+        <section id="introduction" class="section">
+            <div class="section-header">
+                <span class="section-number">1</span>
+                <h2>Introduction</h2>
+            </div>
+
+            <h3 id="what-is">What is the Trading Toolkit?</h3>
+            <p>The Trading Toolkit is a web-based platform designed to centralise campaign information, activation
+                strategies, customer touchpoints, and marketing resources. It provides a single source of truth for
+                campaign teams globally.</p>
+
+            <div class="card-grid">
+                <div class="feature-card">
+                    <h4>📱 Public-facing pages</h4>
+                    <p>Display campaign information (read-only for most users)</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⚙️ Admin panel</h4>
+                    <p>Update content, add resources, and manage campaign data</p>
+                </div>
+            </div>
+
+            <h3 id="who-for">Who is this guide for?</h3>
+            <p>This guide is intended for:</p>
+            <ul>
+                <li><strong>Content editors</strong> who need to update campaign information, add new resources, or
+                    modify existing content</li>
+                <li><strong>Marketing coordinators</strong> managing campaign rollouts across regions</li>
+                <li><strong>New team members</strong> being onboarded to the Trading Toolkit system</li>
+            </ul>
+
+            <div class="callout tip">
+                <span class="callout-icon">💡</span>
+                <div class="callout-content">
+                    <strong>No technical expertise required</strong>
+                    You do not need coding knowledge to use this guide. All tasks are performed through the web
+                    interface.
+                </div>
+            </div>
+
+            <h3 id="how-to-use">How to use this guide</h3>
+            <div class="card-grid">
+                <div class="feature-card">
+                    <h4>🆕 If you're new</h4>
+                    <p>Start with Section 2 (Accessing the System) and Section 5 (Quick Start Checklist)</p>
+                </div>
+                <div class="feature-card">
+                    <h4>✏️ Updating content</h4>
+                    <p>Jump to Section 4 (Admin Panel) and find the relevant subsection</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔧 Something broken?</h4>
+                    <p>Check Section 6 (Troubleshooting)</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📖 Quick reference</h4>
+                    <p>Use the sidebar to navigate directly to the section you need</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Accessing the System -->
+        <section id="accessing" class="section">
+            <div class="section-header">
+                <span class="section-number">2</span>
+                <h2>Accessing the System</h2>
+            </div>
+
+            <h3 id="login">Logging in (front-end view)</h3>
+            <p><strong>URL:</strong></p>
+            <div class="url-display">http://localhost:5173</div>
+
+            <h4>Steps:</h4>
+            <ol class="steps">
+                <li>Open your web browser and navigate to the URL above</li>
+                <li>Use the usual Trading Toolkit login method (Supabase authentication)</li>
+                <li>Enter your credentials: Email and Password</li>
+                <li>Click <strong>Log In</strong> or <strong>Sign In</strong></li>
+                <li>You will be taken to the home page</li>
+            </ol>
+
+            <div class="callout note">
+                <span class="callout-icon">📝</span>
+                <div class="callout-content">
+                    <strong>Login issues?</strong>
+                    If you see a login error, check that you are using the correct credentials. Contact your system
+                    administrator if you cannot log in.
+                </div>
+            </div>
+
+            <h3 id="admin-access">Accessing the Admin panel</h3>
+            <p>Once logged in, you can toggle into Admin mode:</p>
+
+            <ol class="steps">
+                <li>Look for the <strong>Admin toggle</strong> in the top navigation bar (top-right corner, see Home
+                    screenshot below)</li>
+                <li>Click the toggle to switch to Admin mode</li>
+                <li>You will see additional navigation options appear, including a link to <code>/admin</code></li>
+                <li>Click <strong>Admin</strong> in the navigation to open the Admin panel</li>
+            </ol>
+
+            <p><strong>URL when in Admin panel:</strong></p>
+            <div class="url-display">http://localhost:5173/admin</div>
+
+            <h3 id="roles">User roles and permissions</h3>
+            <p>The Trading Toolkit uses two main access levels:</p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Role</th>
+                            <th>Access Level</th>
+                            <th>What You Can Do</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-blue">Standard User</span></td>
+                            <td>View-only</td>
+                            <td>Browse all front-end pages, view campaign information, click through to external
+                                resources</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-purple">Admin</span></td>
+                            <td>Edit access</td>
+                            <td>All of the above, plus: add/edit/delete content in the Admin panel, manage campaigns,
+                                update resources, modify touchpoints</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="callout tip">
+                <span class="callout-icon">💡</span>
+                <div class="callout-content">
+                    <strong>Can't see the Admin toggle?</strong>
+                    You may not have admin permissions. Contact your system administrator to request access.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Front-End Pages -->
+        <section id="frontend" class="section">
+            <div class="section-header">
+                <span class="section-number">3</span>
+                <h2>Front-End Pages (View-Only)</h2>
+            </div>
+
+            <p>This section explains what each front-end page displays and how content is controlled. You cannot edit
+                content directly on these pages. All edits must be made through the Admin panel (Section 4).</p>
+
+            <h3 id="home">3.1 Home / Overview</h3>
+            <p><strong>What this page shows:</strong> The home page displays the current campaign overview, including:
+            </p>
+            <ul>
+                <li>Campaign hero image</li>
+                <li>Campaign name and year (e.g., "The Magic of Joy")</li>
+                <li>Scope, channels, and activation dates</li>
+                <li>Quick links to other sections</li>
+            </ul>
+
+            <div class="screenshot">
+                <img src="images/home_page_full.png" alt="Home page with campaign hero">
+                <div class="screenshot-caption">Home page showing the campaign hero card with "The Magic of Joy Holiday
+                    Season"</div>
+            </div>
+
+            <p><strong>How content is controlled:</strong></p>
+            <ul>
+                <li>Campaign metadata is managed in <strong>Admin &gt; Campaign</strong> (see Section 4.2)</li>
+                <li>Quick links are hardcoded and cannot be edited through the Admin panel</li>
+            </ul>
+
+            <h3 id="touchpoints">3.2 Customer Touchpoints</h3>
+            <p><strong>What this page shows:</strong> An interactive accordion list of platforms (Web, App, Email,
+                Social) with expandable sections showing:</p>
+            <ul>
+                <li>A screenshot of the platform</li>
+                <li>Numbered markers indicating specific touchpoints</li>
+                <li>Descriptions including title, description, tier badges, and copy ideas</li>
+            </ul>
+
+            <div class="screenshot">
+                <img src="images/touchpoints.png" alt="Customer Touchpoints page">
+                <div class="screenshot-caption">Customer Touchpoints page showing activation levels and platform
+                    accordions</div>
+            </div>
+
+            <p><strong>How content is controlled:</strong></p>
+            <ul>
+                <li>Platforms and touchpoints are managed in <strong>Admin &gt; Touchpoints</strong> (see Section 4.6)
+                </li>
+                <li>Screenshots are stored as URLs in the platforms table</li>
+                <li>Marker positions are stored as JSON data</li>
+            </ul>
+
+            <h3 id="insights">3.3 Insights</h3>
+            <p><strong>What this page shows:</strong> Campaign performance data and market insights including
+                infographic cards with maps, statistics, and charts.</p>
+
+            <div class="screenshot">
+                <img src="images/insights.png" alt="Insights page">
+                <div class="screenshot-caption">Insights page with infographic cards showing flight statistics</div>
+            </div>
+
+            <div class="callout warning">
+                <span class="callout-icon">⚠️</span>
+                <div class="callout-content">
+                    <strong>Limited editing available</strong>
+                    Only the title and subtitle are admin-controlled via Admin &gt; Insight Pages. Infographic cards and
+                    charts are currently hardcoded.
+                </div>
+            </div>
+
+            <h3 id="activate">3.4 Activate (Ways of Working)</h3>
+            <p><strong>What this page shows:</strong> A step-by-step workflow for campaign activation with numbered
+                cards.</p>
+
+            <div class="screenshot">
+                <img src="images/activate.png" alt="Activate page">
+                <div class="screenshot-caption">Activate page showing workflow steps in card layout</div>
+            </div>
+
+            <p><strong>How content is controlled:</strong></p>
+            <ul>
+                <li>Workflow steps are managed in <strong>Admin &gt; Ways of Working</strong> (see Section 4.3)</li>
+                <li>You can add, edit, reorder, or delete steps</li>
+            </ul>
+
+            <h3 id="omnichannel">3.5 Omnichannel</h3>
+            <p><strong>What this page shows:</strong></p>
+            <ul>
+                <li>A 360° activation strategy grid showing channels arranged around a central card</li>
+                <li>A horizontal carousel of "Summer Joy Ideas" cards</li>
+            </ul>
+
+            <div class="screenshot">
+                <img src="images/omnichannel.png" alt="Omnichannel page">
+                <div class="screenshot-caption">Omnichannel page with 360° strategy grid and Summer Joy Ideas section
+                </div>
+            </div>
+
+            <p><strong>How content is controlled:</strong></p>
+            <ul>
+                <li>360° strategy grid: <strong>Admin &gt; Omnichannel</strong> (see Section 4.4)</li>
+                <li>Summer Joy Ideas carousel: <strong>Admin &gt; Omnichannel Ideas</strong> (see Section 4.5)</li>
+            </ul>
+
+            <h3 id="calendar">3.6 Calendar</h3>
+            <p><strong>What this page shows:</strong> A timeline view of campaign milestones and key dates.</p>
+
+            <div class="screenshot">
+                <img src="images/calendar.png" alt="Calendar page">
+                <div class="screenshot-caption">Campaign Calendar showing timeline with milestones</div>
+            </div>
+
+            <div class="callout note">
+                <span class="callout-icon">📝</span>
+                <div class="callout-content">
+                    <strong>Currently view-only</strong>
+                    No admin interface exists yet for editing calendar events. Contact your system administrator if
+                    updates are needed.
+                </div>
+            </div>
+
+            <h3 id="resources">3.7 Resources</h3>
+            <p><strong>What this page shows:</strong> A grid of downloadable assets and external links including
+                thumbnails, category badges, titles, descriptions, and CTA buttons.</p>
+
+            <div class="screenshot">
+                <img src="images/resources.png" alt="Resources page">
+                <div class="screenshot-caption">Resources page showing grid of resource cards with category badges</div>
+            </div>
+
+            <p><strong>How content is controlled:</strong></p>
+            <ul>
+                <li>Resource cards are managed in <strong>Admin &gt; Resources</strong> (see Section 4.7)</li>
+                <li>Cards link to external URLs (Canopy, Figma, Google Drive, etc.)</li>
+            </ul>
+        </section>
+
+        <!-- Section 4: Admin Panel -->
+        <section id="admin" class="section">
+            <div class="section-header">
+                <span class="section-number">4</span>
+                <h2>Admin Panel - Content Management</h2>
+            </div>
+
+            <div class="callout warning">
+                <span class="callout-icon">⚠️</span>
+                <div class="callout-content">
+                    <strong>Before you begin</strong>
+                    Make sure you are logged in and have toggled into Admin mode (see Section 2.2).
+                </div>
+            </div>
+
+            <h3 id="admin-overview">4.1 Overview of the Admin Panel</h3>
+            <p><strong>URL:</strong></p>
+            <div class="url-display">http://localhost:5173/admin</div>
+
+            <p>The Admin panel contains multiple tabs, each corresponding to a different content area.</p>
+
+            <div class="screenshot">
+                <img src="images/admin_dashboard_full.png" alt="Admin Dashboard Overview">
+                <div class="screenshot-caption">Admin Dashboard / Overview Panel</div>
+            </div>
+
+            <h4>How to navigate (Once Logged In):</h4>
+            <ol class="steps">
+                <li>Click on any tab name to open that content area</li>
+                <li>You will see a list view of existing entries</li>
+                <li>Use the <strong>Add New</strong> button to create a new entry</li>
+                <li>Click <strong>Edit</strong> on any existing entry to modify it</li>
+                <li>Click <strong>Delete</strong> to remove an entry (use with caution)</li>
+            </ol>
+
+            <div class="callout tip">
+                <span class="callout-icon">💡</span>
+                <div class="callout-content">
+                    <strong>See your changes</strong>
+                    Always refresh the front-end page after making changes in the Admin panel to see your updates.
+                </div>
+            </div>
+
+            <!-- Note: Specific Admin Panel Screenshots are omitted as they require authenticated access. -->
+
+            <h3 id="admin-campaign">4.2 Campaign Metadata</h3>
+            <p><strong>What this section controls:</strong> Campaign-level information displayed on the home page.</p>
+
+            <div class="screenshot">
+                <img src="images/admin_campaign.png" alt="Admin Campaign Tab">
+                <div class="screenshot-caption">Campaign Metadata Editor</div>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field Name</th>
+                            <th>What It Controls</th>
+                            <th>Example</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>id</code></td>
+                            <td>Unique campaign identifier</td>
+                            <td>campaign-2026</td>
+                            <td>⚠️ Do not edit. Used internally.</td>
+                        </tr>
+                        <tr>
+                            <td><code>name</code></td>
+                            <td>Campaign display name</td>
+                            <td>Summer Joy 2026</td>
+                            <td>Appears on the home page hero card.</td>
+                        </tr>
+                        <tr>
+                            <td><code>year</code></td>
+                            <td>Campaign year</td>
+                            <td>2026</td>
+                            <td>Displayed as "2026 Global campaign".</td>
+                        </tr>
+                        <tr>
+                            <td><code>hero_image_url</code></td>
+                            <td>Hero image URL</td>
+                            <td>https://...</td>
+                            <td>Must be full URL. Recommended: 1200x600px.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 id="admin-wow">4.3 Ways of Working</h3>
+            <p><strong>What this section controls:</strong> The workflow steps displayed on the Activate page.</p>
+
+            <div class="screenshot">
+                <img src="images/admin_wow.png" alt="Admin Ways of Working Tab">
+                <div class="screenshot-caption">Ways of Working Workflow Editor</div>
+            </div>
+
+            <h4>How to add a new workflow step:</h4>
+            <ol class="steps">
+                <li>Go to <strong>Admin &gt; Ways of Working</strong></li>
+                <li>Click <strong>Add New Step</strong></li>
+                <li>Fill in: Title, Description, Sort Order, Campaign ID</li>
+                <li>Click <strong>Save</strong></li>
+                <li>Refresh the Activate page to see your new step</li>
+            </ol>
+
+            <h3 id="admin-omni">4.4 Omnichannel Strategy &amp; Ideas</h3>
+            <p><strong>Omnichannel Strategy</strong> controls the 360° grid channels (Web, App, Email, Social, etc.).
+            </p>
+            <p><strong>Omnichannel Ideas</strong> controls the Summer Joy Ideas carousel cards.</p>
+
+            <div class="screenshot">
+                <img src="images/admin_omnichannel.png" alt="Admin Omnichannel Tab">
+                <div class="screenshot-caption">Omnichannel Strategy & Ideas Editor</div>
+            </div>
+
+            <h3 id="admin-touchpoints">4.5 Customer Touchpoints</h3>
+            <p><strong>What this section controls:</strong> Platforms, touchpoints, and marker positions.</p>
+
+            <div class="screenshot">
+                <img src="images/admin_touchpoints.png" alt="Admin Touchpoints Tab">
+                <div class="screenshot-caption">Customer Touchpoints & Marker Editor</div>
+            </div>
+
+            <div class="callout important">
+                <span class="callout-icon">⚠️</span>
+                <div class="callout-content">
+                    <strong>Most complex admin section</strong>
+                    Take care when editing marker positions, as incorrect values can break the visual layout.
+                </div>
+            </div>
+
+            <h3 id="admin-resources">4.6 Resources</h3>
+            <p><strong>What this section controls:</strong> Resource cards displayed on the Resources page.</p>
+
+            <div class="screenshot">
+                <img src="images/admin_resources.png" alt="Admin Resources Tab">
+                <div class="screenshot-caption">Resources Management</div>
+            </div>
+
+            <h3 id="admin-insights">4.7 Insight Pages</h3>
+            <p><strong>What this section controls:</strong> The title and subtitle at the top of the Insights page only.
+            </p>
+        </section>
+
+        <!-- Section 5: Quick Start -->
+        <section id="quickstart" class="section">
+            <div class="section-header">
+                <span class="section-number">5</span>
+                <h2>Quick Start Checklist</h2>
+            </div>
+            <p>Use this checklist when onboarding a new content editor:</p>
+
+            <ul class="checklist">
+                <li>Receive login credentials (email and password)</li>
+                <li>Log in at http://localhost:5173 using Supabase authentication</li>
+                <li>Browse the front-end pages to familiarise yourself with the toolkit</li>
+                <li>Toggle into Admin mode (top navigation bar)</li>
+                <li>Navigate to /admin</li>
+                <li>Explore each admin tab</li>
+                <li>Read this guide (sections 4.1 through 4.7)</li>
+                <li>Complete the first task below</li>
+                <li>Bookmark this guide for future reference</li>
+            </ul>
+        </section>
+
+        <!-- Section 6: Troubleshooting -->
+        <section id="troubleshooting" class="section">
+            <div class="section-header">
+                <span class="section-number">6</span>
+                <h2>Troubleshooting</h2>
+            </div>
+
+            <div class="card">
+                <h4>"I can't see my changes"</h4>
+                <p><strong>Solutions:</strong> Refresh the page, clear cache, or check if the campaign_id matches.</p>
+            </div>
+            <div class="card">
+                <h4>"My image is not loading"</h4>
+                <p><strong>Solutions:</strong> Ensure the URL is correct and starts with https://. Local file paths will
+                    not work.</p>
+            </div>
+        </section>
+
+        <!-- Section 7: Appendix -->
+        <section id="appendix" class="section">
+            <div class="section-header">
+                <span class="section-number">7</span>
+                <h2>Appendix</h2>
+            </div>
+
+            <h3>Database Table Reference</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Table Name</th>
+                            <th>What It Stores</th>
+                            <th>Key Fields</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>campaigns</code></td>
+                            <td>Campaign metadata</td>
+                            <td>id, name, year, hero_image_url, scope, channels</td>
+                        </tr>
+                        <tr>
+                            <td><code>ways_of_working</code></td>
+                            <td>Workflow steps</td>
+                            <td>title, description, sort_order, campaign_id</td>
+                        </tr>
+                        <tr>
+                            <td><code>omnichannel_strategy</code></td>
+                            <td>360° grid channels</td>
+                            <td>id, channel, description, color</td>
+                        </tr>
+                        <tr>
+                            <td><code>omnichannel_ideas</code></td>
+                            <td>Ideas carousel cards</td>
+                            <td>title, description, image_url, tag, sort_order</td>
+                        </tr>
+                        <tr>
+                            <td><code>platforms</code></td>
+                            <td>Touchpoints categories</td>
+                            <td>name, type, screenshot_url</td>
+                        </tr>
+                        <tr>
+                            <td><code>touchpoints</code></td>
+                            <td>Individual touchpoints</td>
+                            <td>platform, title, description, marker_positions</td>
+                        </tr>
+                        <tr>
+                            <td><code>resources</code></td>
+                            <td>Resource cards</td>
+                            <td>title, category, description, cta_url, campaign_id</td>
+                        </tr>
+                        <tr>
+                            <td><code>insight_pages</code></td>
+                            <td>Insights page header</td>
+                            <td>campaign_id, title, subtitle</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Glossary of Terms</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Term</th>
+                            <th>Definition</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Admin panel</strong></td>
+                            <td>The backend interface (/admin) where authorised users manage content.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Campaign ID</strong></td>
+                            <td>A unique identifier for a campaign (e.g., campaign-2026). Must be used in all linked
+                                content.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CTA</strong></td>
+                            <td>Call to Action - a button or link prompting user action.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>JSON</strong></td>
+                            <td>A data format used to store structured information (e.g., marker positions).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Marker position</strong></td>
+                            <td>The location (top and left coordinates) where a marker appears on a screenshot.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sort order</strong></td>
+                            <td>A number determining display order. Lower numbers appear first.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Supabase</strong></td>
+                            <td>The backend database and authentication system used by the Trading Toolkit.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tier badges</strong></td>
+                            <td>Labels indicating membership tiers (Executive, Premium, Standard).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Contact Information</h3>
+            <p>For technical support, access issues, or questions about this guide:</p>
+            <ul>
+                <li><strong>System Administrator:</strong> [Your Name/Email]</li>
+                <li><strong>Development Team:</strong> [Team Name/Email]</li>
+                <li><strong>Supabase Support:</strong> <a href="https://supabase.com/docs"
+                        target="_blank">supabase.com/docs</a></li>
+            </ul>
+        </section>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Trading Toolkit Handover &amp; Onboarding Guide</p>
+            <p>Last Updated: 27 January 2026 | Version 1.1</p>
+        </div>
+    </main>
+
+    <script>
+        // Highlight active section in sidebar
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.sidebar-nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

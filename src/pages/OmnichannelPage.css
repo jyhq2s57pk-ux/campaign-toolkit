@@ -120,7 +120,7 @@
 
     /* Visual Styles matching Screenshot */
     background: #050505;
-    border-radius: 32px;
+    border-radius: var(--card-radius);
     padding: 32px;
     border: 1px solid var(--surface-card);
     backdrop-filter: none;
@@ -247,7 +247,7 @@
 .strategy-info-card {
     grid-area: center;
     padding: 40px;
-    border-radius: 32px;
+    border-radius: var(--card-radius);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -424,7 +424,7 @@
 .treasure-container {
     display: flex;
     flex-direction: column;
-    border-radius: 32px;
+    border-radius: var(--card-radius);
     overflow: hidden;
 }
 
@@ -567,7 +567,8 @@
 
 .ideas-grid {
     display: flex;
-    gap: 16px;
+    gap: 24px;
+    /* Increased to 24px to match ResourcesPage */
     overflow-x: auto;
     scroll-behavior: smooth;
     scrollbar-width: none;
@@ -575,79 +576,26 @@
     padding: 0 max(24px, calc((100vw - 1200px) / 2)) 20px;
 }
 
-.ideas-grid::-webkit-scrollbar {
-    display: none;
+/* Fix squashing issue in flex scroll container */
+.ideas-grid .universal-card {
+    flex: 0 0 400px;
+    min-width: 400px;
+    /* Increased for desktop */
 }
 
-.idea-card {
-    flex: 0 0 320px;
-    min-width: 320px;
-    border-radius: 32px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    transition: transform var(--transition-medium);
-    background: rgba(255, 255, 255, 0.05);
-    border: 0.5px solid rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+@media (max-width: 768px) {
+    .ideas-grid .universal-card {
+        flex: 0 0 320px;
+        min-width: 320px;
+        /* Revert to 320px for mobile */
+    }
 }
 
-.idea-card:hover {
-    transform: translateY(-4px);
-}
+/* 
+  .idea-card, .idea-image-container, .idea-tag-badge, .idea-content 
+  Removed as they are now handled by UniversalCard.css 
+*/
 
-.idea-image-container {
-    height: 220px;
-    background: var(--surface-card);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 1px solid var(--border-glass);
-    position: relative;
-    overflow: hidden;
-}
-
-.idea-image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.idea-tag-badge {
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    padding: 6px 12px;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: rgba(255, 255, 255, 0.9);
-    z-index: 1;
-}
-
-.idea-content {
-    padding: 24px;
-    flex: 1;
-}
-
-.idea-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 8px;
-}
-
-.idea-desc {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.5;
-}
 
 /* Animations */
 .fade-in-up {
@@ -698,5 +646,160 @@
 
     .strategy-info-card {
         padding: 24px;
+    }
+}
+
+/* Modal Styles */
+.clickable {
+    cursor: pointer;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+    animation: fadeIn 0.3s ease-out;
+    backdrop-filter: blur(8px);
+}
+
+.modal-container {
+    background: #fff;
+    /* White background as per design */
+    width: 100%;
+    max-width: 900px;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
+    animation: scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    color: #111;
+    /* Dark text for white bg */
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    /* Boost z-index to ensure visibility */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+    color: #000;
+}
+
+.modal-close-btn:hover {
+    transform: scale(1.1);
+}
+
+.modal-image-header {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    background: #f0f0f0;
+}
+
+.modal-image-header img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modal-content-body {
+    padding: 60px;
+}
+
+.modal-title {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 40px;
+    letter-spacing: -1px;
+    color: #111;
+    max-width: 80%;
+}
+
+.modal-highlight-block {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.highlight-bar {
+    width: 6px;
+    background-color: #00D26A;
+    /* Bright green accent */
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.highlight-text {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #111;
+}
+
+.modal-long-desc {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #555;
+    max-width: 800px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleUp {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-content-body {
+        padding: 32px;
+    }
+
+    .modal-title {
+        font-size: 32px;
+        margin-bottom: 24px;
+    }
+
+    .modal-image-header {
+        height: 250px;
+    }
+
+    .highlight-text {
+        font-size: 20px;
     }
 }

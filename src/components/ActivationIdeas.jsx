@@ -1,5 +1,6 @@
 import React from 'react';
 import './ActivationIdeas.css';
+import UniversalCard from './UniversalCard';
 
 const ACTIVATION_IDEAS = [
     {
@@ -25,16 +26,13 @@ export default function ActivationIdeas() {
 
             <div className="activation-grid">
                 {ACTIVATION_IDEAS.map((idea) => (
-                    <div key={idea.id} className="activation-card">
-                        {/* Placeholder Image Area */}
-                        <div className="activation-img-placeholder"></div>
-
-                        <div className="activation-content">
-                            <div className="activation-category">{idea.category}</div>
-                            <h4 className="activation-title">{idea.title}</h4>
-                            <button className="btn-download">Download</button>
-                        </div>
-                    </div>
+                    <UniversalCard
+                        key={idea.id}
+                        title={idea.title}
+                        category={idea.category}
+                        buttonText="Download"
+                    // ActivationIdeas previously had a placeholder, so image is null/undefined
+                    />
                 ))}
             </div>
         </div>

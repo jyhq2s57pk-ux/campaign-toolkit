@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Toolkit - Quick Start Guide</title>
+    <style>
+        :root {
+            --primary: #a855f7;
+            --bg: #0a0a0a;
+            --card: #262626;
+            --text: #ffffff;
+            --text-muted: #a3a3a3;
+        }
+        body {
+            font-family: -apple-system, system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        h1, h2, h3 { color: var(--text); }
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .subtitle { color: var(--text-muted); font-size: 1.2rem; margin-bottom: 3rem; }
+        
+        section { margin-bottom: 4rem; }
+        .step { background: var(--card); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; border: 1px solid #404040; }
+        .step h3 { margin-top: 0; color: var(--primary); }
+        
+        img { max-width: 100%; border-radius: 8px; border: 1px solid #404040; margin-top: 1rem; }
+        code { background: #333; padding: 0.2rem 0.6rem; border-radius: 4px; font-family: monospace; }
+        
+        .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-right: 0.5rem; }
+        .badge-read { background: #3b82f6; color: white; }
+        .badge-write { background: #a855f7; color: white; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Trading Toolkit</h1>
+        <p class="subtitle">Quick Start & Handover Guide</p>
+    </header>
+
+    <section>
+        <h2>1. What is it?</h2>
+        <p>The Trading Toolkit is the central hub for global campaign information, activation strategies, and marketing resources.</p>
+        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+            <div class="step" style="flex: 1;">
+                <strong>For Viewers</strong><br>
+                Browse campaign details, calendars, and resources.
+            </div>
+            <div class="step" style="flex: 1;">
+                <strong>For Editors</strong><br>
+                Manage content via the Admin Panel.
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>2. Accessing the System</h2>
+        <div class="step">
+            <h3>Login</h3>
+            <p>Navigate to <code>http://localhost:5173</code> (or your deployment URL).</p>
+            <p>Log in using your Supabase credentials.</p>
+            <img src="images/admin_login.png" alt="Login Screen">
+        </div>
+    </section>
+
+    <section>
+        <h2>3. Using the Toolkit</h2>
+        
+        <div class="step">
+            <h3><span class="badge badge-read">View Only</span> The Dashboard</h3>
+            <p>Upon login, you'll see the active campaign overview. Use the top navigation to explore <strong>Touchpoints</strong>, <strong>Calendar</strong>, and <strong>Resources</strong>.</p>
+            <img src="images/home_page.png" alt="Home Page Dashboard">
+        </div>
+
+        <div class="step">
+            <h3><span class="badge badge-write">Admin</span> Editing Content</h3>
+            <p>To make changes:</p>
+            <ol>
+                <li>Click the <strong>Admin</strong> toggle in the top-right corner of the navigation bar.</li>
+                <li>Select the section you wish to edit from the new menu items.</li>
+                <li>Changes are saved automatically or via clearly marked "Save" buttons.</li>
+            </ol>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">Note: You need Admin permissions to see this toggle.</p>
+        </div>
+    </section>
+
+    <section>
+        <h2>4. Troubleshooting</h2>
+        <p><strong>Can't log in?</strong> Contact the system administrator to verify your account has been created in Supabase.</p>
+        <p><strong>Don't see the Admin toggle?</strong> Your account likely defaults to "Read Only". Request an upgrade from an Admin.</p>
+    </section>
+
+</body>
+</html>

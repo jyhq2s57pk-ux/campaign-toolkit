@@ -3,6 +3,8 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './OmnichannelPage.css';
 import { api } from '../lib/api';
+import UniversalCard from '../components/UniversalCard';
+import '../components/UniversalCard.css';
 
 // Imported Images
 
@@ -25,6 +27,8 @@ export default function OmnichannelPage() {
     const [gridVisible, setGridVisible] = useState(false);
     const [harmonySteps, setHarmonySteps] = useState([]);
     const [ideas, setIdeas] = useState([]);
+
+    const [selectedIdea, setSelectedIdea] = useState(null);
 
     // Map of default images for fallback
     const imageMap = {
@@ -85,6 +89,16 @@ export default function OmnichannelPage() {
         });
     }, []);
 
+    const handleCardClick = (idea) => {
+        setSelectedIdea(idea);
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    };
+
+    const closeModal = () => {
+        setSelectedIdea(null);
+        document.body.style.overflow = 'auto'; // Restore scrolling
+    };
+
     return (
         <div className="omnichannel-page">
             <Header />
@@ -135,24 +149,56 @@ export default function OmnichannelPage() {
                     <div className="ideas-carousel-wrapper">
                         <div className="ideas-grid">
                             {ideas.map((idea) => (
-                                <div key={idea.id} className="idea-card glass">
-                                    <div className="idea-image-container">
-                                        <img src={idea.image} alt={idea.title} />
-                                        {idea.tag && (
-                                            <div className="idea-tag-badge">
-                                                {idea.tag}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="idea-content">
-                                        <h3 className="idea-title">{idea.title}</h3>
-                                        <p className="idea-desc">{idea.desc}</p>
-                                    </div>
-                                </div>
+                                <UniversalCard
+                                    key={idea.id}
+                                    title={idea.title}
+                                    description={idea.desc}
+                                    image={idea.image}
+                                    category={idea.tag}
+                                    categoryStyle="badge"
+                                    onClick={() => handleCardClick(idea)}
+                                    // No button here, card itself is clickable
+                                    className="clickable"
+                                />
                             ))}
                         </div>
                     </div>
                 </section>
+
+                {/* Modal Overlay */}
+                {selectedIdea && (
+                    <div className="modal-overlay" onClick={closeModal}>
+                        <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+                            <button className="modal-close-btn" onClick={closeModal} aria-label="Close modal">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+
+                            <div className="modal-image-header">
+                                <img src={selectedIdea.image} alt={selectedIdea.title} />
+                            </div>
+
+                            <div className="modal-content-body">
+                                <h2 className="modal-title">{selectedIdea.title}</h2>
+
+                                <div className="modal-highlight-block">
+                                    <div className="highlight-bar"></div>
+                                    <p className="highlight-text">
+                                        {selectedIdea.desc}
+                                    </p>
+                                </div>
+
+                                <div className="modal-long-desc">
+                                    <p>
+                                        Our Power for Impact initiative gives local communities and organizations access to cost-effective energy while supporting their economic growth and championing social impact. We support projects in countries around the world, including South Africa, the Philippines, and Colombia.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
             </main>
             <Footer />

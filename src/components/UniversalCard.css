@@ -1,0 +1,135 @@
+/* src/components/UniversalCard.css */
+
+.universal-card {
+    border-radius: var(--card-radius);
+    /* Master Style 01: Glass Effect */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform var(--transition-medium);
+    background: rgba(255, 255, 255, 0.05);
+    /* Resources page glass base */
+    border: 0.5px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    height: 100%;
+    /* Ensure consistent height in grids */
+    aspect-ratio: 6 / 7;
+    /* Strict 6:7 aspect ratio */
+}
+
+.universal-card.clickable {
+    cursor: pointer;
+}
+
+/* Image / Preview Section */
+.uc-preview {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    /* Enforce 16:9 ratio */
+    height: auto;
+    background-color: var(--surface-card);
+    /* Default background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border-glass);
+    position: relative;
+    overflow: hidden;
+}
+
+.uc-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.uc-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #444;
+    /* From ActivationIdeas placeholder */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Category Badge (Optional) */
+.uc-category-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.9);
+    z-index: 1;
+}
+
+/* Content Section */
+.uc-content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    flex: 1;
+    /* Pushes button to bottom if needed */
+}
+
+.uc-category-text {
+    font-size: var(--text-12);
+    color: var(--accent-blue);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.uc-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: #fff;
+    margin: 0;
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+.uc-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    /* Enforce 2 lines max */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Button Section */
+.uc-footer {
+    padding: 0 24px 24px;
+}
+
+.uc-btn {
+    background-color: #fff;
+    color: #000;
+    border: none;
+    border-radius: 9999px;
+    padding: 6px 16px;
+    font-size: var(--text-12);
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    display: inline-block;
+}
+
+.uc-btn:hover {
+    opacity: 0.9;
+}
