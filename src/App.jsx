@@ -7,6 +7,7 @@ import ResourcesPage from './pages/ResourcesPage';
 import ResourceDetailPage from './pages/ResourceDetailPage';
 import OmnichannelPage from './pages/OmnichannelPage';
 import InsightsPage from './pages/InsightsPage';
+import TradePerformancePage from './pages/TradePerformancePage';
 import AnnexPage from './pages/AnnexPage';
 import AdminPage from './pages/AdminPage';
 import DesignSystemPage from './pages/DesignSystemPage';
@@ -27,6 +28,7 @@ function App() {
         <Route path="/ways-of-working" element={<WaysOfWorkingPage />} />
         <Route path="/omnichannel" element={<OmnichannelPage />} />
         <Route path="/insights" element={<InsightsPage />} />
+        <Route path="/trade-performance" element={<TradePerformancePage />} />
         <Route path="/annex" element={<AnnexPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/design-system" element={<DesignSystemPage />} />

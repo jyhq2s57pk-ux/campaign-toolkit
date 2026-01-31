@@ -1,0 +1,451 @@
+/* Trade Performance Dashboard */
+
+.trade-performance-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #000;
+    color: #fff;
+}
+
+.trade-main {
+    flex: 1;
+    padding-bottom: 120px;
+}
+
+/* Sub Header */
+.trade-subheader {
+    background: var(--surface-elevated);
+    border-bottom: 1px solid var(--border-default);
+    position: sticky;
+    top: 80px;
+    z-index: 40;
+}
+
+.trade-subheader-content {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 20px var(--container-padding);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.trade-title {
+    font-family: var(--font-display);
+    font-size: var(--h-l);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.trade-subtitle {
+    font-size: var(--length-body-default);
+    color: var(--text-secondary);
+    margin: 4px 0 0 0;
+}
+
+.growth-positive {
+    color: var(--badge-success-text);
+    font-weight: 600;
+}
+
+.trade-subheader-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* Content Container */
+.trade-content {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 32px var(--container-padding);
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* KPI Grid */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 1024px) {
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.kpi-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    transition: all var(--transition-fast);
+}
+
+.kpi-card:hover {
+    border-color: var(--accent-blue);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+}
+
+.kpi-highlighted {
+    border-left: 4px solid var(--accent-blue);
+}
+
+.kpi-label {
+    font-size: var(--length-body-small);
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 8px 0;
+}
+
+.kpi-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.1;
+}
+
+.kpi-change {
+    font-size: var(--length-body-small);
+    font-weight: 600;
+    margin: 12px 0 0 0;
+}
+
+.kpi-positive {
+    color: var(--badge-success-text);
+}
+
+.kpi-negative {
+    color: var(--accent-coral);
+}
+
+.kpi-target {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Charts Grid */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+@media (max-width: 1024px) {
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.chart-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    transition: all var(--transition-fast);
+}
+
+.chart-card:hover {
+    border-color: var(--accent-blue);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+}
+
+.chart-title {
+    font-size: var(--h-s);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 24px 0;
+}
+
+.latam-title {
+    text-decoration: underline;
+    text-decoration-color: var(--accent-blue);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 8px;
+}
+
+/* Regional Performance Bars */
+.regional-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.regional-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.regional-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--length-body-default);
+    font-weight: 600;
+}
+
+.region-name-primary {
+    color: var(--text-primary);
+}
+
+.region-name {
+    color: var(--text-secondary);
+}
+
+.region-value-primary {
+    color: var(--text-primary);
+}
+
+.region-value {
+    color: var(--text-secondary);
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: var(--radius-pill);
+    transition: width 0.8s ease-out;
+}
+
+.progress-bar-0 {
+    background: var(--accent-blue);
+}
+
+.progress-bar-1 {
+    background: rgba(59, 130, 246, 0.7);
+}
+
+.progress-bar-2 {
+    background: rgba(59, 130, 246, 0.5);
+}
+
+/* Data Table */
+.table-container {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    text-align: left;
+    font-size: var(--length-body-default);
+    border-collapse: collapse;
+}
+
+.data-table th {
+    color: var(--text-muted);
+    font-weight: 500;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.data-table td {
+    padding: 16px 0;
+    color: var(--text-primary);
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.data-table tr:last-child td {
+    border-bottom: none;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.change-positive {
+    color: var(--badge-success-text);
+    font-size: var(--length-body-small);
+    font-weight: 500;
+}
+
+.change-negative {
+    color: var(--accent-coral);
+    font-size: var(--length-body-small);
+    font-weight: 500;
+}
+
+.pickup-alert {
+    color: var(--accent-coral);
+}
+
+/* Insights Grid */
+.insights-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 24px;
+}
+
+@media (max-width: 1024px) {
+    .insights-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Inventory Alert Card */
+.inventory-alert-card {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+}
+
+.alert-title {
+    font-size: var(--h-s);
+    font-weight: 700;
+    color: var(--accent-blue);
+    margin: 0 0 16px 0;
+}
+
+.alert-value {
+    font-size: 48px;
+    font-weight: 900;
+    font-style: italic;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    line-height: 1;
+}
+
+.alert-text {
+    font-size: var(--length-body-default);
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.alert-highlight {
+    color: var(--text-primary);
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+/* Insights & Actions Card */
+.insights-actions-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+}
+
+.insights-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+}
+
+@media (max-width: 768px) {
+    .insights-actions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.insights-section,
+.actions-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.section-title {
+    font-size: var(--length-body-large);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dot-blue {
+    width: 8px;
+    height: 8px;
+    background: var(--accent-blue);
+    border-radius: 50%;
+}
+
+.dot-green {
+    width: 8px;
+    height: 8px;
+    background: var(--badge-success-text);
+    border-radius: 50%;
+}
+
+.insights-list,
+.actions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.insights-list li,
+.actions-list li {
+    font-size: var(--length-body-default);
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.insights-list li strong {
+    color: var(--text-primary);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 640px) {
+    .trade-subheader-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .trade-subheader-actions {
+        width: 100%;
+    }
+
+    .trade-subheader-actions button {
+        flex: 1;
+    }
+
+    .trade-content {
+        padding: 24px var(--container-padding);
+        gap: 24px;
+    }
+
+    .chart-card {
+        padding: 24px;
+    }
+
+    .kpi-value {
+        font-size: 28px;
+    }
+
+    .alert-value {
+        font-size: 40px;
+    }
+}
