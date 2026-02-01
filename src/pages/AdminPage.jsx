@@ -1,10 +1,17 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Papa from 'papaparse';
 import { supabase } from '../lib/supabase';
+import { api } from '../lib/api';
+import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import './AdminPage.css';
+import CampaignAdmin from '../components/CampaignAdmin';
+import WaysOfWorkingAdmin from '../components/WaysOfWorkingAdmin';
+import OmnichannelIdeasAdmin from '../components/OmnichannelIdeasAdmin';
 import JourneyAdmin from '../components/JourneyAdmin';
 import ResourcesAdmin from '../components/ResourcesAdmin';
+import InsightPagesAdmin from '../components/InsightPagesAdmin';
 
 const STORAGE_KEY = "avolta_toolkit_calendar_v1";
 
@@ -50,9 +57,19 @@ function calendarToCSV(items) {
 }
 
 export default function AdminPage() {
-  const [activeTab, setActiveTab] = useState('journey');
+  const [activeTab, setActiveTab] = useState('campaign');
   const [calendarEvents, setCalendarEvents] = useState([]);
   const [csvError, setCsvError] = useState(null);
+  const [campaign, setCampaign] = useState(null);
+  const [csvPreview, setCsvPreview] = useState(null);
+  const [showPreview, setShowPreview] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   // Fetch calendar events from Supabase
   const fetchCalendarEvents = async () => {
@@ -68,8 +85,15 @@ export default function AdminPage() {
     }
   };
 
+  // Fetch campaign data for dynamic year
+  const fetchCampaign = async () => {
+    const data = await api.getCampaign();
+    setCampaign(data);
+  };
+
   useEffect(() => {
     fetchCalendarEvents();
+    fetchCampaign();
   }, []);
 
   // Calendar management functions
@@ -170,47 +194,62 @@ export default function AdminPage() {
           return;
         }
 
-        if (!confirm(`Found ${parsed.length} campaigns. This will REPLACE all existing calendar events. Continue?`)) {
-          return;
-        }
-
-        console.log("Events to insert:", parsed);
-
-        // 1. Delete all existing events to avoid ID collisions and duplicates
-        const { error: deleteError } = await supabase
-          .from('calendar_events')
-          .delete()
-          .gt('id', 0); // Assuming positive integer IDs
-
-        if (deleteError) {
-          console.error('Error clearing calendar:', deleteError);
-          alert('Error clearing existing calendar: ' + deleteError.message);
-          return;
-        }
-
-        // 2. Insert new events
-        const { error } = await supabase
-          .from('calendar_events')
-          .insert(parsed.map(e => ({
-            title: e.title,
-            start_date: e.startDate,
-            end_date: e.endDate,
-            tier: e.tier
-          })));
-
-        if (error) {
-          console.error('Error importing calendar:', error);
-          alert('Error importing calendar: ' + error.message);
-        } else {
-          alert(`Successfully imported ${parsed.length} campaigns!`);
-          fetchCalendarEvents();
-        }
+        // Show preview instead of immediately importing
+        setCsvPreview(parsed);
+        setShowPreview(true);
       },
       error: (error) => {
         console.error('CSV parse error:', error);
         setCsvError('Error parsing CSV file: ' + error.message);
       }
     });
+  };
+
+  const handleConfirmImport = async () => {
+    if (!csvPreview || csvPreview.length === 0) return;
+
+    try {
+      // 1. Delete all existing events to avoid ID collisions and duplicates
+      const { error: deleteError } = await supabase
+        .from('calendar_events')
+        .delete()
+        .gt('id', 0); // Assuming positive integer IDs
+
+      if (deleteError) {
+        console.error('Error clearing calendar:', deleteError);
+        alert('Error clearing existing calendar: ' + deleteError.message);
+        return;
+      }
+
+      // 2. Insert new events
+      const { error } = await supabase
+        .from('calendar_events')
+        .insert(csvPreview.map(e => ({
+          title: e.title,
+          start_date: e.startDate,
+          end_date: e.endDate,
+          tier: e.tier
+        })));
+
+      if (error) {
+        console.error('Error importing calendar:', error);
+        alert('Error importing calendar: ' + error.message);
+      } else {
+        alert(`Successfully imported ${csvPreview.length} campaigns!`);
+        setShowPreview(false);
+        setCsvPreview(null);
+        fetchCalendarEvents();
+      }
+    } catch (err) {
+      console.error('Import error:', err);
+      alert('Error importing calendar: ' + err.message);
+    }
+  };
+
+  const handleCancelImport = () => {
+    setShowPreview(false);
+    setCsvPreview(null);
+    setCsvError(null);
   };
 
   const handleCalendarExport = () => {
@@ -221,11 +260,12 @@ export default function AdminPage() {
       tier: e.tier
     })) : seededCalendarEvents;
 
+    const year = campaign?.year || '2026';
     const blob = new Blob([calendarToCSV(itemsToExport)], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "campaign-calendar-2026.csv";
+    a.download = `campaign-calendar-${year}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -268,11 +308,39 @@ export default function AdminPage() {
       <main style={{ paddingTop: '56px' }}>
         <div className="admin-container inner-content-wrapper">
           <div className="admin-header">
-            <h1>Admin</h1>
+            <div>
+              <h1>Admin</h1>
+              {user && (
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: '0.5rem 0 0 0' }}>
+                  Logged in as: {user.email}
+                </p>
+              )}
+            </div>
+            <button onClick={handleSignOut} className="btn-secondary">
+              Sign Out
+            </button>
           </div>
 
           {/* Tab Navigation */}
           <div className="admin-tabs">
+            <button
+              className={activeTab === 'campaign' ? 'btn-primary' : 'btn-secondary'}
+              onClick={() => setActiveTab('campaign')}
+            >
+              Campaign
+            </button>
+            <button
+              className={activeTab === 'wow' ? 'btn-primary' : 'btn-secondary'}
+              onClick={() => setActiveTab('wow')}
+            >
+              Ways of Working
+            </button>
+            <button
+              className={activeTab === 'omnichannel' ? 'btn-primary' : 'btn-secondary'}
+              onClick={() => setActiveTab('omnichannel')}
+            >
+              Omnichannel Ideas
+            </button>
             <button
               className={activeTab === 'journey' ? 'btn-primary' : 'btn-secondary'}
               onClick={() => setActiveTab('journey')}
@@ -291,14 +359,31 @@ export default function AdminPage() {
             >
               Resources
             </button>
+            <button
+              className={activeTab === 'insights' ? 'btn-primary' : 'btn-secondary'}
+              onClick={() => setActiveTab('insights')}
+            >
+              Insight Pages
+            </button>
           </div>
 
+          {/* Campaign Tab */}
+          {activeTab === 'campaign' && <CampaignAdmin />}
+
+          {/* Ways of Working Tab */}
+          {activeTab === 'wow' && <WaysOfWorkingAdmin />}
+
+          {/* Omnichannel Ideas Tab */}
+          {activeTab === 'omnichannel' && <OmnichannelIdeasAdmin />}
+
+          {/* Journey Tab */}
+          {activeTab === 'journey' && <JourneyAdmin />}
+
+          {/* Resources Tab */}
           {activeTab === 'resources' && <ResourcesAdmin />}
 
-          {/* Calendar Tab */}
-          {activeTab === 'journey' && (
-            <JourneyAdmin />
-          )}
+          {/* Insight Pages Tab */}
+          {activeTab === 'insights' && <InsightPagesAdmin />}
 
           {activeTab === 'calendar' && (
             <div className="calendar-admin-section">
@@ -308,7 +393,7 @@ export default function AdminPage() {
 
               <div className="calendar-admin-card">
                 <p className="calendar-admin-info">
-                  Manage your 2026 campaign calendar data. Import/export campaigns as CSV or reset to defaults.
+                  Manage your {campaign?.year || '2026'} campaign calendar data. Import/export campaigns as CSV or reset to defaults.
                 </p>
                 {csvError && <div className="import-error">{csvError}</div>}
 
@@ -342,6 +427,92 @@ export default function AdminPage() {
                     Valid tiers: Overarching Campaign, Category-Led, Omnichannel Campaigns, Digital Campaigns, Local Campaigns (supported by Global)
                   </p>
                 </div>
+
+                {/* CSV Preview Modal */}
+                {showPreview && csvPreview && (
+                  <div className="modal-overlay" onClick={handleCancelImport}>
+                    <div className="modal-content" style={{ maxWidth: '800px' }} onClick={(e) => e.stopPropagation()}>
+                      <h3>CSV Import Preview</h3>
+
+                      <div className="admin-message info">
+                        <strong>⚠️ Warning:</strong> This will replace ALL {calendarEvents.length} existing calendar events with {csvPreview.length} new events from the CSV.
+                      </div>
+
+                      <div style={{ marginBottom: '1rem' }}>
+                        <p><strong>Preview of events to import:</strong></p>
+                        <div style={{
+                          maxHeight: '400px',
+                          overflowY: 'auto',
+                          background: 'rgba(0,0,0,0.2)',
+                          padding: '1rem',
+                          borderRadius: '6px',
+                          marginTop: '0.5rem'
+                        }}>
+                          <table style={{ width: '100%', fontSize: '0.9rem', borderCollapse: 'collapse' }}>
+                            <thead>
+                              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                                <th style={{ textAlign: 'left', padding: '0.5rem' }}>Title</th>
+                                <th style={{ textAlign: 'left', padding: '0.5rem' }}>Start</th>
+                                <th style={{ textAlign: 'left', padding: '0.5rem' }}>End</th>
+                                <th style={{ textAlign: 'left', padding: '0.5rem' }}>Tier (Normalized)</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {csvPreview.map((event, idx) => (
+                                <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                  <td style={{ padding: '0.5rem' }}>{event.title}</td>
+                                  <td style={{ padding: '0.5rem' }}>{event.startDate}</td>
+                                  <td style={{ padding: '0.5rem' }}>{event.endDate}</td>
+                                  <td style={{ padding: '0.5rem' }}>
+                                    <span style={{
+                                      background: 'rgba(139, 92, 246, 0.2)',
+                                      padding: '2px 8px',
+                                      borderRadius: '4px',
+                                      fontSize: '0.85em'
+                                    }}>
+                                      {event.tier}
+                                    </span>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      <div className="admin-info-box" style={{ marginTop: '1rem' }}>
+                        <h3>Tier Mapping Applied:</h3>
+                        <ul style={{ fontSize: '0.85rem' }}>
+                          <li>"Omnichannel Campaigns" → "Campaigns"</li>
+                          <li>"Digital Campaigns" → "Other Global Campaigns"</li>
+                          <li>"Local Campaigns (supported by Global)" → "Other Local Campaigns"</li>
+                        </ul>
+                      </div>
+
+                      <div className="form-actions" style={{ marginTop: '1.5rem' }}>
+                        <button
+                          className="btn-secondary"
+                          onClick={handleCalendarExport}
+                          style={{ marginRight: 'auto' }}
+                        >
+                          Export Current Events (Backup)
+                        </button>
+                        <button
+                          className="btn-secondary"
+                          onClick={handleCancelImport}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="btn-primary"
+                          onClick={handleConfirmImport}
+                        >
+                          Confirm Import
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}

@@ -120,7 +120,7 @@
 
     /* Visual Styles matching Screenshot */
     background: #050505;
-    border-radius: 32px;
+    border-radius: var(--card-radius);
     padding: 32px;
     border: 1px solid var(--surface-card);
     backdrop-filter: none;
@@ -247,7 +247,7 @@
 .strategy-info-card {
     grid-area: center;
     padding: 40px;
-    border-radius: 32px;
+    border-radius: var(--card-radius);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -424,7 +424,7 @@
 .treasure-container {
     display: flex;
     flex-direction: column;
-    border-radius: 32px;
+    border-radius: var(--card-radius);
     overflow: hidden;
 }
 
@@ -539,106 +539,63 @@
     color: var(--text-secondary);
 }
 
-.carousel-wrapper {
+/* Ideas Grid Section - Carousel style */
+.ideas-grid-section {
+    padding: 0 0 80px 0;
+    margin-top: -40px;
+}
+
+.ideas-grid-section .section-header {
+    text-align: left;
+}
+
+.ideas-grid-section .section-title {
+    font-family: var(--font-display);
+    font-size: var(--h-xxxl);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -1.68px;
+    margin: 0 0 16px 0;
+}
+
+.ideas-carousel-wrapper {
+    position: relative;
+    margin-top: 20px;
+    overflow: hidden;
     width: 100%;
+}
+
+.ideas-grid {
+    display: flex;
+    gap: 24px;
+    /* Increased to 24px to match ResourcesPage */
     overflow-x: auto;
-    padding: 0 40px 60px 40px;
-    /* Padding for scroll snapping edge */
-    scrollbar-width: none;
-    /* Hide scrollbar Firefox */
-    -ms-overflow-style: none;
     scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 0 max(24px, calc((100vw - 1200px) / 2)) 20px;
 }
 
-.carousel-wrapper::-webkit-scrollbar {
-    display: none;
-    /* Hide scrollbar Chrome */
+/* Fix squashing issue in flex scroll container */
+.ideas-grid .universal-card {
+    flex: 0 0 400px;
+    min-width: 400px;
+    /* Increased for desktop */
 }
 
-.carousel-track {
-    display: flex;
-    gap: 32px;
-    width: max-content;
-}
-
-.carousel-item {
-    scroll-snap-align: center;
-    width: 380px;
-    /* Fixed width for consistency */
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    transition: transform 0.3s ease;
-}
-
-@media (min-width: 768px) {
-    .carousel-item {
-        width: 450px;
+@media (max-width: 768px) {
+    .ideas-grid .universal-card {
+        flex: 0 0 320px;
+        min-width: 320px;
+        /* Revert to 320px for mobile */
     }
 }
 
-.carousel-image-container {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    /* Square images like Apple example */
-    border-radius: 24px;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-    background: #222;
-}
+/* 
+  .idea-card, .idea-image-container, .idea-tag-badge, .idea-content 
+  Removed as they are now handled by UniversalCard.css 
+*/
 
-.carousel-image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-/* Hover effect removed */
-
-.carousel-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.4) 100%);
-    pointer-events: none;
-}
-
-.carousel-badges {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    display: flex;
-    gap: 10px;
-}
-
-.carousel-tag {
-    background: rgba(255, 255, 255, 0.9);
-    color: #000;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: var(--length-body-small);
-    font-weight: 700;
-    text-transform: uppercase;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.carousel-text h3 {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #fff;
-}
-
-.carousel-text p {
-    font-size: 16px;
-    color: var(--text-secondary);
-    line-height: 1.5;
-}
 
 /* Animations */
 .fade-in-up {
@@ -689,5 +646,160 @@
 
     .strategy-info-card {
         padding: 24px;
+    }
+}
+
+/* Modal Styles */
+.clickable {
+    cursor: pointer;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+    animation: fadeIn 0.3s ease-out;
+    backdrop-filter: blur(8px);
+}
+
+.modal-container {
+    background: #fff;
+    /* White background as per design */
+    width: 100%;
+    max-width: 900px;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
+    animation: scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    color: #111;
+    /* Dark text for white bg */
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 100;
+    /* Boost z-index to ensure visibility */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+    color: #000;
+}
+
+.modal-close-btn:hover {
+    transform: scale(1.1);
+}
+
+.modal-image-header {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    background: #f0f0f0;
+}
+
+.modal-image-header img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modal-content-body {
+    padding: 60px;
+}
+
+.modal-title {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 40px;
+    letter-spacing: -1px;
+    color: #111;
+    max-width: 80%;
+}
+
+.modal-highlight-block {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.highlight-bar {
+    width: 6px;
+    background-color: #00D26A;
+    /* Bright green accent */
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.highlight-text {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #111;
+}
+
+.modal-long-desc {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #555;
+    max-width: 800px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleUp {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-content-body {
+        padding: 32px;
+    }
+
+    .modal-title {
+        font-size: 32px;
+        margin-bottom: 24px;
+    }
+
+    .modal-image-header {
+        height: 250px;
+    }
+
+    .highlight-text {
+        font-size: 20px;
     }
 }

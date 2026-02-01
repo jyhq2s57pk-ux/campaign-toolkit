@@ -1,7 +1,12 @@
 /* Campaign Toolkit - Global Styles */
 
 /* Import Master Design System */
+/* Import Master Design System */
 @import './styles/master-styles.css';
+
+:root {
+    --card-radius: 24px;
+}
 
 /* Saans Font Family */
 @font-face {

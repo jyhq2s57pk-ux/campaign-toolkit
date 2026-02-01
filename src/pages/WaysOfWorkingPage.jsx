@@ -7,6 +7,69 @@ import { api } from "../lib/api";
 
 
 export default function WaysOfWorkingPage() {
+  const [steps, setSteps] = useState([]);
+  const [tips, setTips] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await api.getWaysOfWorking();
+
+      // Map process data to steps format
+      const stepsData = data.process.map((step, index) => ({
+        icon: getIconForStep(index),
+        title: step.title,
+        content: renderStepContent(step.description)
+      }));
+
+      // Map timeline data to tips (using phase field as tip text)
+      const tipsData = data.timeline.map(item => item.phase);
+
+      setSteps(stepsData);
+      setTips(tipsData);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  // Helper to get appropriate icon for each step
+  const getIconForStep = (index) => {
+    const icons = [IconExpand, IconGroup, IconStar];
+    const IconComponent = icons[index] || IconStar;
+    return <IconComponent />;
+  };
+
+  // Helper to render step description with formatting support
+  const renderStepContent = (description) => {
+    if (!description) return null;
+
+    // Split by line breaks and process each part
+    const parts = description.split('\n\n');
+
+    return (
+      <>
+        {parts.map((part, i) => {
+          // Check if part contains highlight-text class
+          if (part.includes('<div class="highlight-text">')) {
+            return (
+              <div key={i} className="highlight-text" dangerouslySetInnerHTML={{ __html: part.replace(/<div[^>]*>|<\/div>/g, '') }} />
+            );
+          }
+
+          // Check if part contains inline-new-badge
+          if (part.includes('<span class="inline-new-badge">')) {
+            return <p key={i} dangerouslySetInnerHTML={{ __html: part }} />;
+          }
+
+          // Regular paragraph with markdown-style bold
+          const htmlContent = part.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+          return <p key={i} dangerouslySetInnerHTML={{ __html: htmlContent }} />;
+        })}
+      </>
+    );
+  };
+
   const IconExpand = () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M15 3H21V9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -31,59 +94,19 @@ export default function WaysOfWorkingPage() {
     </svg>
   );
 
-  // Hardcoded steps to match user request
-  const steps = [
-    {
-      icon: <IconExpand />,
-      title: "1. Global",
-      content: (
-        <>
-          <p>
-            <strong>EPIC Ticket in JIRA</strong> – Global Digital Team to open an EPIC ticket in JIRA with everything ready to implement as it is in this toolkit.
-          </p>
-          <p>
-            <strong>One ticket by main region</strong> – Global Digital team to open a child ticket by each region, including an excel file with a detailed implementation guide including copies, translations, etc. <span className="inline-new-badge">NEW</span>
-          </p>
-        </>
-      )
-    },
-    {
-      icon: <IconGroup />,
-      title: "2. Regions",
-      content: (
-        <>
-          <p>
-            <strong>Review & Confirm</strong> – Validate details (location, dates, activation level).
-          </p>
-          <div className="highlight-text">
-            <strong>Approve Assets</strong> – Check copy & translations. Defaults apply if unchanged.
+  if (loading) {
+    return (
+      <div className="ways-page">
+        <Header />
+        <main className="ways-main-content">
+          <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+            Loading ways of working...
           </div>
-          <p>
-            <strong>Support</strong> – Open DCCR ticket for design/translation help.
-          </p>
-          <p>
-            <strong>Handover</strong> – Reassign to <strong>Surekha Matte</strong> (Content Team).
-          </p>
-        </>
-      )
-    },
-    {
-      icon: <IconStar />,
-      title: "3. Content Implementation",
-      content: (
-        <p>
-          Once approved and assigned, the Content Team takes over to make it real! Final assets are deployed across all channels.
-        </p>
-      )
-    }
-  ];
-
-  const tips = [
-    "Always define activation level first",
-    "Include start and end dates",
-    "Attach final visuals and translations",
-    "Avoid changes once tickets are approved"
-  ];
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="ways-page">
