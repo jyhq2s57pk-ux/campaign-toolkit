@@ -62,7 +62,7 @@
 .admin-toggle-switch-footer {
   width: 48px;
   height: 24px;
-  background-color: #555555;
+  background-color: var(--surface-interactive);
   border-radius: 12px;
   position: relative;
   transition: background-color 0.3s ease;
@@ -154,18 +154,35 @@
   text-decoration: none;
   color: white;
   flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.footer-nav-link::before {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 1px;
+  background: var(--text-primary);
+  transition: width var(--transition-hover);
+  margin-right: 0;
+}
+
+.footer-nav-link:hover::before {
+  width: 12px;
+  margin-right: 8px;
 }
 
 .footer-nav-link:hover .footer-link-text {
-  text-decoration: underline;
-  opacity: 0.8;
+  color: var(--text-primary);
 }
 
 .footer-link-text {
-  color: white;
+  color: var(--text-secondary);
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
+  transition: color var(--transition-fast);
 }
 
 /* Bottom Section (Logo) */

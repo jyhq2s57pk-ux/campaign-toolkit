@@ -5,15 +5,15 @@
     height: 128px;
     width: 100%;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%);
-    border: 1px solid #313131;
+    border: 1px solid var(--border-medium);
     /* Mobile Radius */
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     position: relative;
     /* Mobile padding */
     padding: 20px;
     box-sizing: border-box;
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: all var(--transition-hover);
     cursor: pointer;
     background-color: var(--surface-card);
 }
@@ -21,16 +21,21 @@
 @media (min-width: 768px) {
     .mini-link-card {
         /* Desktop Radius */
-        border-radius: 20px;
+        border-radius: var(--radius-xl);
         /* Desktop Padding */
         padding: 24px;
-        /* Desktop Height (if different, Figma implies flexible or specific for desktop, keeping 128 for now as cleaner base, or could be reduced if design demands, but padding override is key) */
     }
 }
 
 .mini-link-card:hover {
-    border-color: #555;
-    background-color: #222;
+    border-color: var(--border-hover);
+    background-color: var(--surface-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.mini-link-card:hover .mini-card-chevron {
+    transform: translateX(4px);
 }
 
 .mini-card-content {
@@ -49,7 +54,7 @@
     /* Mobile font size */
     font-size: 17px;
     font-weight: 400;
-    color: #ffffff;
+    color: var(--text-primary);
     margin: 0;
     line-height: 1.2;
 }
@@ -64,8 +69,7 @@
 .mini-card-description {
     font-family: var(--font-body, 'Saans', sans-serif);
     font-size: 12px;
-    color: #aaaaaa;
-    /* Theme colors/text-2 */
+    color: var(--text-tertiary);
     margin: 0;
     line-height: 1.2;
 }
@@ -79,10 +83,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform var(--transition-hover);
 }
 
 .mini-card-chevron svg {
     width: 16px;
     height: 16px;
-    color: #f1f1f1;
+    color: var(--text-secondary);
 }

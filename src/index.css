@@ -5,7 +5,7 @@
 @import './styles/master-styles.css';
 
 :root {
-    --card-radius: 24px;
+    --card-radius: var(--radius-xl);
 }
 
 /* Saans Font Family */

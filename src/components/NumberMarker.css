@@ -1,5 +1,5 @@
 /* NumberMarker Component Styles */
-/* Matching Figma CLP Hero design - light gray circle with dark number */
+/* Dark-theme appropriate circle with light number */
 
 .number-marker {
   display: flex;
@@ -7,12 +7,12 @@
   align-items: center;
   width: 24px;
   height: 24px;
-  background-color: #eeeeee;
+  background-color: var(--surface-interactive);
   border-radius: 50%;
   flex-shrink: 0;
 
   /* Text styling */
-  color: #1e1e1e;
+  color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 14px;
   font-weight: 500;

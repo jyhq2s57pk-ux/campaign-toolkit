@@ -19,6 +19,18 @@
   overflow: hidden;
   white-space: nowrap;
   font-family: var(--font-body);
+  transition: transform var(--transition-fast);
+}
+
+/* Interactive hover only when badge is inside a clickable context */
+a .badge:hover,
+button .badge:hover,
+[role="button"] .badge:hover {
+  transform: scale(1.05);
+}
+
+.badge:focus-visible {
+  box-shadow: var(--focus-ring);
 }
 
 /* =====================================================

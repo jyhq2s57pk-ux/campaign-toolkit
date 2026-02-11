@@ -4,8 +4,8 @@
   left: 0;
   right: 0;
   height: 50px;
-  background-color: #161616;
-  border-bottom: 1px solid #2B2B2B;
+  background-color: var(--surface-subtle);
+  border-bottom: 1px solid var(--border-default);
   display: flex;
   justify-content: center;
   padding: 0 12px;
@@ -21,9 +21,6 @@
 
 .header-container {
   width: 100%;
-  /* max-width: 1400px; Remove max-width constraint to match "alignSelf: stretch" in figma or keep it reasonable? 
-     Figma layout shows a container width of 1400 but also "width: 1400" on the request. 
-     I'll keep it full width or max-width 1400 centered. */
   max-width: 1400px;
   display: flex;
   align-items: center;
@@ -60,7 +57,6 @@
   display: flex;
   gap: 4px;
   padding: 4px;
-  /* Optional: background for the nav container if needed, but looks transparent in default */
   align-items: center;
 }
 
@@ -68,15 +64,14 @@
   background: none;
   border: none;
   color: #F1F1F1;
-  /* var(--Day, white) */
   font-size: 14px;
   font-family: inherit;
   font-weight: 400;
   cursor: pointer;
   padding: 6px 16px;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all var(--transition-hover);
   white-space: nowrap;
   display: flex;
   align-items: center;
@@ -88,14 +83,18 @@
   color: #fff;
 }
 
+.nav-btn:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
 .nav-btn-active {
-  background-color: #333333;
+  background-color: var(--surface-interactive);
   color: #FFFFFF;
   font-weight: 500;
 }
 
 .nav-btn-active:hover {
-  background-color: #444444;
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .header-right {
@@ -116,7 +115,7 @@
 .admin-toggle-switch {
   width: 48px;
   height: 24px;
-  background-color: #555555;
+  background-color: var(--surface-interactive);
   border-radius: 12px;
   position: relative;
   transition: background-color 0.3s ease;
@@ -125,8 +124,7 @@
 }
 
 .admin-toggle-switch.active {
-  background-color: #2B2B2B;
-  /* Dark Grey */
+  background-color: var(--surface-card);
 }
 
 .toggle-knob {
@@ -180,11 +178,23 @@
 
 @media (max-width: 1100px) {
   .header-center {
-    display: none;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    height: calc(100vh - 50px);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.3s var(--ease-out-expo), transform 0.3s var(--ease-out-expo);
+    z-index: 1001;
+    display: block;
   }
 
   .header-center.open {
-    display: block;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 
   .header-right {
@@ -202,12 +212,11 @@
     left: 0;
     right: 0;
     height: calc(100vh - 50px);
-    background: #161616;
+    background: var(--surface-subtle);
     flex-direction: column;
     justify-content: flex-start;
     padding-top: 0;
     align-items: stretch;
-    /* Stretch to full width */
     gap: 0;
     z-index: 1001;
     overflow-y: auto;
@@ -218,19 +227,12 @@
     height: auto;
     padding: 24px;
     width: 100%;
-    border-bottom: 1px solid #2B2B2B;
+    border-bottom: 1px solid var(--border-default);
     border-radius: 0;
     justify-content: flex-start;
   }
 
-  /* Make active state look different on mobile if needed, or keep same */
   .header-nav.mobile-open .nav-btn-active {
-    background-color: #161616;
-    /* Keep dark background specifically for mobile list item if per design, or use the white pill? */
-    /* Screenshot shows simple list. Active state styling on mobile is often different. 
-       Let's assume text color highlight or white pill. 
-       If I look at screenshot, mobile menu links just look like text. 
-       I will reset the active background for mobile to look cleaner if it spans full width. */
     background-color: transparent;
     color: #FFFFFF;
     font-weight: 600;
@@ -240,15 +242,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* Label left/right? Or Toggle right? */
     padding: 24px;
-    border-bottom: 1px solid #2B2B2B;
+    border-bottom: 1px solid var(--border-default);
     width: 100%;
     box-sizing: border-box;
-    /* Position at bottom or just end of list? Screenshot shows at bottom.
-       If list is short, mt-auto pushes it down? 
-       .header-nav is flex column. */
-    /* margin-top: auto; */
-    /* Only if height is 100% and we want it at bottom */
   }
 }

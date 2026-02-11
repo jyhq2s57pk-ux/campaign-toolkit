@@ -1,19 +1,25 @@
 /* FlexibleHeroCard.css */
 
 .resource-hero-card.flexible-card {
-    background-color: #161616;
+    background-color: var(--surface-subtle);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 24px;
+    border-radius: var(--radius-xl);
     padding: 40px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
     margin-bottom: 80px;
+    transition: box-shadow var(--transition-hover), border-color var(--transition-hover);
+}
+
+.resource-hero-card.flexible-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-hover);
 }
 
 .flexible-card .hero-visual-side {
-    background: #000;
-    border-radius: 16px;
+    background: var(--surface-default);
+    border-radius: var(--radius-lg);
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -87,18 +93,20 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #fff;
-    color: #000;
+    background: var(--text-primary);
+    color: var(--text-inverse);
     font-size: 14px;
     font-weight: 600;
     padding: 12px 24px;
-    border-radius: 100px;
+    border-radius: var(--radius-pill);
     text-decoration: none;
-    transition: transform 0.2s;
+    transition: all var(--transition-fast);
 }
 
 .flexible-card .primary-action-btn:hover {
-    transform: scale(1.02);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+    background: #e5e5e5;
 }
 
 @media (max-width: 900px) {

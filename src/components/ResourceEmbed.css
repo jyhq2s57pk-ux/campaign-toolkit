@@ -62,11 +62,11 @@
 .res-img-placeholder {
     width: 100%;
     height: 100%;
-    background: #333;
+    background: var(--surface-interactive);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #555;
+    color: var(--text-muted);
 }
 
 /* Text Column */
@@ -100,7 +100,7 @@
 
 .res-embed-label {
     align-self: stretch;
-    color: #9B9B9B;
+    color: var(--text-tertiary);
     font-size: 12px;
     font-family: inherit;
     font-weight: 500;

@@ -14,8 +14,8 @@
     /* Colors */
     --fb-text-white: #ffffff;
     --fb-text-gray: #a6a6a6;
-    --fb-number-bg: #eeeeee;
-    --fb-number-text: #1e1e1e;
+    --fb-number-bg: var(--surface-interactive);
+    --fb-number-text: var(--text-primary);
 
     /* Badge Colors - matching Figma design */
     --fb-magenta-bg: rgba(255, 102, 196, 0.2);

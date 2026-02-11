@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './Carousel.css';
 import joyImage from '../assets/joy-unlimited.png';
 
@@ -48,6 +48,39 @@ export default function Carousel() {
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    // Sync active dot to scroll position
+    useEffect(() => {
+        const track = trackRef.current;
+        if (!track) return;
+        const handleScroll = () => {
+            const scrollPos = track.scrollLeft;
+            const cardWidth = track.offsetWidth;
+            const index = Math.round(scrollPos / cardWidth);
+            setActiveIndex(Math.min(index, CAROUSEL_ITEMS.length - 1));
+        };
+        track.addEventListener('scroll', handleScroll, { passive: true });
+        return () => track.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const scrollToCard = useCallback((index) => {
+        const track = trackRef.current;
+        if (!track) return;
+        track.scrollTo({ left: index * track.offsetWidth, behavior: 'smooth' });
+    }, []);
+
+    // Keyboard navigation
+    const handleKeyDown = useCallback((e) => {
+        if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            scrollToCard(Math.min(activeIndex + 1, CAROUSEL_ITEMS.length - 1));
+        }
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            scrollToCard(Math.max(activeIndex - 1, 0));
+        }
+    }, [activeIndex, scrollToCard]);
 
     // Mouse Drag Handlers
     const onMouseDown = (e) => {
@@ -82,6 +115,10 @@ export default function Carousel() {
                 onMouseLeave={onMouseLeave}
                 onMouseUp={onMouseUp}
                 onMouseMove={onMouseMove}
+                onKeyDown={handleKeyDown}
+                tabIndex={0}
+                role="region"
+                aria-label="Campaign carousel"
             >
                 {CAROUSEL_ITEMS.map((currentItem) => (
                     <div className={`carousel-card card--${currentItem.color}`} key={currentItem.id}>
@@ -156,21 +193,14 @@ export default function Carousel() {
                 ))}
             </div>
 
-            {/* Dots (Optional: Can remain as indicators, logically updating based on scroll pos requires more logic, 
-                for now removing explicit dot control binding or implementing simple scrollIntoView logic is complex without requested. 
-                Leaving basic static dots or removing if scroll is primary. 
-                User asked for "scrollable", often dots disappear or become just indicators. 
-                I will remove the clickable dots for now to rely on the requested scroll/swipe interaction, or keep simplified.) 
-                
-                Actually, let's keep it clean as per screenshot which shows dots. 
-                I will leave them out for this iteration unless requested to sync them, as 'scrollable' is the priority.
-            */}
+            {/* Dot Indicators - synced to scroll position */}
             <div className="carousel-dots">
                 {CAROUSEL_ITEMS.map((_, idx) => (
-                    <span
+                    <button
                         key={idx}
-                        className={`dot ${/* efficient way to track active index on scroll is needed, simplifying for now */ 'dot-indicator'}`}
-                    /* active class requires scroll listener */
+                        className={`dot ${idx === activeIndex ? 'active' : ''}`}
+                        onClick={() => scrollToCard(idx)}
+                        aria-label={`Go to slide ${idx + 1}`}
                     />
                 ))}
             </div>

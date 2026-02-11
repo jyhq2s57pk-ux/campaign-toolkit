@@ -3,7 +3,7 @@
 .contents-container {
     background-color: var(--surface-card);
     /* Dark card bg */
-    border: 1px solid #333;
+    border: 1px solid var(--border-medium);
     border-radius: 24px;
     padding: 32px;
     width: 100%;
@@ -17,7 +17,7 @@
     font-family: var(--font-body);
     font-size: 20px;
     font-weight: 500;
-    color: #fff;
+    color: var(--text-primary);
     margin: 0;
 }
 
@@ -30,7 +30,7 @@
     display: flex;
     align-items: center;
     padding: 16px 0;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid var(--border-medium);
     text-decoration: none;
     transition: background-color 0.2s;
 }
@@ -46,16 +46,15 @@
 
 .content-n {
     font-family: var(--font-mono);
-    /* Or just sans-serif if no mono var */
     font-size: 14px;
-    color: #666;
+    color: var(--text-muted);
     width: 40px;
 }
 
 .content-title {
     font-family: var(--font-body);
     font-size: 16px;
-    color: #fff;
+    color: var(--text-primary);
     transition: color 0.2s;
 }
 

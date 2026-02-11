@@ -248,12 +248,21 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: #333;
+    background-color: var(--surface-interactive);
     border: none;
     padding: 0;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s var(--ease-out-expo);
     opacity: 0.5;
+}
+
+.dot:hover {
+    background-color: var(--text-tertiary);
+    opacity: 0.8;
+}
+
+.dot:focus-visible {
+    box-shadow: var(--focus-ring);
 }
 
 .dot.active {
@@ -261,6 +270,13 @@
     width: 28px;
     border-radius: 4px;
     opacity: 1;
+}
+
+/* Focus ring for carousel keyboard navigation */
+.carousel-track:focus-visible {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 4px;
+    border-radius: var(--radius-xl);
 }
 
 /* Responsive: Mobile/Tablet (< 1024px) */

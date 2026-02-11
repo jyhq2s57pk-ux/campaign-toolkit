@@ -14,8 +14,8 @@
 }
 
 .activation-pill {
-    background-color: #333;
-    color: #fff;
+    background-color: var(--surface-interactive);
+    color: var(--text-primary);
     padding: 8px 16px;
     border-radius: 9999px;
     font-size: var(--text-13);

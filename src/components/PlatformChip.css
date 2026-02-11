@@ -1,12 +1,12 @@
 .platform-chip {
   padding: 10px 16px;
-  border-radius: 12px;
-  background-color: #2d2d2d;
+  border-radius: var(--radius-md);
+  background-color: var(--surface-interactive);
   color: var(--text-secondary);
   border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
   text-align: left;
-  transition: all 0.2s ease;
+  transition: all var(--transition-hover);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -15,17 +15,24 @@
 }
 
 .platform-chip.active {
-  background-color: var(--surface-card);
+  background-color: var(--text-primary);
   color: var(--text-inverse);
   border: 1px solid transparent;
+  box-shadow: var(--shadow-sm);
 }
 
 .platform-chip:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
 }
 
 .platform-chip.active:hover {
-  background-color: var(--surface-card);
+  background-color: #e5e5e5;
+}
+
+.platform-chip:focus-visible {
+  box-shadow: var(--focus-ring);
 }
 
 .chip-header {
