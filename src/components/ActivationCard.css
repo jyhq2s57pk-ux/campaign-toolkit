@@ -75,8 +75,11 @@
   position: absolute;
   right: 16px;
   bottom: 16px;
-  background: none;
+  background: #FFFFFF;
+  border-radius: 50%;
   border: none;
+  width: 42px;
+  height: 42px;
   padding: 0;
   cursor: pointer;
   display: flex;

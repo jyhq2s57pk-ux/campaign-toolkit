@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { api } from '../lib/api';
 import './Header.css';
 
 import logo from '../assets/logo1.svg';
@@ -7,7 +8,27 @@ import logo from '../assets/logo1.svg';
 export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [campaignName, setCampaignName] = useState(null);
+
+  const campaignId = searchParams.get('campaignId');
+
+  useEffect(() => {
+    const fetchCampaignContext = async () => {
+      if (campaignId) {
+        const campaign = await api.getCampaignById(campaignId);
+        if (campaign) {
+          setCampaignName(campaign.name);
+        } else {
+          setCampaignName(null);
+        }
+      } else {
+        setCampaignName(null);
+      }
+    };
+    fetchCampaignContext();
+  }, [campaignId]);
 
   // Check if we are on admin page
   const isAdmin = location.pathname.startsWith('/admin');
@@ -29,13 +50,21 @@ export default function Header() {
     closeMenu();
   };
 
+  // Helper to preserve campaignId in nav links
+  const getNavLinkWithContext = (path) => {
+    if (campaignId) {
+      return `${path}?campaignId=${campaignId}`;
+    }
+    return path;
+  };
+
   const navLinks = [
-    { name: 'Customer Touchpoints', path: '/customer-journey' },
     { name: 'Insights', path: '/insights' },
+    { name: 'Customer Touchpoints', path: '/customer-journey' },
     { name: 'Activate', path: '/ways-of-working' },
     { name: 'Omnichannel', path: '/omnichannel' },
-    { name: 'Calendar', path: '/calendar' },
     { name: 'Resources', path: '/resources' },
+    { name: 'Calendar', path: '/calendar' },
   ];
 
   return (
@@ -46,6 +75,12 @@ export default function Header() {
           <Link to="/" className="header-logo" onClick={closeMenu}>
             <img src={logo} alt="Trading Toolkit" className="logo-image" />
           </Link>
+          {campaignName && (
+            <div className="header-campaign-context">
+              <span className="campaign-context-year">2026</span>
+              <span className="campaign-context-name">{campaignName}</span>
+            </div>
+          )}
         </div>
 
         <button
@@ -66,7 +101,7 @@ export default function Header() {
             {navLinks.map((link) => (
               <Link
                 key={link.path}
-                to={link.path}
+                to={getNavLinkWithContext(link.path)}
                 className={`nav-btn ${location.pathname === link.path ? 'nav-btn-active' : ''}`}
                 onClick={closeMenu}
               >

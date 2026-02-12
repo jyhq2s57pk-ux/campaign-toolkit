@@ -65,20 +65,31 @@
     color: #fff;
 }
 
-.omni-panel__heading {
-    color: #fff;
-    font-size: 36px;
-    font-family: var(--font-display, 'Saans', sans-serif);
-    font-weight: 500;
-    line-height: 1.2;
-    margin: 16px 0 0;
+.omni-panel__subheading {
+    color: var(--text-secondary, #a1a1a6);
+    font-size: 14px;
+    font-family: var(--font-body, 'Saans', sans-serif);
+    font-weight: 400;
+    line-height: normal;
+    margin: 20px 0 0;
+}
+
+.omni-panel__scroll-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #000;
+    margin-top: 4px;
 }
 
 .omni-panel__arrow {
     width: 24px;
     height: 24px;
     flex-shrink: 0;
-    opacity: 0.6;
+    opacity: 1;
 }
 
 @media (max-width: 768px) {
@@ -101,6 +112,11 @@
 /* =====================================================
    Activation Grid
    ===================================================== */
+.omnichannel-main .filter-tabs {
+    margin-top: 30px;
+    justify-content: center;
+}
+
 .activation-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

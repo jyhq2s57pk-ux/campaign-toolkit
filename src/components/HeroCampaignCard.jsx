@@ -1,6 +1,5 @@
 import React from 'react';
-import MiniLinkCard from './MiniLinkCard';
-import Badge from './Badge';
+import { Link } from 'react-router-dom';
 import './HeroCampaignCard.css';
 
 // Inline logo to allow color overriding
@@ -27,89 +26,103 @@ const HeroCampaignCard = ({
     scope = "Global",
     channels = "Reserve & Collect (Web / APP) Emporium",
     activationDates = "October-December 2025 (Activation date may vary by location)",
-    links = [
-        { title: "Customer touchpoints", description: "Optional description text.", link: "#" },
-        { title: "Title", description: "Optional description text.", link: "#" },
-        { title: "Title", description: "Optional description text.", link: "#" },
-        { title: "Title", description: "Optional description text.", link: "#" },
-        { title: "Title", description: "Optional description text.", link: "#" },
-        { title: "Title", description: "Optional description text.", link: "#" }
-    ]
+    links = [],
+    primaryColor,
+    features
 }) => {
+    const bannerStyle = primaryColor ? { backgroundColor: primaryColor } : {};
+
+    // Helper to extract badge data from features if present, 
+    // or fallback to parsing if we passed it in "Multi-level activation"
+    // Since Figma has hardcoded Badges for Premium/Executive/Standard, let's try to find them.
+    const renderBadges = () => {
+        // Look for the feature that contains "Multi-level"
+        const levelFeature = features?.find(f => f.label.includes('Multi-level'));
+        if (!levelFeature || !levelFeature.values) return null;
+
+        return (
+            <div className="badges-row">
+                {levelFeature.values.map((val, idx) => {
+                    // Expect format "Label: Description" e.g. "Premium: Full visibility"
+                    const parts = val.split(':');
+                    const label = parts[0].trim();
+                    const desc = parts[1] ? parts[1].trim() : '';
+                    const variant = label.toLowerCase();
+
+                    return (
+                        <div key={idx} className="badge-group">
+                            <span className={`badge-pill ${variant}`}>{label}</span>
+                            <span className="badge-desc">{desc}</span>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    };
+
     return (
         <div className="hero-campaign-card">
-            {/* HERO BANNER */}
-            <div className="hero-banner">
-                <div className="hero-banner-content">
-                    <h1 className="hero-title">{title}</h1>
-                    <div className="hero-logo-row">
-                        <div className="hero-logo">
-                            <AvoltaLogo color="var(--surface-card)" style={{ height: '16px', width: 'auto' }} />
-                        </div>
-                        <span className="hero-year">{year}</span>
-                    </div>
+            {/* HERO BANNER - Image Left, Content Right */}
+            <div className="hero-banner" style={bannerStyle}>
+                <div className="hero-image-container">
+                    <img src={image} alt={title} className="hero-image-img" />
                 </div>
-                <div className="hero-image">
-                    <img src={image} alt={title} />
+                <div className="hero-banner-content">
+                    <div className="hero-meta-row">
+                        <div className="hero-logo-wrapper">
+                            {/* Logo is white/dark depending on background? Figma has dark text on orange */}
+                            <AvoltaLogo color="#232323" style={{ height: '100%', width: 'auto' }} />
+                        </div>
+                        <p className="hero-year-text">{year}</p>
+                    </div>
+                    <h1 className="hero-title">{title}</h1>
                 </div>
             </div>
 
-            {/* CONTENT SECTION */}
-            <div className="campaign-content">
-                {/* LEFT SIDEBAR */}
-                <div className="campaign-info">
-                    <div className="info-section">
-                        <p className="info-label">Scope</p>
-                        <p className="info-value">{scope}</p>
-                    </div>
-
-                    <div className="info-section">
-                        <p className="info-label">Channels</p>
-                        <p className="info-value">{channels}</p>
-                    </div>
-
-                    <div className="info-section">
-                        <p className="info-label">Activation dates</p>
-                        <p className="info-value">{activationDates}</p>
-                    </div>
-
-                    {/* BADGE LEGEND */}
-                    <div className="badge-legend">
-                        <div className="legend-item">
-                            <Badge variant="premium">Premium</Badge>
-                            <span className="legend-text">Full visibility</span>
+            {/* BODY CONTENT - Left Info, Right Links */}
+            <div className="campaign-body">
+                <div className="campaign-info-col">
+                    <div className="info-group">
+                        <div className="info-item">
+                            <p className="info-label">Scope</p>
+                            <p className="info-value info-value-large">{scope}</p>
                         </div>
-                        <div className="legend-item">
-                            <Badge variant="executive">Executive</Badge>
-                            <span className="legend-text">Medium visibility</span>
+                        <div className="info-item">
+                            <p className="info-label">Channels</p>
+                            <p className="info-value info-value-large">{channels}</p>
                         </div>
-                        <div className="legend-item">
-                            <Badge variant="standard">Standard</Badge>
-                            <span className="legend-text">Regular visibility</span>
+                        <div className="info-item">
+                            <p className="info-label">Activation dates</p>
+                            <p className="info-value info-value-large">{activationDates}</p>
                         </div>
                     </div>
+
+                    {/* Render other features exclude the badges one if needed, or just specific ones */}
+                    {features?.filter(f => !f.label.includes('Multi-level')).map((feature, i) => (
+                        <div key={i} className="info-item">
+                            <p className="info-label" style={{ color: '#E94E55' }}>{feature.label}</p>
+                            {feature.values && feature.values.map((v, k) => (
+                                <p key={k} className="info-value">{v}</p>
+                            ))}
+                        </div>
+                    ))}
+
+                    {renderBadges()}
                 </div>
 
-                {/* RIGHT LINKS GRID */}
-                <div className="campaign-links">
-                    {/* Only show title on mobile/desktop as needed? Design has "Contents" or similar headers sometimes */}
-                    {/* The Figma has "Contents" centered in one view but left in other? 
-                        Desktop Screenshot shows no "Contents" header, just the grid. 
-                        Mobile Screenshot shows grid directly. 
-                        Wait, first screenshot "uploaded_image_0" has "Contents" centered above grid.
-                        Second screenshot "uploaded_image_1" just has grid.
-                        I'll leave header out for now to match the cleaner look, or verify.
-                    */}
-                    <div className="links-grid">
-                        {links.map((linkItem, index) => (
-                            <MiniLinkCard
-                                key={index}
-                                title={linkItem.title}
-                                description={linkItem.description}
-                                link={linkItem.link}
-                            />
-                        ))}
-                    </div>
+                <div className="campaign-links-col">
+                    {links.map((linkItem, index) => {
+                        const isInternal = linkItem.link && linkItem.link.startsWith('/');
+                        const LinkTag = isInternal ? Link : 'a';
+                        const linkProps = isInternal ? { to: linkItem.link } : { href: linkItem.link, target: "_blank", rel: "noreferrer" };
+
+                        return (
+                            <LinkTag key={index} className="link-item" {...linkProps}>
+                                <span className="link-index">{String(index + 1).padStart(2, '0')}</span>
+                                <span className="link-text">{linkItem.title}</span>
+                            </LinkTag>
+                        );
+                    })}
                 </div>
             </div>
         </div>

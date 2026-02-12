@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './InsightsPage.css';
 import { api } from '../lib/api';
+import ValentineInsights from '../components/ValentineInsights';
 
 // Imported Images
 import mapBg from '../assets/omni/gen/map-bg.png';
@@ -45,6 +46,7 @@ export default function InsightsPage() {
                     </section>
 
                     <div className="inner-content-wrapper">
+                        <ValentineInsights />
 
 
                         {/* Bento Grid Infographics */}

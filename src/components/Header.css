@@ -50,6 +50,32 @@
   display: block;
 }
 
+.header-campaign-context {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+  padding-left: 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  height: 24px;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.campaign-context-year {
+  font-size: 14px;
+  color: #888;
+  font-weight: 500;
+}
+
+.campaign-context-name {
+  font-size: 14px;
+  color: #fff;
+  font-weight: 500;
+  max-width: 250px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .header-center {
   display: flex;
   justify-content: center;
