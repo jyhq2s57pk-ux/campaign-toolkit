@@ -83,13 +83,11 @@ export default function OmnichannelPage() {
                             <span className="omni-panel__text--purple">A 360° activation strategy </span>
                             <span className="omni-panel__text--white">designed to engage, captivate, and inspire passengers around the world.</span>
                         </p>
+                        <h1 className="omni-panel__heading">Activation ideas</h1>
+                        <svg className="omni-panel__arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 16L6 10H18L12 16Z" fill="white"/>
+                        </svg>
                     </div>
-                </div>
-
-                <div className="outer-container">
-                    <section className="page-header">
-                        <h1>Activation ideas</h1>
-                    </section>
                 </div>
 
                 <div className="inner-content-wrapper">
