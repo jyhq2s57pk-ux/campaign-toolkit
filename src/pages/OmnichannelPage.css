@@ -22,6 +22,63 @@
 }
 
 /* =====================================================
+   Omni Panel (Hero Banner)
+   ===================================================== */
+.omni-panel {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    min-width: 0;
+    padding: 56px 74px 56px 32px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    border-radius: 32px;
+    background: #1E1E1E;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.omni-panel__logo {
+    width: 69px;
+    height: 37px;
+    flex-shrink: 0;
+}
+
+.omni-panel__text {
+    max-width: 722px;
+    text-align: center;
+    font-size: 36px;
+    font-family: var(--font-display, 'Saans', sans-serif);
+    font-weight: 500;
+    line-height: 50px;
+    word-wrap: break-word;
+    margin: 0;
+}
+
+.omni-panel__text--purple {
+    color: var(--accent-purple, #8F53F0);
+}
+
+.omni-panel__text--white {
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .omni-panel {
+        padding: 40px 24px;
+        border-radius: 24px;
+        gap: 20px;
+    }
+
+    .omni-panel__text {
+        font-size: 24px;
+        line-height: 34px;
+    }
+}
+
+/* =====================================================
    Activation Grid
    ===================================================== */
 .activation-grid {
