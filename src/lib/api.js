@@ -3,7 +3,18 @@ import { supabase } from './supabase';
 
 export const api = {
     async getCampaign() {
-        // Fetch the primary campaign (campaign-2026)
+        if (!supabase) return {
+            id: 'campaign-2026',
+            name: 'The Magic of Joy Holiday Season',
+            subtitle: 'A global celebration bringing joy to travelers worldwide',
+            year: '2026',
+            scope: 'Global',
+            channels: 'Reserve & Collect (Web / APP) Emporium',
+            activation_start_date: '2025-10-01',
+            activation_end_date: '2025-12-31',
+            activation_dates: 'October-December 2025 (Activation date may vary by location)'
+        };
+
         const { data, error } = await supabase
             .from('campaigns')
             .select('*')
@@ -12,7 +23,6 @@ export const api = {
 
         if (error) {
             console.error('Error fetching campaign:', error);
-            // Return fallback data
             return {
                 id: 'campaign-2026',
                 name: 'The Magic of Joy Holiday Season',
@@ -29,6 +39,7 @@ export const api = {
     },
 
     async getTouchpoints() {
+        if (!supabase) return [];
         const { data, error } = await supabase
             .from('touchpoints')
             .select('*')
@@ -42,6 +53,7 @@ export const api = {
     },
 
     async getPlatforms() {
+        if (!supabase) return [];
         const { data, error } = await supabase
             .from('platforms')
             .select('*')
@@ -55,6 +67,7 @@ export const api = {
     },
 
     async getCalendarEvents() {
+        if (!supabase) return [];
         const { data, error } = await supabase
             .from('calendar_events')
             .select('*');
@@ -67,6 +80,7 @@ export const api = {
     },
 
     async getCalendarTiers() {
+        if (!supabase) return [];
         const { data, error } = await supabase
             .from('calendar_tiers')
             .select('*');
@@ -79,6 +93,7 @@ export const api = {
     },
 
     async getResources() {
+        if (!supabase) return [];
         const { data, error } = await supabase
             .from('resources')
             .select('*')
@@ -93,6 +108,7 @@ export const api = {
     },
 
     async getResourceById(id) {
+        if (!supabase) return null;
         const { data, error } = await supabase
             .from('resources')
             .select('*')
@@ -107,6 +123,7 @@ export const api = {
     },
 
     async getWaysOfWorking() {
+        if (!supabase) return { process: [], timeline: [] };
         const { data: process, error: pError } = await supabase
             .from('wow_process')
             .select('*')
@@ -125,6 +142,7 @@ export const api = {
     },
 
     async getOmnichannel() {
+        if (!supabase) return [];
         const { data, error } = await supabase
             .from('omnichannel')
             .select('*');
@@ -137,6 +155,7 @@ export const api = {
     },
 
     async getOmnichannelIdeas() {
+        if (!supabase) return [];
         const { data, error } = await supabase
             .from('omnichannel_ideas')
             .select('*')
@@ -151,6 +170,7 @@ export const api = {
     },
 
     async getInsightPage(campaignId) {
+        if (!supabase) return null;
         const { data, error } = await supabase
             .from('insight_pages')
             .select('*')

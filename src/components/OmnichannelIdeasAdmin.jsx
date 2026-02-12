@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import './AdminComponents.css';
 
+const CHANNEL_OPTIONS = ['Web', 'App', 'Email', 'Social', 'Paid Social', 'Loyalty', 'In-Store'];
+
 export default function OmnichannelIdeasAdmin() {
   const [ideas, setIdeas] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,35 +39,34 @@ export default function OmnichannelIdeasAdmin() {
     setSaving(true);
     setMessage(null);
 
+    const payload = {
+      title: editingIdea.title,
+      description: editingIdea.description,
+      image_url: editingIdea.image_url,
+      tag: editingIdea.tag,
+      sort_order: editingIdea.sort_order,
+      is_active: editingIdea.is_active,
+      channels: editingIdea.channels || [],
+      headline: editingIdea.headline || null,
+      sub_headline: editingIdea.sub_headline || null,
+      how_it_works_title: editingIdea.how_it_works_title || 'How it works',
+      how_it_works_steps: editingIdea.how_it_works_steps || [],
+      modal_images: editingIdea.modal_images || [],
+    };
+
     try {
       if (editingIdea.id) {
-        // Update existing
         const { error } = await supabase
           .from('omnichannel_ideas')
-          .update({
-            title: editingIdea.title,
-            description: editingIdea.description,
-            image_url: editingIdea.image_url,
-            tag: editingIdea.tag,
-            sort_order: editingIdea.sort_order,
-            is_active: editingIdea.is_active
-          })
+          .update(payload)
           .eq('id', editingIdea.id);
 
         if (error) throw error;
         setMessage({ type: 'success', text: 'Idea updated successfully!' });
       } else {
-        // Create new
         const { error } = await supabase
           .from('omnichannel_ideas')
-          .insert({
-            title: editingIdea.title,
-            description: editingIdea.description,
-            image_url: editingIdea.image_url,
-            tag: editingIdea.tag,
-            sort_order: editingIdea.sort_order,
-            is_active: editingIdea.is_active
-          });
+          .insert(payload);
 
         if (error) throw error;
         setMessage({ type: 'success', text: 'Idea created successfully!' });
@@ -117,6 +118,54 @@ export default function OmnichannelIdeasAdmin() {
     }
   };
 
+  const handleChannelToggle = (channel) => {
+    const current = editingIdea.channels || [];
+    const updated = current.includes(channel)
+      ? current.filter(c => c !== channel)
+      : [...current, channel];
+    setEditingIdea({ ...editingIdea, channels: updated });
+  };
+
+  const handleAddStep = () => {
+    const steps = editingIdea.how_it_works_steps || [];
+    setEditingIdea({ ...editingIdea, how_it_works_steps: [...steps, ''] });
+  };
+
+  const handleRemoveStep = (index) => {
+    const steps = [...(editingIdea.how_it_works_steps || [])];
+    steps.splice(index, 1);
+    setEditingIdea({ ...editingIdea, how_it_works_steps: steps });
+  };
+
+  const handleStepChange = (index, value) => {
+    const steps = [...(editingIdea.how_it_works_steps || [])];
+    steps[index] = value;
+    setEditingIdea({ ...editingIdea, how_it_works_steps: steps });
+  };
+
+  const handleModalImageChange = (index, value) => {
+    const images = [...(editingIdea.modal_images || ['', '', ''])];
+    images[index] = value;
+    setEditingIdea({ ...editingIdea, modal_images: images.filter((_, i) => i < 3) });
+  };
+
+  const startNewIdea = () => {
+    setEditingIdea({
+      title: '',
+      description: '',
+      image_url: '',
+      tag: '',
+      sort_order: ideas.length + 1,
+      is_active: true,
+      channels: [],
+      headline: '',
+      sub_headline: '',
+      how_it_works_title: 'How it works',
+      how_it_works_steps: [],
+      modal_images: [],
+    });
+  };
+
   if (loading) {
     return <div className="admin-loading">Loading omnichannel ideas...</div>;
   }
@@ -124,9 +173,9 @@ export default function OmnichannelIdeasAdmin() {
   return (
     <div className="omnichannel-ideas-admin-section">
       <div className="admin-section-header">
-        <h2>Omnichannel Ideas Management</h2>
+        <h2>Activation Ideas Management</h2>
         <p className="section-description">
-          Manage the carousel of activation ideas displayed on the Omnichannel page.
+          Manage the activation ideas displayed on the Omnichannel page.
         </p>
       </div>
 
@@ -140,7 +189,7 @@ export default function OmnichannelIdeasAdmin() {
         {ideas.length === 0 ? (
           <div className="admin-empty-state">
             <h3>No ideas yet</h3>
-            <p>Add your first omnichannel activation idea to get started.</p>
+            <p>Add your first activation idea to get started.</p>
           </div>
         ) : (
           <ul className="admin-list">
@@ -152,7 +201,8 @@ export default function OmnichannelIdeasAdmin() {
                     {!idea.is_active && <span style={{ marginLeft: '8px', fontSize: '0.8em', color: 'var(--text-secondary)' }}>(Hidden)</span>}
                   </div>
                   <div className="admin-list-item-meta">
-                    {idea.tag && <span className="idea-tag">{idea.tag}</span>}
+                    {idea.channels?.length > 0 && <span className="idea-tag">{idea.channels.join(', ')}</span>}
+                    {idea.tag && <> · {idea.tag}</>}
                     {' · '}
                     Sort order: {idea.sort_order}
                   </div>
@@ -169,7 +219,12 @@ export default function OmnichannelIdeasAdmin() {
                   </button>
                   <button
                     className="btn-secondary"
-                    onClick={() => setEditingIdea({ ...idea })}
+                    onClick={() => setEditingIdea({
+                      ...idea,
+                      channels: idea.channels || [],
+                      how_it_works_steps: idea.how_it_works_steps || [],
+                      modal_images: idea.modal_images || [],
+                    })}
                   >
                     Edit
                   </button>
@@ -188,14 +243,7 @@ export default function OmnichannelIdeasAdmin() {
         <button
           className="btn-primary"
           style={{ marginTop: '1rem' }}
-          onClick={() => setEditingIdea({
-            title: '',
-            description: '',
-            image_url: '',
-            tag: '',
-            sort_order: ideas.length + 1,
-            is_active: true
-          })}
+          onClick={startNewIdea}
         >
           Add New Idea
         </button>
@@ -203,7 +251,7 @@ export default function OmnichannelIdeasAdmin() {
 
       {editingIdea && (
         <div className="modal-overlay" onClick={() => setEditingIdea(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxHeight: '90vh', overflowY: 'auto' }}>
             <h3>{editingIdea.id ? 'Edit Idea' : 'Add New Idea'}</h3>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
@@ -231,6 +279,48 @@ export default function OmnichannelIdeasAdmin() {
               </div>
 
               <div className="form-group">
+                <label>Channels</label>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '4px' }}>
+                  {CHANNEL_OPTIONS.map((channel) => (
+                    <label key={channel} style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', padding: '4px 8px', borderRadius: '8px', background: editingIdea.channels?.includes(channel) ? 'var(--accent-purple)' : 'var(--surface-card)', color: '#fff', fontSize: '13px' }}>
+                      <input
+                        type="checkbox"
+                        checked={editingIdea.channels?.includes(channel) || false}
+                        onChange={() => handleChannelToggle(channel)}
+                        style={{ display: 'none' }}
+                      />
+                      {channel}
+                    </label>
+                  ))}
+                </div>
+                <small className="form-help">Select which channels this idea applies to</small>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="idea-headline">Modal Headline (purple text)</label>
+                <input
+                  type="text"
+                  id="idea-headline"
+                  value={editingIdea.headline || ''}
+                  onChange={(e) => setEditingIdea({ ...editingIdea, headline: e.target.value })}
+                  placeholder="e.g., Treasure Hunt:"
+                />
+                <small className="form-help">Displayed in purple in the modal title</small>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="idea-sub-headline">Modal Subtitle</label>
+                <input
+                  type="text"
+                  id="idea-sub-headline"
+                  value={editingIdea.sub_headline || ''}
+                  onChange={(e) => setEditingIdea({ ...editingIdea, sub_headline: e.target.value })}
+                  placeholder="e.g., Turn Every Store Visit into a Brand-led AR Adventure"
+                />
+                <small className="form-help">Displayed in dark text below the headline</small>
+              </div>
+
+              <div className="form-group">
                 <label htmlFor="idea-tag">Tag</label>
                 <input
                   type="text"
@@ -243,7 +333,7 @@ export default function OmnichannelIdeasAdmin() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="idea-image">Image URL</label>
+                <label htmlFor="idea-image">Card Image URL</label>
                 <input
                   type="text"
                   id="idea-image"
@@ -251,7 +341,60 @@ export default function OmnichannelIdeasAdmin() {
                   onChange={(e) => setEditingIdea({ ...editingIdea, image_url: e.target.value })}
                   placeholder="/src/assets/omni/gen/balloon.png"
                 />
-                <small className="form-help">Path to image file or URL</small>
+                <small className="form-help">Main image shown on the card</small>
+              </div>
+
+              <div className="form-group">
+                <label>Modal Images (up to 3)</label>
+                {[0, 1, 2].map((i) => (
+                  <input
+                    key={i}
+                    type="text"
+                    value={(editingIdea.modal_images || [])[i] || ''}
+                    onChange={(e) => handleModalImageChange(i, e.target.value)}
+                    placeholder={`Modal image ${i + 1} URL`}
+                    style={{ marginBottom: '4px' }}
+                  />
+                ))}
+                <small className="form-help">Images shown in the modal left column</small>
+              </div>
+
+              <div className="form-group">
+                <label>How it works</label>
+                <input
+                  type="text"
+                  value={editingIdea.how_it_works_title || 'How it works'}
+                  onChange={(e) => setEditingIdea({ ...editingIdea, how_it_works_title: e.target.value })}
+                  placeholder="Section title"
+                  style={{ marginBottom: '8px' }}
+                />
+                {(editingIdea.how_it_works_steps || []).map((step, i) => (
+                  <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '4px' }}>
+                    <input
+                      type="text"
+                      value={step}
+                      onChange={(e) => handleStepChange(i, e.target.value)}
+                      placeholder={`Step ${i + 1}`}
+                      style={{ flex: 1 }}
+                    />
+                    <button
+                      type="button"
+                      className="btn-secondary"
+                      onClick={() => handleRemoveStep(i)}
+                      style={{ padding: '4px 12px' }}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={handleAddStep}
+                  style={{ marginTop: '4px' }}
+                >
+                  + Add Step
+                </button>
               </div>
 
               <div className="form-group">
@@ -298,9 +441,10 @@ export default function OmnichannelIdeasAdmin() {
       <div className="admin-info-box" style={{ marginTop: '2rem' }}>
         <h3>What gets updated?</h3>
         <ul>
-          <li><strong>Omnichannel Page:</strong> Ideas carousel displays active ideas ordered by sort_order</li>
+          <li><strong>Activation Ideas Page:</strong> Ideas grid displays active ideas ordered by sort_order</li>
+          <li><strong>Channels:</strong> Used for filtering and displayed as badges on each card</li>
           <li><strong>Visibility:</strong> Use Hide/Show to control which ideas appear on the page</li>
-          <li><strong>Tags:</strong> Optional labels displayed as badges on each card</li>
+          <li><strong>Modal Content:</strong> Headline, subtitle, images, and "How it works" steps shown in the detail modal</li>
         </ul>
       </div>
     </div>

@@ -1,0 +1,296 @@
+/* IdeaDetailModal - Two-column modal for activation idea details */
+
+.idea-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+  animation: ideaModalFadeIn 0.3s ease-out;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  overflow-y: auto;
+}
+
+.idea-modal {
+  position: relative;
+  background: #fff;
+  border-radius: 48px;
+  padding: 48px 72px 72px 48px;
+  display: flex;
+  align-items: flex-start;
+  gap: 63px;
+  max-width: 1129px;
+  width: 100%;
+  outline: 1px solid #616161;
+  outline-offset: -1px;
+  animation: ideaModalScaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* =====================================================
+   Left Column: Images
+   ===================================================== */
+.idea-modal__images {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  flex-shrink: 0;
+}
+
+.idea-modal__image-frame {
+  width: 383px;
+  height: 261px;
+  min-width: 170px;
+  min-height: 116px;
+  background: #252525;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.idea-modal__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =====================================================
+   Right Column: Content
+   ===================================================== */
+.idea-modal__content {
+  flex: 1;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 65px;
+}
+
+.idea-modal__content-inner {
+  padding-right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 62px;
+}
+
+.idea-modal__sections {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Badges */
+.idea-modal__badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Title */
+.idea-modal__title-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.idea-modal__title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.idea-modal__headline {
+  color: var(--accent-purple, #8F53F0);
+  font-size: 44px;
+  font-family: var(--font-display, 'Saans', sans-serif);
+  font-weight: 600;
+  line-height: 1.19;
+  word-wrap: break-word;
+}
+
+.idea-modal__subtitle {
+  color: #252525;
+  font-size: 38px;
+  font-family: var(--font-display, 'Saans', sans-serif);
+  font-weight: 600;
+  line-height: 1.19;
+  word-wrap: break-word;
+}
+
+/* Description */
+.idea-modal__description-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.idea-modal__description {
+  color: #3D3D3D;
+  font-size: 17px;
+  font-family: var(--font-body, 'Saans', sans-serif);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.17px;
+  word-wrap: break-word;
+}
+
+/* How it works block */
+.idea-modal__how-it-works {
+  padding: 40px;
+  background: #F5F3ED;
+  border-radius: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.idea-modal__how-title {
+  color: #373737;
+  font-size: 25px;
+  font-family: var(--font-display, 'Saans', sans-serif);
+  font-weight: 600;
+  line-height: 1.19;
+  word-wrap: break-word;
+}
+
+.idea-modal__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.idea-modal__step {
+  color: #252525;
+  font-size: 18px;
+  font-family: var(--font-body, 'Saans', sans-serif);
+  font-weight: 400;
+  line-height: 30px;
+  word-wrap: break-word;
+}
+
+/* =====================================================
+   Close Button
+   ===================================================== */
+.idea-modal__close {
+  position: absolute;
+  top: 48px;
+  right: 48px;
+  width: 48px;
+  height: 48px;
+  background: #232323;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.idea-modal__close:hover {
+  transform: scale(1.1);
+  background: #333;
+}
+
+/* =====================================================
+   Animations
+   ===================================================== */
+@keyframes ideaModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ideaModalScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* =====================================================
+   Responsive - Mobile
+   ===================================================== */
+@media (max-width: 900px) {
+  .idea-modal {
+    flex-direction: column;
+    padding: 32px 24px 48px 24px;
+    border-radius: 32px;
+    gap: 32px;
+    max-height: 95vh;
+  }
+
+  .idea-modal__images {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 12px;
+    width: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .idea-modal__images::-webkit-scrollbar {
+    display: none;
+  }
+
+  .idea-modal__image-frame {
+    width: 280px;
+    height: 190px;
+    min-width: 280px;
+    flex-shrink: 0;
+    border-radius: 20px;
+  }
+
+  .idea-modal__content {
+    padding-top: 0;
+    gap: 32px;
+  }
+
+  .idea-modal__content-inner {
+    padding-right: 0;
+    gap: 32px;
+  }
+
+  .idea-modal__headline {
+    font-size: 32px;
+  }
+
+  .idea-modal__subtitle {
+    font-size: 26px;
+  }
+
+  .idea-modal__how-it-works {
+    padding: 24px;
+    border-radius: 24px;
+  }
+
+  .idea-modal__how-title {
+    font-size: 20px;
+  }
+
+  .idea-modal__step {
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .idea-modal__close {
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+  }
+}

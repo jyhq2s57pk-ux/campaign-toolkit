@@ -1,0 +1,183 @@
+/* ActivationCard - Desktop vertical / Mobile horizontal */
+
+.activation-card {
+  cursor: pointer;
+}
+
+/* =====================================================
+   Desktop Card
+   ===================================================== */
+.activation-card__desktop {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #232323;
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  min-width: 250px;
+  aspect-ratio: 4 / 5;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.activation-card__desktop:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+.activation-card__image-wrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.activation-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.activation-card__image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: #1a1a1a;
+}
+
+.activation-card__body {
+  padding: 20px 20px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  flex: 1;
+  min-height: 0;
+}
+
+.activation-card__badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.activation-card__title {
+  color: #fff;
+  font-size: 30px;
+  font-family: var(--font-display, 'Saans', sans-serif);
+  font-weight: 500;
+  line-height: 39px;
+  word-wrap: break-word;
+  padding-right: 43px;
+}
+
+.activation-card__action {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.activation-card__action:hover {
+  transform: scale(1.1);
+}
+
+/* =====================================================
+   Mobile Card
+   ===================================================== */
+.activation-card__mobile {
+  display: none;
+  position: relative;
+  width: 100%;
+  max-width: 528px;
+  height: 139px;
+  padding-right: 16px;
+  background: #222222;
+  border-radius: 20px;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.activation-card__mobile:active {
+  transform: scale(0.98);
+}
+
+.activation-card__mobile-link {
+  flex: 1;
+  align-self: stretch;
+  padding: 16px 28px 16px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.activation-card__mobile-image {
+  width: 93px;
+  height: 107px;
+  border-radius: 14px;
+  object-fit: cover;
+  background: #191919;
+  flex-shrink: 0;
+}
+
+.activation-card__mobile-image-placeholder {
+  width: 93px;
+  height: 107px;
+  border-radius: 14px;
+  background: #191919;
+  flex-shrink: 0;
+}
+
+.activation-card__mobile-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.activation-card__mobile-title {
+  color: #fff;
+  font-size: 18px;
+  font-family: var(--font-display, 'Saans', sans-serif);
+  font-weight: 500;
+  line-height: 26px;
+  word-wrap: break-word;
+}
+
+.activation-card__mobile-action {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.activation-card__mobile-action:hover {
+  transform: scale(1.1);
+}
+
+/* =====================================================
+   Responsive Switching
+   ===================================================== */
+@media (max-width: 768px) {
+  .activation-card__desktop {
+    display: none;
+  }
+
+  .activation-card__mobile {
+    display: flex;
+  }
+}

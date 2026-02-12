@@ -106,6 +106,27 @@
   color: var(--badge-default-text);
 }
 
+/* Channel badges - for Activation cards and modals */
+.badge--channel {
+  background: #464646;
+  color: #ffffff;
+  padding: 10px 13px;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 400;
+  height: auto;
+}
+
+.badge--channel-modal {
+  background: #7A7A7A;
+  color: #ffffff;
+  padding: 10px 13px;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 400;
+  height: auto;
+}
+
 /* Legacy mappings - ensuring backward compatibility */
 /* Legacy mappings - ensuring backward compatibility */
 .badge--purple {
