@@ -38,10 +38,16 @@ export default function JourneyAdmin({ campaignId }) {
 
   const fetchAllData = async () => {
     setLoading(true);
-    // 1. Fetch Platforms (Pages)
-    const { data: platformsData, error: pagesError } = await supabase
+    // 1. Fetch Platforms (Pages) — scoped to campaign
+    let platformsQuery = supabase
       .from('platforms')
-      .select('*')
+      .select('*');
+
+    if (campaignId) {
+      platformsQuery = platformsQuery.eq('campaign_id', campaignId);
+    }
+
+    const { data: platformsData, error: pagesError } = await platformsQuery
       .order('sort_order', { ascending: true });
 
     if (pagesError) console.error('Error fetching platforms:', pagesError);
@@ -53,7 +59,8 @@ export default function JourneyAdmin({ campaignId }) {
       platform_type: p.type || 'Web',
       accent_color: p.accent_color || '#22c55e',
       screenshot_url: p.screenshot_url,
-      sort_order: p.sort_order || 0
+      sort_order: p.sort_order || 0,
+      is_active: p.is_active !== false
     }));
     setPages(mappedPages);
 
@@ -140,7 +147,8 @@ export default function JourneyAdmin({ campaignId }) {
       type: pageFormData.platform_type,
       accent_color: pageFormData.accent_color,
       screenshot_url: pageFormData.screenshot_url,
-      sort_order: pageFormData.sort_order || (pages.length + 1)
+      sort_order: pageFormData.sort_order || (pages.length + 1),
+      campaign_id: campaignId || null
     };
 
     if (editingPage) {
@@ -178,6 +186,63 @@ export default function JourneyAdmin({ campaignId }) {
       }
       if (expandedPage === id) setExpandedPage(null);
       fetchAllData();
+    }
+  };
+
+  const handleToggleActive = async (pageId) => {
+    const page = pages.find(p => p.id === pageId);
+    if (!page) return;
+
+    const newActive = !page.is_active;
+
+    // Optimistic update
+    setPages(prev => prev.map(p =>
+      p.id === pageId ? { ...p, is_active: newActive } : p
+    ));
+
+    const { error } = await supabase
+      .from('platforms')
+      .update({ is_active: newActive })
+      .eq('id', pageId);
+
+    if (error) {
+      console.error('Error toggling page active state:', error);
+      // Revert on error
+      setPages(prev => prev.map(p =>
+        p.id === pageId ? { ...p, is_active: !newActive } : p
+      ));
+    }
+  };
+
+  const handleMovePage = async (pageId, direction) => {
+    const currentIndex = pages.findIndex(p => p.id === pageId);
+    if (currentIndex === -1) return;
+
+    const newIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    if (newIndex < 0 || newIndex >= pages.length) return;
+
+    const updatedList = [...pages];
+    [updatedList[currentIndex], updatedList[newIndex]] = [updatedList[newIndex], updatedList[currentIndex]];
+
+    const updates = updatedList.map((p, idx) => ({
+      id: p.id,
+      sort_order: idx + 1
+    }));
+
+    // Optimistic update
+    setPages(updatedList.map((p, idx) => ({ ...p, sort_order: idx + 1 })));
+
+    // Persist to DB
+    const updatePromises = updates.map(u =>
+      supabase.from('platforms').update({ sort_order: u.sort_order }).eq('id', u.id)
+    );
+
+    const results = await Promise.all(updatePromises);
+    const error = results.find(r => r.error)?.error;
+
+    if (error) {
+      console.error('Error reordering pages:', error);
+      fetchAllData(); // Revert on error
     }
   };
 
@@ -337,21 +402,41 @@ export default function JourneyAdmin({ campaignId }) {
 
       {/* Accordion - Mirrors Front-End */}
       <div className="admin-accordion">
-        {pages.map((page) => {
+        {pages.map((page, index) => {
           const pageComps = components[page.id] || [];
           const isExpanded = expandedPage === page.id;
 
           return (
-            <div key={page.id} className={`admin-accordion-item ${isExpanded ? 'expanded' : ''}`}>
+            <div key={page.id} className={`admin-accordion-item ${isExpanded ? 'expanded' : ''} ${!page.is_active ? 'inactive' : ''}`}>
               {/* Header Row */}
               <div className="admin-accordion-header" style={{ '--accent': page.accent_color }}>
                 <div className="accent-bar" />
+                <div className="page-reorder">
+                  <button
+                    className="btn-icon-tiny"
+                    disabled={index === 0}
+                    onClick={() => handleMovePage(page.id, 'up')}
+                    title="Move Up"
+                  >▲</button>
+                  <button
+                    className="btn-icon-tiny"
+                    disabled={index === pages.length - 1}
+                    onClick={() => handleMovePage(page.id, 'down')}
+                    title="Move Down"
+                  >▼</button>
+                </div>
                 <div className="header-content" onClick={() => setExpandedPage(isExpanded ? null : page.id)}>
                   <span className="platform-tag">{page.platform_type}</span>
                   <h3>{page.title}</h3>
                   <span className="comp-count">{pageComps.length} Touchpoints</span>
+                  {!page.is_active && <span className="hidden-badge">Hidden</span>}
                 </div>
                 <div className="header-actions">
+                  <button
+                    className={`btn-icon ${page.is_active ? '' : 'btn-muted'}`}
+                    onClick={() => handleToggleActive(page.id)}
+                    title={page.is_active ? 'Hide from front-end' : 'Show on front-end'}
+                  >{page.is_active ? '👁️' : '👁️‍🗨️'}</button>
                   <button className="btn-icon" onClick={() => startEditPage(page)} title="Edit Page">✏️</button>
                   <button className="btn-icon btn-danger" onClick={() => handleDeletePage(page.id)} title="Delete Page">🗑️</button>
                   <span className={`chevron ${isExpanded ? 'open' : ''}`} onClick={() => setExpandedPage(isExpanded ? null : page.id)}>▼</span>

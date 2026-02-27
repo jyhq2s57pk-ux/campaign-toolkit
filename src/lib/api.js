@@ -80,12 +80,17 @@ export const api = {
         return data;
     },
 
-    async getPlatforms() {
+    async getPlatforms(campaignId) {
         if (!supabase) return [];
-        const { data, error } = await supabase
+        let query = supabase
             .from('platforms')
-            .select('*')
-            .order('name');
+            .select('*');
+
+        if (campaignId) {
+            query = query.eq('campaign_id', campaignId);
+        }
+
+        const { data, error } = await query.order('sort_order', { ascending: true });
 
         if (error) {
             console.error('Error fetching platforms:', error);
@@ -520,6 +525,23 @@ export const api = {
                     .insert({ ...rest, campaign_id: newCampaignId });
                 if (error) results.errors.push(`wow_timeline: ${error.message}`);
                 else results.copied.push('wow_timeline');
+            }
+        }
+
+        // 7. Duplicate platforms (pages in Customer Touchpoints)
+        const { data: platforms } = await supabase
+            .from('platforms')
+            .select('*')
+            .eq('campaign_id', sourceCampaignId);
+
+        if (platforms && platforms.length > 0) {
+            for (const platform of platforms) {
+                const { id, created_at, ...rest } = platform;
+                const { error } = await supabase
+                    .from('platforms')
+                    .insert({ ...rest, campaign_id: newCampaignId });
+                if (error) results.errors.push(`platforms: ${error.message}`);
+                else results.copied.push('platforms');
             }
         }
 

@@ -32,7 +32,9 @@ export default function CustomerJourneyPage() {
   const fetchPages = async () => {
     setLoading(true);
     if (!supabase) { setLoading(false); return; }
-    const { data: platformsData, error: platformsError } = await supabase.from('platforms').select('*').order('name');
+    let platformsQuery = supabase.from('platforms').select('*').eq('is_active', true);
+    if (campaignId) { platformsQuery = platformsQuery.eq('campaign_id', campaignId); }
+    const { data: platformsData, error: platformsError } = await platformsQuery.order('sort_order', { ascending: true });
     if (platformsError) { setLoading(false); return; }
 
     const loadedPages = (platformsData || []).map(p => ({ id: p.name, title: p.name, platform_type: p.type || 'Web', screenshot_url: p.screenshot_url }));
