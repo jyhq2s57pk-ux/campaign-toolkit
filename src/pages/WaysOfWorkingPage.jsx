@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "./WaysOfWorkingPage.css";
@@ -7,12 +8,19 @@ import { api } from "../lib/api";
 
 
 export default function WaysOfWorkingPage() {
+  const [searchParams] = useSearchParams();
+  const campaignId = searchParams.get('campaignId');
   const [steps, setSteps] = useState([]);
   const [tips, setTips] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [modules, setModules] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
+      if (campaignId) {
+        const campaign = await api.getCampaignById(campaignId);
+        if (campaign?.modules) setModules(campaign.modules);
+      }
       const data = await api.getWaysOfWorking();
 
       // Map process data to steps format
@@ -156,7 +164,7 @@ export default function WaysOfWorkingPage() {
               </div>
             </div>
 
-            <ImplementationTips />
+            {modules.ways_of_working_tips !== false && <ImplementationTips />}
 
             <section className="best-practice-section">
               <h2 className="section-label centered">Best Practice Tips</h2>

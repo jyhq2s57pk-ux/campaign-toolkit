@@ -17,7 +17,26 @@ const EMPTY_FORM = {
   overview: '',
   hero_image_url: '',
   primary_color: '#8F53F0',
-  features: []
+  features: [],
+  modules: {}
+};
+
+const DEFAULT_MODULES = {
+  omnichannel_hero: true,
+  insights_charts: true,
+  insights_bento: true,
+  ways_of_working_tips: true,
+  page_calendar: true,
+  page_resources: true
+};
+
+const MODULE_LABELS = {
+  page_calendar: { label: 'Calendar Page', group: 'Pages' },
+  page_resources: { label: 'Resources Page', group: 'Pages' },
+  omnichannel_hero: { label: 'Omnichannel Hero Banner', group: 'Sections' },
+  insights_bento: { label: 'Insights Bento Grid', group: 'Sections' },
+  insights_charts: { label: 'Insights Charts', group: 'Sections' },
+  ways_of_working_tips: { label: 'Implementation Tips', group: 'Sections' }
 };
 
 export default function CampaignAdmin({ campaignId }) {
@@ -27,6 +46,7 @@ export default function CampaignAdmin({ campaignId }) {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [duplicateFromId, setDuplicateFromId] = useState(null);
   const [formData, setFormData] = useState({ ...EMPTY_FORM });
 
   useEffect(() => {
@@ -82,7 +102,8 @@ export default function CampaignAdmin({ campaignId }) {
       overview: data.overview || '',
       hero_image_url: data.hero_image_url || '',
       primary_color: data.primary_color || '#8F53F0',
-      features: data.features || []
+      features: data.features || [],
+      modules: { ...DEFAULT_MODULES, ...(data.modules || {}) }
     });
     setShowCreateForm(false);
     setMessage(null);
@@ -102,15 +123,18 @@ export default function CampaignAdmin({ campaignId }) {
     // Duplicate from last campaign if available
     if (campaigns.length > 0) {
       const last = campaigns[0]; // Most recent
+      setDuplicateFromId(last.id);
       setFormData({
         ...EMPTY_FORM,
         id: `campaign-new-${Date.now()}`,
         scope: last.scope || '',
         channels: last.channels || '',
         year: last.year || '',
-        primary_color: '#8F53F0'
+        primary_color: '#8F53F0',
+        modules: { ...DEFAULT_MODULES, ...(last.modules || {}) }
       });
     } else {
+      setDuplicateFromId(null);
       setFormData({ ...EMPTY_FORM, id: `campaign-new-${Date.now()}` });
     }
     setSelectedId(null);
@@ -133,7 +157,8 @@ export default function CampaignAdmin({ campaignId }) {
       const payload = {
         ...formData,
         id: saveId,
-        features: formData.features || []
+        features: formData.features || [],
+        modules: formData.modules || {}
       };
 
       if (!supabase) {
@@ -148,7 +173,24 @@ export default function CampaignAdmin({ campaignId }) {
 
       if (error) throw error;
 
-      setMessage({ type: 'success', text: showCreateForm ? 'Campaign created!' : 'Campaign updated!' });
+      let dupMessage = '';
+
+      // Duplicate related data if creating from an existing campaign
+      if (showCreateForm && duplicateFromId) {
+        const dupResult = await api.duplicateCampaignData(duplicateFromId, saveId);
+        if (dupResult.copied.length > 0) {
+          dupMessage = ` Copied ${dupResult.copied.length} item(s) from source campaign.`;
+        }
+        if (dupResult.errors.length > 0) {
+          dupMessage += ` (${dupResult.errors.length} copy error(s))`;
+        }
+        setDuplicateFromId(null);
+      }
+
+      setMessage({
+        type: 'success',
+        text: (showCreateForm ? 'Campaign created!' : 'Campaign updated!') + dupMessage
+      });
 
       if (showCreateForm) {
         setShowCreateForm(false);
@@ -211,7 +253,7 @@ export default function CampaignAdmin({ campaignId }) {
             <h2>{showCreateForm ? 'Create New Campaign' : 'Edit Campaign'}</h2>
             <p className="section-description">
               {showCreateForm
-                ? 'Fill in the details for your new campaign.'
+                ? `Fill in the details for your new campaign.${duplicateFromId ? ` Content will be duplicated from "${campaigns.find(c => c.id === duplicateFromId)?.name || duplicateFromId}".` : ''}`
                 : 'Edit the campaign information displayed on the homepage and throughout the toolkit.'}
             </p>
           </div>
@@ -368,6 +410,41 @@ export default function CampaignAdmin({ campaignId }) {
                 />
                 <small className="form-help">Recommended: 600x400px</small>
               </div>
+            </div>
+
+            {/* Module Toggles */}
+            <div className="modules-section">
+              <h3 className="modules-heading">Visible Modules</h3>
+              <p className="section-description">Toggle pages and sections on or off for this campaign.</p>
+              {['Pages', 'Sections'].map(group => (
+                <div key={group} className="modules-group">
+                  <span className="modules-group-label">{group}</span>
+                  <div className="modules-toggles">
+                    {Object.entries(MODULE_LABELS)
+                      .filter(([, v]) => v.group === group)
+                      .map(([key, { label }]) => {
+                        const modules = { ...DEFAULT_MODULES, ...formData.modules };
+                        const isOn = modules[key] !== false;
+                        return (
+                          <label key={key} className="module-toggle">
+                            <div
+                              className={`admin-toggle-switch ${isOn ? 'active' : ''}`}
+                              onClick={() =>
+                                setFormData(prev => ({
+                                  ...prev,
+                                  modules: { ...DEFAULT_MODULES, ...prev.modules, [key]: !isOn }
+                                }))
+                              }
+                            >
+                              <div className="toggle-knob" />
+                            </div>
+                            <span className="module-toggle-label">{label}</span>
+                          </label>
+                        );
+                      })}
+                  </div>
+                </div>
+              ))}
             </div>
 
             <div className="form-actions">

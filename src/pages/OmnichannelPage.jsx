@@ -26,6 +26,7 @@ export default function OmnichannelPage() {
     const [activeFilter, setActiveFilter] = useState('All');
     const [selectedIdea, setSelectedIdea] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [modules, setModules] = useState({});
 
     const imageMap = {
         '/src/assets/omni/gen/balloon.png': imgBalloon,
@@ -45,14 +46,20 @@ export default function OmnichannelPage() {
 
     useEffect(() => {
         setLoading(true);
-        Promise.all([
-            api.getOmnichannel(),
-            api.getOmnichannelIdeas(campaignId)
-        ]).then(([channelsData, ideasData]) => {
+        const fetchAll = async () => {
+            if (campaignId) {
+                const campaign = await api.getCampaignById(campaignId);
+                if (campaign?.modules) setModules(campaign.modules);
+            }
+            const [channelsData, ideasData] = await Promise.all([
+                api.getOmnichannel(),
+                api.getOmnichannelIdeas(campaignId)
+            ]);
             if (channelsData) setChannels(channelsData);
             if (ideasData) setIdeas(ideasData);
             setLoading(false);
-        });
+        };
+        fetchAll();
     }, [campaignId]);
 
     const filterTabs = ['All', ...channels.map(c => c.channel)];
@@ -76,6 +83,7 @@ export default function OmnichannelPage() {
         <div className="omnichannel-page">
             <Header />
             <main className="omnichannel-main">
+                {modules.omnichannel_hero !== false && (
                 <div className="inner-content-wrapper">
                     <div className="omni-panel">
                         <svg className="omni-panel__logo" width="69" height="37" viewBox="0 0 69 37" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -97,6 +105,7 @@ export default function OmnichannelPage() {
                         </div>
                     </div>
                 </div>
+                )}
 
                 <div className="inner-content-wrapper">
                     <FilterTabs

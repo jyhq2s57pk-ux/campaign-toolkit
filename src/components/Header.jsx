@@ -56,14 +56,21 @@ export default function Header() {
     return path;
   };
 
-  const navLinks = [
+  const allNavLinks = [
     { name: 'Customer Touchpoints', path: '/customer-journey' },
-    { name: 'Resources', path: '/resources' },
+    { name: 'Resources', path: '/resources', moduleKey: 'page_resources' },
     { name: 'Activate', path: '/activate' },
     { name: 'Omnichannel', path: '/omnichannel' },
-    { name: 'Calendar', path: '/calendar' },
+    { name: 'Calendar', path: '/calendar', moduleKey: 'page_calendar' },
     { name: 'Insights', path: '/insights' },
   ];
+
+  // Filter out pages disabled by campaign modules
+  const modules = campaign?.modules || {};
+  const navLinks = allNavLinks.filter(link => {
+    if (!link.moduleKey) return true;
+    return modules[link.moduleKey] !== false;
+  });
 
   const campaignColor = campaign?.primary_color;
 

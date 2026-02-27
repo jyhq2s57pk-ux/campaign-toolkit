@@ -17,6 +17,7 @@ export default function InsightsPage() {
         subtitle: "Data-driven opportunities for the season",
         content_blocks: []
     });
+    const [modules, setModules] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
@@ -28,14 +29,18 @@ export default function InsightsPage() {
                 campaign = await api.getCampaign();
             }
 
-            if (campaign?.id) {
-                const insightPage = await api.getInsightPage(campaign.id);
-                if (insightPage) {
-                    setPageData({
-                        title: insightPage.title || "Insights & Performance",
-                        subtitle: insightPage.subtitle || "Data-driven opportunities for the season",
-                        content_blocks: insightPage.content_blocks || []
-                    });
+            if (campaign) {
+                if (campaign.modules) setModules(campaign.modules);
+
+                if (campaign.id) {
+                    const insightPage = await api.getInsightPage(campaign.id);
+                    if (insightPage) {
+                        setPageData({
+                            title: insightPage.title || "Insights & Performance",
+                            subtitle: insightPage.subtitle || "Data-driven opportunities for the season",
+                            content_blocks: insightPage.content_blocks || []
+                        });
+                    }
                 }
             }
         };
@@ -82,6 +87,7 @@ export default function InsightsPage() {
                         )}
 
                         {/* Fallback: Bento Grid (shown when no CMS blocks or as supplementary) */}
+                        {modules.insights_bento !== false && (
                         <div className="bento-grid">
                             {/* Card 1: Top Routes Map */}
                             <div className="bento-card card-large map-card glass">
@@ -135,8 +141,10 @@ export default function InsightsPage() {
                                 </div>
                             </div>
                         </div>
+                        )}
 
                         {/* Charts Section */}
+                        {modules.insights_charts !== false && (
                         <div className="charts-container">
                             <div className="chart-card glass">
                                 <h3>Avolta LY PAX by month (EU)</h3>
@@ -179,6 +187,7 @@ export default function InsightsPage() {
                                 </div>
                             </div>
                         </div>
+                        )}
 
                     </div>
                 </div>

@@ -402,5 +402,85 @@ export const api = {
             return null;
         }
         return data;
+    },
+
+    async duplicateCampaignData(sourceCampaignId, newCampaignId) {
+        if (!supabase) return { success: false, error: 'No database connection' };
+
+        const results = { copied: [], errors: [] };
+
+        // 1. Duplicate insight_pages
+        const { data: insightPages } = await supabase
+            .from('insight_pages')
+            .select('*')
+            .eq('campaign_id', sourceCampaignId);
+
+        if (insightPages && insightPages.length > 0) {
+            for (const page of insightPages) {
+                const { id, created_at, updated_at, ...rest } = page;
+                const { error } = await supabase
+                    .from('insight_pages')
+                    .insert({ ...rest, campaign_id: newCampaignId });
+                if (error) results.errors.push(`insight_pages: ${error.message}`);
+                else results.copied.push('insight_pages');
+            }
+        }
+
+        // 2. Duplicate omnichannel_ideas
+        const { data: ideas } = await supabase
+            .from('omnichannel_ideas')
+            .select('*')
+            .eq('campaign_id', sourceCampaignId);
+
+        if (ideas && ideas.length > 0) {
+            for (const idea of ideas) {
+                const { id, created_at, ...rest } = idea;
+                const { error } = await supabase
+                    .from('omnichannel_ideas')
+                    .insert({ ...rest, campaign_id: newCampaignId });
+                if (error) results.errors.push(`omnichannel_ideas: ${error.message}`);
+                else results.copied.push('omnichannel_ideas');
+            }
+        }
+
+        // 3. Duplicate resources
+        const { data: resources } = await supabase
+            .from('resources')
+            .select('*')
+            .eq('campaign_id', sourceCampaignId);
+
+        if (resources && resources.length > 0) {
+            for (const resource of resources) {
+                const { id, created_at, ...rest } = resource;
+                const { error } = await supabase
+                    .from('resources')
+                    .insert({ ...rest, campaign_id: newCampaignId });
+                if (error) results.errors.push(`resources: ${error.message}`);
+                else results.copied.push('resources');
+            }
+        }
+
+        // 4. Duplicate touchpoints
+        const { data: touchpoints } = await supabase
+            .from('touchpoints')
+            .select('*')
+            .eq('campaign_id', sourceCampaignId);
+
+        if (touchpoints && touchpoints.length > 0) {
+            for (const tp of touchpoints) {
+                const { id, created_at, updated_at, ...rest } = tp;
+                const { error } = await supabase
+                    .from('touchpoints')
+                    .insert({ ...rest, campaign_id: newCampaignId });
+                if (error) results.errors.push(`touchpoints: ${error.message}`);
+                else results.copied.push('touchpoints');
+            }
+        }
+
+        return {
+            success: results.errors.length === 0,
+            copied: results.copied,
+            errors: results.errors
+        };
     }
 };

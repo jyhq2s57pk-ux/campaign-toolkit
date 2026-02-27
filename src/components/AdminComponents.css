@@ -564,3 +564,47 @@
     max-height: 95vh;
   }
 }
+
+/* Module Toggles */
+.modules-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color, rgba(255,255,255,0.1));
+}
+
+.modules-heading {
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
+.modules-group {
+  margin-top: 1rem;
+}
+
+.modules-group-label {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.modules-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.module-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.module-toggle-label {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
