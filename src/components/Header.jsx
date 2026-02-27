@@ -61,7 +61,6 @@ export default function Header() {
     { name: 'Resources', path: '/resources', moduleKey: 'page_resources' },
     { name: 'Activate', path: '/activate' },
     { name: 'Omnichannel', path: '/omnichannel' },
-    { name: 'Calendar', path: '/calendar', moduleKey: 'page_calendar' },
     { name: 'Insights', path: '/insights' },
   ];
 
@@ -125,7 +124,14 @@ export default function Header() {
               </Link>
             ))}
 
-            {/* Mobile-only Admin Toggle */}
+            {/* Mobile-only Calendar + Admin */}
+            <Link
+              to="/calendar"
+              className={`nav-btn global-nav-mobile ${location.pathname === '/calendar' ? 'nav-btn-active' : ''}`}
+              onClick={closeMenu}
+            >
+              Calendar
+            </Link>
             <div className="mobile-admin-wrapper" onClick={toggleAdmin}>
               <div className={`admin-toggle-switch ${isAdmin ? 'active' : ''}`}>
                 <div className="toggle-knob"></div>
@@ -136,6 +142,19 @@ export default function Header() {
         </div>
 
         <div className="header-right">
+          <Link
+            to="/calendar"
+            className={`global-nav-link ${location.pathname === '/calendar' ? 'global-nav-link-active' : ''}`}
+            onClick={closeMenu}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2" />
+              <path d="M16 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              <path d="M8 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              <path d="M3 10H21" stroke="currentColor" strokeWidth="2" />
+            </svg>
+            Calendar
+          </Link>
           <div className="admin-toggle-wrapper" onClick={toggleAdmin}>
             <div className={`admin-toggle-switch ${isAdmin ? 'active' : ''}`}>
               <div className="toggle-knob"></div>

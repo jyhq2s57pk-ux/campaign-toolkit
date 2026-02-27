@@ -21,7 +21,7 @@ export default function WaysOfWorkingPage() {
         const campaign = await api.getCampaignById(campaignId);
         if (campaign?.modules) setModules(campaign.modules);
       }
-      const data = await api.getWaysOfWorking();
+      const data = await api.getWaysOfWorking(campaignId);
 
       // Map process data to steps format
       const stepsData = data.process.map((step, index) => ({
@@ -39,7 +39,7 @@ export default function WaysOfWorkingPage() {
     };
 
     fetchData();
-  }, []);
+  }, [campaignId]);
 
   // Helper to get appropriate icon for each step
   const getIconForStep = (index) => {

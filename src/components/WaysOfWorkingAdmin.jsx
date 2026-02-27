@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import './AdminComponents.css';
 
-export default function WaysOfWorkingAdmin() {
+export default function WaysOfWorkingAdmin({ campaignId }) {
   const [steps, setSteps] = useState([]);
   const [tips, setTips] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,24 +13,30 @@ export default function WaysOfWorkingAdmin() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [campaignId]);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Fetch process steps
-      const { data: processData, error: processError } = await supabase
+      // Fetch process steps — scoped to campaign
+      let processQuery = supabase
         .from('wow_process')
-        .select('*')
-        .order('sort_order');
+        .select('*');
+      if (campaignId) {
+        processQuery = processQuery.eq('campaign_id', campaignId);
+      }
+      const { data: processData, error: processError } = await processQuery.order('sort_order');
 
       if (processError) throw processError;
 
-      // Fetch tips (stored in wow_timeline for now)
-      const { data: tipsData, error: tipsError } = await supabase
+      // Fetch tips (stored in wow_timeline) — scoped to campaign
+      let tipsQuery = supabase
         .from('wow_timeline')
-        .select('*')
-        .order('sort_order');
+        .select('*');
+      if (campaignId) {
+        tipsQuery = tipsQuery.eq('campaign_id', campaignId);
+      }
+      const { data: tipsData, error: tipsError } = await tipsQuery.order('sort_order');
 
       if (tipsError) throw tipsError;
 
@@ -58,7 +64,8 @@ export default function WaysOfWorkingAdmin() {
           .update({
             title: editingStep.title,
             description: editingStep.description,
-            sort_order: editingStep.sort_order
+            sort_order: editingStep.sort_order,
+            campaign_id: campaignId || null
           })
           .eq('id', editingStep.id);
 
@@ -71,7 +78,8 @@ export default function WaysOfWorkingAdmin() {
           .insert({
             title: editingStep.title,
             description: editingStep.description,
-            sort_order: editingStep.sort_order
+            sort_order: editingStep.sort_order,
+            campaign_id: campaignId || null
           });
 
         if (error) throw error;
@@ -120,7 +128,8 @@ export default function WaysOfWorkingAdmin() {
           .from('wow_timeline')
           .update({
             phase: editingTip.phase,
-            sort_order: editingTip.sort_order
+            sort_order: editingTip.sort_order,
+            campaign_id: campaignId || null
           })
           .eq('id', editingTip.id);
 
@@ -133,7 +142,8 @@ export default function WaysOfWorkingAdmin() {
           .insert({
             phase: editingTip.phase,
             date_text: '',
-            sort_order: editingTip.sort_order
+            sort_order: editingTip.sort_order,
+            campaign_id: campaignId || null
           });
 
         if (error) throw error;

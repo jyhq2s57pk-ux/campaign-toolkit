@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -14,6 +15,8 @@ const PLATFORM_COLORS = { 'Web': { bg: 'rgba(232, 92, 74, 0.15)', text: '#E85C4A
 const ChevronRight = () => (<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>);
 
 export default function CustomerJourneyPage() {
+  const [searchParams] = useSearchParams();
+  const campaignId = searchParams.get('campaignId');
   const [pages, setPages] = useState([]);
   const [components, setComponents] = useState({});
   const [expandedPage, setExpandedPage] = useState(null);
@@ -24,7 +27,7 @@ export default function CustomerJourneyPage() {
   const sectionRefs = useRef({});
   const screenshotRef = useRef(null);
 
-  useEffect(() => { fetchPages(); }, []);
+  useEffect(() => { fetchPages(); }, [campaignId]);
 
   const fetchPages = async () => {
     setLoading(true);
@@ -35,7 +38,11 @@ export default function CustomerJourneyPage() {
     const loadedPages = (platformsData || []).map(p => ({ id: p.name, title: p.name, platform_type: p.type || 'Web', screenshot_url: p.screenshot_url }));
     setPages(loadedPages);
 
-    const { data: touchpointsData } = await supabase.from('touchpoints').select('*').order('sort_order', { ascending: true });
+    let touchpointsQuery = supabase.from('touchpoints').select('*');
+    if (campaignId) {
+      touchpointsQuery = touchpointsQuery.eq('campaign_id', campaignId);
+    }
+    const { data: touchpointsData } = await touchpointsQuery.order('sort_order', { ascending: true });
 
     let grouped = {};
     if (touchpointsData) {

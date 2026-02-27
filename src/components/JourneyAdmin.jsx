@@ -13,7 +13,7 @@ const MarkerLine = () => (
 
 const PLATFORM_TYPES = ['Web', 'App', 'In-Store'];
 
-export default function JourneyAdmin() {
+export default function JourneyAdmin({ campaignId }) {
   const [pages, setPages] = useState([]);
   const [components, setComponents] = useState({});
   const [expandedPage, setExpandedPage] = useState(null);
@@ -34,7 +34,7 @@ export default function JourneyAdmin() {
     title: '', description: '', tier_premium: true, tier_executive: true, is_new: false, is_optional: false, marker_number: 1, sort_order: 0, marker_positions: []
   });
 
-  useEffect(() => { fetchAllData(); }, []);
+  useEffect(() => { fetchAllData(); }, [campaignId]);
 
   const fetchAllData = async () => {
     setLoading(true);
@@ -57,10 +57,16 @@ export default function JourneyAdmin() {
     }));
     setPages(mappedPages);
 
-    // 2. Fetch Touchpoints (Components)
-    const { data: touchpointsData, error: compsError } = await supabase
+    // 2. Fetch Touchpoints (Components) — scoped to campaign
+    let touchpointsQuery = supabase
       .from('touchpoints')
-      .select('*')
+      .select('*');
+
+    if (campaignId) {
+      touchpointsQuery = touchpointsQuery.eq('campaign_id', campaignId);
+    }
+
+    const { data: touchpointsData, error: compsError } = await touchpointsQuery
       .order('sort_order', { ascending: true });
 
     if (compsError) console.error('Error fetching touchpoints:', compsError);
@@ -142,9 +148,13 @@ export default function JourneyAdmin() {
       // If name changed, we really should update related touchpoints' platform string, 
       // but that's complex without foreign keys. Warn or ignore for now (or simple update).
       if (editingPage.title !== pageFormData.title) {
-        await supabase.from('touchpoints')
+        let renameQuery = supabase.from('touchpoints')
           .update({ platform: pageFormData.title })
           .eq('platform', editingPage.title);
+        if (campaignId) {
+          renameQuery = renameQuery.eq('campaign_id', campaignId);
+        }
+        await renameQuery;
       }
     } else {
       await supabase.from('platforms').insert([data]);
@@ -157,8 +167,12 @@ export default function JourneyAdmin() {
     if (confirm('Delete this page and all its components?')) {
       const page = pages.find(p => p.id === id);
       if (page) {
-        // Delete components first (by platform name)
-        await supabase.from('touchpoints').delete().eq('platform', page.title);
+        // Delete components first (by platform name, scoped to campaign)
+        let deleteQuery = supabase.from('touchpoints').delete().eq('platform', page.title);
+        if (campaignId) {
+          deleteQuery = deleteQuery.eq('campaign_id', campaignId);
+        }
+        await deleteQuery;
         // Delete platform
         await supabase.from('platforms').delete().eq('id', id);
       }
@@ -203,7 +217,8 @@ export default function JourneyAdmin() {
       is_new: componentFormData.is_new,
       is_optional: componentFormData.is_optional,
       marker_positions: componentFormData.marker_positions || [],
-      sort_order: componentFormData.sort_order || (pageComps.length + 1)
+      sort_order: componentFormData.sort_order || (pageComps.length + 1),
+      campaign_id: campaignId || null,
     };
 
     if (editingComponent) {

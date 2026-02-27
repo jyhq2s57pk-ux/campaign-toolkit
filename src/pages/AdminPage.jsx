@@ -392,13 +392,13 @@ export default function AdminPage() {
           {activeTab === 'campaign' && <CampaignAdmin campaignId={campaign?.id} />}
 
           {/* Ways of Working Tab */}
-          {activeTab === 'wow' && <WaysOfWorkingAdmin />}
+          {activeTab === 'wow' && <WaysOfWorkingAdmin campaignId={campaignId} />}
 
           {/* Omnichannel Ideas Tab */}
           {activeTab === 'omnichannel' && <OmnichannelIdeasAdmin />}
 
           {/* Journey Tab */}
-          {activeTab === 'journey' && <JourneyAdmin />}
+          {activeTab === 'journey' && <JourneyAdmin campaignId={campaignId} />}
 
           {/* Resources Tab */}
           {activeTab === 'resources' && <ResourcesAdmin />}

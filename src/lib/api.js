@@ -61,12 +61,17 @@ export const api = {
         return campaigns.find(c => c.id === id) || null;
     },
 
-    async getTouchpoints() {
+    async getTouchpoints(campaignId) {
         if (!supabase) return [];
-        const { data, error } = await supabase
+        let query = supabase
             .from('touchpoints')
-            .select('*')
-            .order('sort_order');
+            .select('*');
+
+        if (campaignId) {
+            query = query.eq('campaign_id', campaignId);
+        }
+
+        const { data, error } = await query.order('sort_order');
 
         if (error) {
             console.error('Error fetching touchpoints:', error);
@@ -161,17 +166,24 @@ export const api = {
         return data;
     },
 
-    async getWaysOfWorking() {
+    async getWaysOfWorking(campaignId) {
         if (!supabase) return { process: [], timeline: [] };
-        const { data: process, error: pError } = await supabase
-            .from('wow_process')
-            .select('*')
-            .order('sort_order');
 
-        const { data: timeline, error: tError } = await supabase
+        let processQuery = supabase
+            .from('wow_process')
+            .select('*');
+        if (campaignId) {
+            processQuery = processQuery.eq('campaign_id', campaignId);
+        }
+        const { data: process, error: pError } = await processQuery.order('sort_order');
+
+        let timelineQuery = supabase
             .from('wow_timeline')
-            .select('*')
-            .order('sort_order');
+            .select('*');
+        if (campaignId) {
+            timelineQuery = timelineQuery.eq('campaign_id', campaignId);
+        }
+        const { data: timeline, error: tError } = await timelineQuery.order('sort_order');
 
         if (pError || tError) {
             console.error('Error fetching ways of working:', pError || tError);
@@ -474,6 +486,40 @@ export const api = {
                     .insert({ ...rest, campaign_id: newCampaignId });
                 if (error) results.errors.push(`touchpoints: ${error.message}`);
                 else results.copied.push('touchpoints');
+            }
+        }
+
+        // 5. Duplicate wow_process (Ways of Working steps)
+        const { data: wowProcess } = await supabase
+            .from('wow_process')
+            .select('*')
+            .eq('campaign_id', sourceCampaignId);
+
+        if (wowProcess && wowProcess.length > 0) {
+            for (const step of wowProcess) {
+                const { id, created_at, ...rest } = step;
+                const { error } = await supabase
+                    .from('wow_process')
+                    .insert({ ...rest, campaign_id: newCampaignId });
+                if (error) results.errors.push(`wow_process: ${error.message}`);
+                else results.copied.push('wow_process');
+            }
+        }
+
+        // 6. Duplicate wow_timeline (Best Practice Tips)
+        const { data: wowTimeline } = await supabase
+            .from('wow_timeline')
+            .select('*')
+            .eq('campaign_id', sourceCampaignId);
+
+        if (wowTimeline && wowTimeline.length > 0) {
+            for (const tip of wowTimeline) {
+                const { id, created_at, ...rest } = tip;
+                const { error } = await supabase
+                    .from('wow_timeline')
+                    .insert({ ...rest, campaign_id: newCampaignId });
+                if (error) results.errors.push(`wow_timeline: ${error.message}`);
+                else results.copied.push('wow_timeline');
             }
         }
 
