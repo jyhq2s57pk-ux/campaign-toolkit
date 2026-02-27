@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "./ResourcesPage.css";
@@ -6,15 +7,17 @@ import { api } from "../lib/api";
 import "../components/UniversalCard.css"; // Ensure styles are loaded if not globally
 import UniversalCard from "../components/UniversalCard";
 export default function ResourcesPage() {
+  const [searchParams] = useSearchParams();
+  const campaignId = searchParams.get('campaignId');
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.getResources().then(data => {
+    api.getResources(campaignId).then(data => {
       setResources(data || []);
       setLoading(false);
     });
-  }, []);
+  }, [campaignId]);
 
   const handleResourceClick = (url) => {
     if (url) {

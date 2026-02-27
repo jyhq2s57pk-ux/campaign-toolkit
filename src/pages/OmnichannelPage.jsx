@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import FilterTabs from '../components/FilterTabs';
@@ -18,10 +19,13 @@ import imgBuzz from '../assets/omni/gen/buzz.png';
 import imgBalance from '../assets/omni/gen/balance.png';
 
 export default function OmnichannelPage() {
+    const [searchParams] = useSearchParams();
+    const campaignId = searchParams.get('campaignId');
     const [ideas, setIdeas] = useState([]);
     const [channels, setChannels] = useState([]);
     const [activeFilter, setActiveFilter] = useState('All');
     const [selectedIdea, setSelectedIdea] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const imageMap = {
         '/src/assets/omni/gen/balloon.png': imgBalloon,
@@ -40,14 +44,16 @@ export default function OmnichannelPage() {
     };
 
     useEffect(() => {
-        api.getOmnichannel().then(data => {
-            if (data) setChannels(data);
+        setLoading(true);
+        Promise.all([
+            api.getOmnichannel(),
+            api.getOmnichannelIdeas(campaignId)
+        ]).then(([channelsData, ideasData]) => {
+            if (channelsData) setChannels(channelsData);
+            if (ideasData) setIdeas(ideasData);
+            setLoading(false);
         });
-
-        api.getOmnichannelIdeas().then(data => {
-            if (data) setIdeas(data);
-        });
-    }, []);
+    }, [campaignId]);
 
     const filterTabs = ['All', ...channels.map(c => c.channel)];
 
@@ -83,7 +89,7 @@ export default function OmnichannelPage() {
                             <span className="omni-panel__text--purple">A 360° activation strategy </span>
                             <span className="omni-panel__text--white">designed to engage, captivate, and inspire passengers around the world.</span>
                         </p>
-                        <p className="omni-panel__subheading">Activation ideas</p>
+                        <p className="omni-panel__subheading">Omnichannel engagement ideas</p>
                         <div className="omni-panel__scroll-indicator">
                             <svg className="omni-panel__arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M12 16L6 10H18L12 16Z" fill="white" />
@@ -99,22 +105,28 @@ export default function OmnichannelPage() {
                         onTabChange={setActiveFilter}
                     />
 
-                    <div className="activation-grid">
-                        {filteredIdeas.map((idea) => (
-                            <ActivationCard
-                                key={idea.id}
-                                title={idea.title}
-                                imageUrl={resolveImage(idea.image_url)}
-                                channels={idea.channels || []}
-                                onClick={() => handleCardClick(idea)}
-                            />
-                        ))}
-                    </div>
+                    {loading ? (
+                        <div className="activation-loading">Loading ideas...</div>
+                    ) : (
+                        <>
+                            <div className="activation-grid">
+                                {filteredIdeas.map((idea) => (
+                                    <ActivationCard
+                                        key={idea.id}
+                                        title={idea.title}
+                                        imageUrl={resolveImage(idea.image_url)}
+                                        channels={idea.channels || []}
+                                        onClick={() => handleCardClick(idea)}
+                                    />
+                                ))}
+                            </div>
 
-                    {filteredIdeas.length === 0 && (
-                        <div className="activation-empty">
-                            No activation ideas found for this channel.
-                        </div>
+                            {filteredIdeas.length === 0 && (
+                                <div className="activation-empty">
+                                    No activation ideas found for this channel.
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
 

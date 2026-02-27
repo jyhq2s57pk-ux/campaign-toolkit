@@ -1,0 +1,181 @@
+.compact-campaign-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #191919;
+    border-radius: 24px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.compact-campaign-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Image area */
+.compact-card-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+}
+
+.compact-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.compact-card-image-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.compact-card-image-initial {
+    font-size: 64px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.3);
+    font-family: var(--font-display, 'Saans', sans-serif);
+}
+
+.compact-card-color-strip {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+}
+
+/* Body */
+.compact-card-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.compact-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.compact-card-year {
+    font-size: 13px;
+    color: var(--text-muted, #666);
+    font-weight: 500;
+    font-family: var(--font-body, 'Saans', sans-serif);
+}
+
+.compact-card-scope {
+    font-size: 12px;
+    color: var(--text-muted, #666);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-weight: 400;
+}
+
+.compact-card-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary, #fff);
+    margin: 0;
+    line-height: 1.2;
+    font-family: var(--font-display, 'Saans', sans-serif);
+    letter-spacing: -0.3px;
+}
+
+.compact-card-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary, #a1a1a6);
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Meta items */
+.compact-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 4px;
+}
+
+.compact-card-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-secondary, #a1a1a6);
+}
+
+.compact-card-meta-item svg {
+    flex-shrink: 0;
+    opacity: 0.5;
+}
+
+/* Feature pills */
+.compact-card-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-top: 4px;
+}
+
+.compact-card-feature-pill {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-secondary, #a1a1a6);
+    font-weight: 400;
+}
+
+/* Enter CTA */
+.compact-card-enter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-top: 8px;
+    margin-top: auto;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary, #fff);
+    transition: gap 0.2s ease;
+}
+
+.compact-campaign-card:hover .compact-card-enter {
+    gap: 12px;
+}
+
+.compact-card-enter svg {
+    transition: transform 0.2s ease;
+}
+
+.compact-campaign-card:hover .compact-card-enter svg {
+    transform: translateX(2px);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .compact-card-title {
+        font-size: 20px;
+    }
+
+    .compact-card-body {
+        padding: 20px;
+    }
+}

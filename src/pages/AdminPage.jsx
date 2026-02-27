@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Papa from 'papaparse';
 import { supabase } from '../lib/supabase';
 import { api } from '../lib/api';
@@ -65,6 +65,8 @@ export default function AdminPage() {
   const [showPreview, setShowPreview] = useState(false);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const campaignId = searchParams.get('campaignId');
 
   const handleSignOut = async () => {
     await signOut();
@@ -85,16 +87,21 @@ export default function AdminPage() {
     }
   };
 
-  // Fetch campaign data for dynamic year
+  // Fetch campaign data — use campaignId from URL if available
   const fetchCampaign = async () => {
-    const data = await api.getCampaign();
-    setCampaign(data);
+    if (campaignId) {
+      const data = await api.getCampaignById(campaignId);
+      setCampaign(data);
+    } else {
+      const data = await api.getCampaign();
+      setCampaign(data);
+    }
   };
 
   useEffect(() => {
     fetchCalendarEvents();
     fetchCampaign();
-  }, []);
+  }, [campaignId]);
 
   // Calendar management functions
   // Helper to validate and normalize tier
@@ -309,7 +316,21 @@ export default function AdminPage() {
         <div className="admin-container inner-content-wrapper">
           <div className="admin-header">
             <div>
-              <h1>Admin</h1>
+              <div className="admin-title-row">
+                <h1>Admin</h1>
+                {campaign && (
+                  <div className="admin-campaign-badge" style={{ borderColor: campaign.primary_color || '#8F53F0' }}>
+                    <span
+                      className="admin-campaign-dot"
+                      style={{ backgroundColor: campaign.primary_color || '#8F53F0' }}
+                    />
+                    <span className="admin-campaign-name">{campaign.name}</span>
+                    {campaign.year && (
+                      <span className="admin-campaign-year">{campaign.year}</span>
+                    )}
+                  </div>
+                )}
+              </div>
               {user && (
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: '0.5rem 0 0 0' }}>
                   Logged in as: {user.email}
@@ -368,7 +389,7 @@ export default function AdminPage() {
           </div>
 
           {/* Campaign Tab */}
-          {activeTab === 'campaign' && <CampaignAdmin />}
+          {activeTab === 'campaign' && <CampaignAdmin campaignId={campaign?.id} />}
 
           {/* Ways of Working Tab */}
           {activeTab === 'wow' && <WaysOfWorkingAdmin />}

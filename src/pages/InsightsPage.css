@@ -459,3 +459,72 @@
 .insights-page .inner-content-wrapper {
     gap: 24px;
 }
+
+/* Dynamic Insight Content Blocks (CMS) */
+.insight-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 16px;
+}
+
+.insight-block {
+    background: rgba(255, 255, 255, 0.05);
+    border: 0.5px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 32px;
+    transition: transform 0.3s ease;
+}
+
+.insight-block:hover {
+    transform: translateY(-2px);
+}
+
+.insight-block.has-image {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+@media (min-width: 768px) {
+    .insight-block.has-image {
+        grid-template-columns: 280px 1fr;
+        gap: 32px;
+    }
+}
+
+.insight-block-image {
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+}
+
+.insight-block-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.insight-block-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+}
+
+.insight-block-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.insight-block-body {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 0;
+}

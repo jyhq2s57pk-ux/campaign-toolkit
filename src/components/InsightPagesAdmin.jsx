@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import ImageUpload from './ImageUpload';
 import './AdminComponents.css';
+
+const EMPTY_BLOCK = { title: '', body: '', image_url: '' };
 
 export default function InsightPagesAdmin() {
   const [pages, setPages] = useState([]);
@@ -22,7 +25,6 @@ export default function InsightPagesAdmin() {
         .order('campaign_id');
 
       if (error) throw error;
-
       setPages(data || []);
     } catch (err) {
       console.error('Error fetching insight pages:', err);
@@ -38,38 +40,35 @@ export default function InsightPagesAdmin() {
     setMessage(null);
 
     try {
+      const payload = {
+        title: editingPage.title,
+        subtitle: editingPage.subtitle,
+        content_blocks: editingPage.content_blocks || [],
+        updated_at: new Date().toISOString()
+      };
+
       if (editingPage.id) {
-        // Update existing
         const { error } = await supabase
           .from('insight_pages')
-          .update({
-            title: editingPage.title,
-            subtitle: editingPage.subtitle,
-            updated_at: new Date().toISOString()
-          })
+          .update(payload)
           .eq('id', editingPage.id);
 
         if (error) throw error;
-        setMessage({ type: 'success', text: 'Insight page updated successfully!' });
+        setMessage({ type: 'success', text: 'Insight page updated!' });
       } else {
-        // Create new
         const { error } = await supabase
           .from('insight_pages')
-          .insert({
-            campaign_id: editingPage.campaign_id,
-            title: editingPage.title,
-            subtitle: editingPage.subtitle
-          });
+          .insert({ ...payload, campaign_id: editingPage.campaign_id });
 
         if (error) throw error;
-        setMessage({ type: 'success', text: 'Insight page created successfully!' });
+        setMessage({ type: 'success', text: 'Insight page created!' });
       }
 
       setEditingPage(null);
       fetchPages();
     } catch (err) {
       console.error('Error saving insight page:', err);
-      setMessage({ type: 'error', text: 'Error saving insight page: ' + err.message });
+      setMessage({ type: 'error', text: 'Error saving: ' + err.message });
     } finally {
       setSaving(false);
     }
@@ -85,13 +84,36 @@ export default function InsightPagesAdmin() {
         .eq('id', id);
 
       if (error) throw error;
-
-      setMessage({ type: 'success', text: 'Insight page deleted successfully!' });
+      setMessage({ type: 'success', text: 'Insight page deleted!' });
       fetchPages();
     } catch (err) {
       console.error('Error deleting insight page:', err);
-      setMessage({ type: 'error', text: 'Error deleting insight page: ' + err.message });
+      setMessage({ type: 'error', text: 'Error deleting: ' + err.message });
     }
+  };
+
+  const addBlock = () => {
+    const blocks = editingPage.content_blocks || [];
+    if (blocks.length >= 4) {
+      setMessage({ type: 'error', text: 'Maximum 4 content blocks allowed.' });
+      return;
+    }
+    setEditingPage({
+      ...editingPage,
+      content_blocks: [...blocks, { ...EMPTY_BLOCK }]
+    });
+  };
+
+  const updateBlock = (index, field, value) => {
+    const blocks = [...(editingPage.content_blocks || [])];
+    blocks[index] = { ...blocks[index], [field]: value };
+    setEditingPage({ ...editingPage, content_blocks: blocks });
+  };
+
+  const removeBlock = (index) => {
+    const blocks = [...(editingPage.content_blocks || [])];
+    blocks.splice(index, 1);
+    setEditingPage({ ...editingPage, content_blocks: blocks });
   };
 
   if (loading) {
@@ -103,7 +125,7 @@ export default function InsightPagesAdmin() {
       <div className="admin-section-header">
         <h2>Insight Pages Management</h2>
         <p className="section-description">
-          Manage insight page titles and subtitles for each campaign.
+          Manage insight page content blocks for each campaign. Up to 4 blocks per page.
         </p>
       </div>
 
@@ -124,29 +146,21 @@ export default function InsightPagesAdmin() {
             {pages.map((page) => (
               <li key={page.id} className="admin-list-item">
                 <div className="admin-list-item-content">
-                  <div className="admin-list-item-title">
-                    {page.title}
-                  </div>
+                  <div className="admin-list-item-title">{page.title}</div>
                   <div className="admin-list-item-meta">
                     Campaign: {page.campaign_id}
+                    {' · '}
+                    {(page.content_blocks || []).length} content block(s)
                   </div>
-                  {page.subtitle && (
-                    <div style={{ fontSize: '0.9em', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
-                      {page.subtitle.substring(0, 100)}{page.subtitle.length > 100 ? '...' : ''}
-                    </div>
-                  )}
                 </div>
                 <div className="admin-list-item-actions">
-                  <button
-                    className="btn-secondary"
-                    onClick={() => setEditingPage({ ...page })}
-                  >
+                  <button className="btn-secondary" onClick={() => setEditingPage({
+                    ...page,
+                    content_blocks: page.content_blocks || []
+                  })}>
                     Edit
                   </button>
-                  <button
-                    className="btn-secondary"
-                    onClick={() => handleDelete(page.id)}
-                  >
+                  <button className="btn-secondary" onClick={() => handleDelete(page.id)}>
                     Delete
                   </button>
                 </div>
@@ -156,12 +170,12 @@ export default function InsightPagesAdmin() {
         )}
 
         <button
-          className="btn-primary"
-          style={{ marginTop: '1rem' }}
+          className="btn-primary btn-mt"
           onClick={() => setEditingPage({
             campaign_id: '',
-            title: '',
-            subtitle: ''
+            title: 'Insights & Performance',
+            subtitle: '',
+            content_blocks: []
           })}
         >
           Add New Insight Page
@@ -170,7 +184,7 @@ export default function InsightPagesAdmin() {
 
       {editingPage && (
         <div className="modal-overlay" onClick={() => setEditingPage(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content modal-content-wide" onClick={(e) => e.stopPropagation()}>
             <h3>{editingPage.id ? 'Edit Insight Page' : 'Add New Insight Page'}</h3>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
@@ -182,15 +196,12 @@ export default function InsightPagesAdmin() {
                   onChange={(e) => setEditingPage({ ...editingPage, campaign_id: e.target.value })}
                   required
                   disabled={!!editingPage.id}
-                  placeholder="e.g., campaign-2026"
+                  placeholder="e.g., campaign-value-club-2026"
                 />
-                {editingPage.id && (
-                  <small className="form-help">Cannot change campaign ID for existing page</small>
-                )}
               </div>
 
               <div className="form-group">
-                <label htmlFor="page-title">Title *</label>
+                <label htmlFor="page-title">Page Title *</label>
                 <input
                   type="text"
                   id="page-title"
@@ -207,21 +218,78 @@ export default function InsightPagesAdmin() {
                   id="page-subtitle"
                   value={editingPage.subtitle || ''}
                   onChange={(e) => setEditingPage({ ...editingPage, subtitle: e.target.value })}
-                  rows="3"
-                  placeholder="Brief description (supports line breaks)"
+                  rows="2"
+                  placeholder="Brief description"
                 />
-                <small className="form-help">Optional. Line breaks will be preserved.</small>
               </div>
 
-              <div className="form-actions">
+              {/* Content Blocks */}
+              <div className="content-blocks-section">
+                <div className="content-blocks-header">
+                  <h4>
+                    Content Blocks ({(editingPage.content_blocks || []).length}/4)
+                  </h4>
+                  <button
+                    type="button"
+                    className="btn-secondary"
+                    onClick={addBlock}
+                    disabled={(editingPage.content_blocks || []).length >= 4}
+                  >
+                    + Add Block
+                  </button>
+                </div>
+
+                {(editingPage.content_blocks || []).map((block, i) => (
+                  <div key={i} className="content-block-editor">
+                    <div className="block-editor-header">
+                      <span className="block-editor-label">Block {i + 1}</span>
+                      <button type="button" className="btn-secondary btn-remove-block" onClick={() => removeBlock(i)}>
+                        Remove
+                      </button>
+                    </div>
+
+                    <div className="form-group">
+                      <label>Title</label>
+                      <input
+                        type="text"
+                        value={block.title || ''}
+                        onChange={(e) => updateBlock(i, 'title', e.target.value)}
+                        placeholder="Block heading"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Body</label>
+                      <textarea
+                        value={block.body || ''}
+                        onChange={(e) => updateBlock(i, 'body', e.target.value)}
+                        rows="3"
+                        placeholder="Block content text..."
+                      />
+                    </div>
+
+                    <ImageUpload
+                      label="Block Image (optional)"
+                      value={block.image_url || ''}
+                      onChange={(url) => updateBlock(i, 'image_url', url)}
+                      placeholder="Paste image URL or upload"
+                      folder="insights"
+                    />
+                  </div>
+                ))}
+
+                {(editingPage.content_blocks || []).length === 0 && (
+                  <p className="content-blocks-empty">
+                    No content blocks yet. Add up to 4 blocks with title, text, and optional image.
+                  </p>
+                )}
+              </div>
+
+              <div className="form-actions form-actions-mt">
                 <button type="submit" className="btn-primary" disabled={saving}>
                   {saving ? 'Saving...' : 'Save Page'}
                 </button>
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  onClick={() => setEditingPage(null)}
-                >
+                <button type="button" className="btn-secondary" onClick={() => setEditingPage(null)}>
                   Cancel
                 </button>
               </div>
@@ -229,15 +297,6 @@ export default function InsightPagesAdmin() {
           </div>
         </div>
       )}
-
-      <div className="admin-info-box" style={{ marginTop: '2rem' }}>
-        <h3>What gets updated?</h3>
-        <ul>
-          <li><strong>Insights Page:</strong> Title and subtitle appear at the top of the insights page</li>
-          <li><strong>Campaign Specific:</strong> Each campaign can have its own insight page settings</li>
-          <li><strong>Fallback:</strong> If no page exists, hardcoded defaults are shown</li>
-        </ul>
-      </div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "./CalendarPage.css";
@@ -7,13 +8,15 @@ import { api } from "../lib/api";
 const STORAGE_KEY = "avolta_toolkit_calendar_v1";
 
 export default function CalendarPage() {
+  const [searchParams] = useSearchParams();
+  const campaignId = searchParams.get('campaignId');
   const [events, setEvents] = useState([]);
   const [tiers, setTiers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([
-      api.getCalendarEvents(),
+      api.getCalendarEvents(campaignId),
       api.getCalendarTiers()
     ]).then(([eventsData, tiersData]) => {
       if (eventsData) {
@@ -35,7 +38,7 @@ export default function CalendarPage() {
       }
       setLoading(false);
     });
-  }, []);
+  }, [campaignId]);
 
   const months = useMemo(
     () => [

@@ -1,9 +1,8 @@
-/* HomePage.css - Redesign v5 (Figma Integration) */
+/* HomePage.css - Redesign v6 (Campaign Dashboard) */
 
 /* Main Layout */
 .home-page {
   background-color: var(--surface-default);
-  /* #101010 or similar dark */
   min-height: 100vh;
   color: var(--text-primary);
   padding-bottom: 0;
@@ -17,16 +16,14 @@
   padding-bottom: 80px;
 }
 
-/* Campaign Pill Area */
+/* Homepage Title */
 .homepage-title-container {
   width: 100%;
   max-width: 1200px;
   display: flex;
   justify-content: center;
-  padding-top: 160px;
-  /* Updated from 40px */
-  padding-bottom: 160px;
-  /* Added spacing below title */
+  padding-top: 120px;
+  padding-bottom: 80px;
   padding-left: 20px;
   padding-right: 20px;
 }
@@ -37,11 +34,10 @@
   display: block;
 }
 
+/* Campaign Pill Label */
 .campaign-header-pill-area {
   width: 100%;
-  max-width: 1200px;
-  padding: 0 20px 24px;
-  /* Removed top padding as title container handles spacing */
+  padding: 0 0 16px;
   display: flex;
   justify-content: flex-start;
 }
@@ -52,7 +48,7 @@
   padding: 6px 16px;
   border-radius: 9999px;
   font-family: var(--font-body);
-  font-size: var(--text-13);
+  font-size: 13px;
 }
 
 /* Inner Content Wrapper */
@@ -63,25 +59,37 @@
   padding: 0 20px;
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 24px;
 }
 
-/* Sections */
-.section-carousel {
+/* Campaign Dashboard Grid */
+.campaign-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
   width: 100%;
 }
 
-.section-contents {
-  width: 100%;
-}
-
-.section-activation {
-  width: 100%;
+.campaign-loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
+  .homepage-title-container {
+    padding-top: 80px;
+    padding-bottom: 48px;
+  }
+
+  .campaign-dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
   .inner-content-wrapper {
-    gap: 32px;
+    gap: 16px;
   }
 }

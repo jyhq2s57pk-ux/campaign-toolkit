@@ -10,21 +10,17 @@ export default function Header() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [campaignName, setCampaignName] = useState(null);
+  const [campaign, setCampaign] = useState(null);
 
   const campaignId = searchParams.get('campaignId');
 
   useEffect(() => {
     const fetchCampaignContext = async () => {
       if (campaignId) {
-        const campaign = await api.getCampaignById(campaignId);
-        if (campaign) {
-          setCampaignName(campaign.name);
-        } else {
-          setCampaignName(null);
-        }
+        const data = await api.getCampaignById(campaignId);
+        setCampaign(data || null);
       } else {
-        setCampaignName(null);
+        setCampaign(null);
       }
     };
     fetchCampaignContext();
@@ -45,7 +41,9 @@ export default function Header() {
     if (isAdmin) {
       navigate('/');
     } else {
-      navigate('/admin');
+      // Preserve campaignId when entering admin
+      const adminPath = campaignId ? `/admin?campaignId=${campaignId}` : '/admin';
+      navigate(adminPath);
     }
     closeMenu();
   };
@@ -59,26 +57,37 @@ export default function Header() {
   };
 
   const navLinks = [
-    { name: 'Insights', path: '/insights' },
     { name: 'Customer Touchpoints', path: '/customer-journey' },
-    { name: 'Activate', path: '/ways-of-working' },
-    { name: 'Omnichannel', path: '/omnichannel' },
     { name: 'Resources', path: '/resources' },
+    { name: 'Activate', path: '/activate' },
+    { name: 'Omnichannel', path: '/omnichannel' },
     { name: 'Calendar', path: '/calendar' },
+    { name: 'Insights', path: '/insights' },
   ];
 
+  const campaignColor = campaign?.primary_color;
+
   return (
-    <header className={`header ${isAdmin ? 'admin-mode' : ''}`}>
+    <header
+      className={`header ${isAdmin ? 'admin-mode' : ''} ${campaign ? 'has-campaign' : ''}`}
+      style={campaign && !isAdmin ? { '--campaign-color': campaignColor || '#8F53F0' } : undefined}
+    >
       <div className="header-container">
 
         <div className="header-left">
           <Link to="/" className="header-logo" onClick={closeMenu}>
             <img src={logo} alt="Trading Toolkit" className="logo-image" />
           </Link>
-          {campaignName && (
+          {campaign && (
             <div className="header-campaign-context">
-              <span className="campaign-context-year">2026</span>
-              <span className="campaign-context-name">{campaignName}</span>
+              <span
+                className="campaign-context-dot"
+                style={{ backgroundColor: campaignColor || '#8F53F0' }}
+              />
+              <span className="campaign-context-name">{campaign.name}</span>
+              {campaign.year && (
+                <span className="campaign-context-year">{campaign.year}</span>
+              )}
             </div>
           )}
         </div>
@@ -102,7 +111,7 @@ export default function Header() {
               <Link
                 key={link.path}
                 to={getNavLinkWithContext(link.path)}
-                className={`nav-btn ${location.pathname === link.path ? 'nav-btn-active' : ''}`}
+                className={`nav-btn ${(location.pathname === link.path || (link.path === '/activate' && location.pathname === '/ways-of-working')) ? 'nav-btn-active' : ''}`}
                 onClick={closeMenu}
               >
                 {link.name}
@@ -129,6 +138,14 @@ export default function Header() {
         </div>
 
       </div>
+
+      {/* Campaign color accent strip */}
+      {campaign && !isAdmin && (
+        <div
+          className="header-campaign-strip"
+          style={{ backgroundColor: campaignColor || '#8F53F0' }}
+        />
+      )}
     </header>
   );
 }

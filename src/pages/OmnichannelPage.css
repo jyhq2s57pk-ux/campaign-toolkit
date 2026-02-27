@@ -138,8 +138,16 @@
 }
 
 /* =====================================================
-   Empty State
+   Loading & Empty States
    ===================================================== */
+.activation-loading {
+    text-align: center;
+    padding: 80px 24px;
+    color: var(--text-secondary, #a1a1a6);
+    font-size: 16px;
+    font-family: var(--font-body, 'Saans', sans-serif);
+}
+
 .activation-empty {
     text-align: center;
     padding: 80px 24px;

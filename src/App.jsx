@@ -29,6 +29,7 @@ function App() {
           <Route path="/resources" element={<ResourcesPage />} />
           <Route path="/resources/:id" element={<ResourceDetailPage />} />
           <Route path="/ways-of-working" element={<WaysOfWorkingPage />} />
+          <Route path="/activate" element={<WaysOfWorkingPage />} />
           <Route path="/omnichannel" element={<OmnichannelPage />} />
           <Route path="/insights" element={<InsightsPage />} />
           <Route path="/annex" element={<AnnexPage />} />

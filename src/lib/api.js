@@ -1,6 +1,39 @@
 
 import { supabase } from './supabase';
 
+// Shared mock data — single source of truth for fallbacks
+const MOCK_CAMPAIGNS = [
+    {
+        id: 'campaign-value-club-2026',
+        name: 'Value Club',
+        subtitle: 'Ecommerce Trading Toolkits',
+        year: '2026',
+        scope: 'Global',
+        channels: 'Reserve & Collect (Web / APP) Emporium',
+        activation_start_date: '2026-01-01',
+        activation_end_date: '2026-03-31',
+        activation_dates: 'Jan 1st to March 31st 2026',
+        hero_image_url: '/campaigns/value_club_hero.png',
+        primary_color: '#E94E55',
+        features: [
+            { label: 'Multi-Category' },
+            { label: 'Multi-level activation', values: ['Premium: Full visibility', 'Executive: Medium visibility'] }
+        ]
+    },
+    {
+        id: 'campaign-summer-2026',
+        name: 'Summer Vibes 2026',
+        subtitle: 'Experience the warmth of summer with exclusive travel retail offers',
+        year: '2026',
+        scope: 'Global',
+        channels: 'Airports, Cruise Lines, Borders',
+        activation_start_date: '2026-06-01',
+        activation_end_date: '2026-08-31',
+        activation_dates: 'June-August 2026',
+        hero_image_url: 'https://placehold.co/600x400/orange/white?text=Summer+Vibes'
+    }
+];
+
 export const api = {
     async getCampaign() {
         // ... existing getCampaign implementation ...
@@ -8,42 +41,7 @@ export const api = {
     },
 
     async getCampaigns() {
-        // FORCE UPDATE FOR PRESENTATION: Always return the mock data for now to show the new campaign.
-        // if (!supabase) { 
-        if (true) {
-            // Mock data for multiple campaigns
-            return [
-                {
-                    id: 'campaign-value-club-2026',
-                    name: 'Value Club',
-                    subtitle: 'Ecommerce Trading Toolkits',
-                    year: '2026',
-                    scope: 'Global',
-                    channels: 'Reserve & Collect (Web / APP) Emporium',
-                    activation_start_date: '2026-01-01',
-                    activation_end_date: '2026-03-31',
-                    activation_dates: 'Jan 1st to March 31st 2026',
-                    hero_image_url: '/campaigns/value_club_hero.png',
-                    primary_color: '#E94E55',
-                    features: [
-                        { label: 'Multi-Category' },
-                        { label: 'Multi-level activation', values: ['Premium: Full visibility', 'Executive: Medium visibility'] }
-                    ]
-                },
-                {
-                    id: 'campaign-summer-2026',
-                    name: 'Summer Vibes 2026',
-                    subtitle: 'Experience the warmth of summer with exclusive travel retail offers',
-                    year: '2026',
-                    scope: 'Global',
-                    channels: 'Airports, Cruise Lines, Borders',
-                    activation_start_date: '2026-06-01',
-                    activation_end_date: '2026-08-31',
-                    activation_dates: 'June-August 2026',
-                    hero_image_url: 'https://placehold.co/600x400/orange/white?text=Summer+Vibes'
-                }
-            ];
-        }
+        if (!supabase) return MOCK_CAMPAIGNS;
 
         const { data, error } = await supabase
             .from('campaigns')
@@ -52,38 +50,7 @@ export const api = {
 
         if (error) {
             console.error('Error fetching campaigns:', error);
-            // Fallback to mock data on error
-            return [
-                {
-                    id: 'campaign-value-club-2026',
-                    name: 'Value Club',
-                    subtitle: 'Ecommerce Trading Toolkits',
-                    year: '2026',
-                    scope: 'Global',
-                    channels: 'Reserve & Collect (Web / APP) Emporium',
-                    activation_start_date: '2026-01-01',
-                    activation_end_date: '2026-03-31',
-                    activation_dates: 'Jan 1st to March 31st 2026',
-                    hero_image_url: '/campaigns/value_club_hero.png',
-                    primary_color: '#E94E55',
-                    features: [
-                        { label: 'Multi-Category' },
-                        { label: 'Multi-level activation', values: ['Premium: Full visibility', 'Executive: Medium visibility'] }
-                    ]
-                },
-                {
-                    id: 'campaign-summer-2026',
-                    name: 'Summer Vibes 2026',
-                    subtitle: 'Experience the warmth of summer',
-                    year: '2026',
-                    scope: 'Global',
-                    channels: 'Global',
-                    activation_start_date: '2026-06-01',
-                    activation_end_date: '2026-08-31',
-                    activation_dates: 'June-August 2026',
-                    hero_image_url: 'https://placehold.co/600x400/orange/white?text=Summer'
-                }
-            ];
+            return MOCK_CAMPAIGNS;
         }
         return data;
     },
@@ -122,14 +89,22 @@ export const api = {
         return data;
     },
 
-    async getCalendarEvents() {
+    async getCalendarEvents(campaignId) {
         if (!supabase) return [];
-        const { data, error } = await supabase
-            .from('calendar_events')
-            .select('*');
+        let query = supabase.from('calendar_events').select('*');
+
+        if (campaignId) {
+            query = query.eq('campaign_id', campaignId);
+        }
+
+        const { data, error } = await query;
 
         if (error) {
             console.error('Error fetching calendar events:', error);
+            // Retry without filter if campaign_id column doesn't exist
+            if (campaignId && error.code === '42703') {
+                return this.getCalendarEvents();
+            }
             return [];
         }
         return data;
@@ -148,16 +123,24 @@ export const api = {
         return data;
     },
 
-    async getResources() {
+    async getResources(campaignId) {
         if (!supabase) return [];
-        const { data, error } = await supabase
+        let query = supabase
             .from('resources')
             .select('*')
-            .eq('active', true)
-            .order('sort_order');
+            .eq('active', true);
+
+        if (campaignId) {
+            query = query.eq('campaign_id', campaignId);
+        }
+
+        const { data, error } = await query.order('sort_order');
 
         if (error) {
             console.error('Error fetching resources:', error);
+            if (campaignId && error.code === '42703') {
+                return this.getResources();
+            }
             return [];
         }
         return data;
@@ -210,9 +193,29 @@ export const api = {
         return data;
     },
 
-    async getOmnichannelIdeas() {
-        // MOCK DATA for "The Magic of Joy" campaign content population
-        // This overrides the database fetch to ensure rich content is immediately available
+    async getOmnichannelIdeas(campaignId) {
+        // Try Supabase first, fall back to mock data
+        if (supabase) {
+            let query = supabase
+                .from('omnichannel_ideas')
+                .select('*')
+                .eq('is_active', true);
+
+            if (campaignId) {
+                query = query.eq('campaign_id', campaignId);
+            }
+
+            const { data, error } = await query.order('sort_order');
+
+            if (!error && data && data.length > 0) return data;
+            // If filtering by campaign returned no results, try without filter
+            if (!error && campaignId && (!data || data.length === 0)) {
+                return this.getOmnichannelIdeas();
+            }
+            if (error) console.error('Error fetching omnichannel ideas:', error);
+        }
+
+        // Mock data fallback
         const mockIdeas = [
             {
                 id: 'idea-treasure-hunt',
@@ -383,7 +386,7 @@ export const api = {
             }
         ];
 
-        return Promise.resolve(mockIdeas);
+        return mockIdeas;
     },
 
     async getInsightPage(campaignId) {

@@ -40,31 +40,39 @@ export default function WaysOfWorkingPage() {
     return <IconComponent />;
   };
 
-  // Helper to render step description with formatting support
+  // Helper to safely render text with **bold** formatting
+  const renderFormattedText = (text) => {
+    if (!text) return null;
+    // Split on **bold** markers and alternate between plain text and bold
+    const parts = text.split(/\*\*([^*]+)\*\*/g);
+    return parts.map((segment, idx) =>
+      idx % 2 === 1 ? <strong key={idx}>{segment}</strong> : segment
+    );
+  };
+
+  // Helper to render step description safely (no dangerouslySetInnerHTML)
   const renderStepContent = (description) => {
     if (!description) return null;
 
-    // Split by line breaks and process each part
-    const parts = description.split('\n\n');
+    // Strip any HTML tags for safety — we only support **bold** markdown
+    const cleanText = description.replace(/<[^>]*>/g, '');
+
+    // Split by double line breaks into paragraphs
+    const parts = cleanText.split('\n\n').filter(Boolean);
 
     return (
       <>
         {parts.map((part, i) => {
-          // Check if part contains highlight-text class
-          if (part.includes('<div class="highlight-text">')) {
+          const trimmed = part.trim();
+          // Check for highlight markers (text starting with >) as a safe alternative
+          if (trimmed.startsWith('>')) {
             return (
-              <div key={i} className="highlight-text" dangerouslySetInnerHTML={{ __html: part.replace(/<div[^>]*>|<\/div>/g, '') }} />
+              <div key={i} className="highlight-text">
+                {renderFormattedText(trimmed.slice(1).trim())}
+              </div>
             );
           }
-
-          // Check if part contains inline-new-badge
-          if (part.includes('<span class="inline-new-badge">')) {
-            return <p key={i} dangerouslySetInnerHTML={{ __html: part }} />;
-          }
-
-          // Regular paragraph with markdown-style bold
-          const htmlContent = part.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-          return <p key={i} dangerouslySetInnerHTML={{ __html: htmlContent }} />;
+          return <p key={i}>{renderFormattedText(trimmed)}</p>;
         })}
       </>
     );

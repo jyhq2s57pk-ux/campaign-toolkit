@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import ImageUpload from './ImageUpload';
 import './AdminComponents.css';
 
 const CHANNEL_OPTIONS = ['Web', 'App', 'Email', 'Social', 'Paid Social', 'Loyalty', 'In-Store'];
@@ -333,13 +334,12 @@ export default function OmnichannelIdeasAdmin() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="idea-image">Card Image URL</label>
-                <input
-                  type="text"
-                  id="idea-image"
+                <ImageUpload
+                  label="Card Image"
                   value={editingIdea.image_url}
-                  onChange={(e) => setEditingIdea({ ...editingIdea, image_url: e.target.value })}
-                  placeholder="/src/assets/omni/gen/balloon.png"
+                  onChange={(url) => setEditingIdea({ ...editingIdea, image_url: url })}
+                  placeholder="Paste image URL or upload"
+                  folder="omnichannel"
                 />
                 <small className="form-help">Main image shown on the card</small>
               </div>
@@ -347,13 +347,12 @@ export default function OmnichannelIdeasAdmin() {
               <div className="form-group">
                 <label>Modal Images (up to 3)</label>
                 {[0, 1, 2].map((i) => (
-                  <input
+                  <ImageUpload
                     key={i}
-                    type="text"
                     value={(editingIdea.modal_images || [])[i] || ''}
-                    onChange={(e) => handleModalImageChange(i, e.target.value)}
-                    placeholder={`Modal image ${i + 1} URL`}
-                    style={{ marginBottom: '4px' }}
+                    onChange={(url) => handleModalImageChange(i, url)}
+                    placeholder={`Modal image ${i + 1}`}
+                    folder="omnichannel/modal"
                   />
                 ))}
                 <small className="form-help">Images shown in the modal left column</small>
