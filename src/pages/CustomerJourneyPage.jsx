@@ -28,6 +28,7 @@ export default function CustomerJourneyPage() {
 
   const fetchPages = async () => {
     setLoading(true);
+    if (!supabase) { setLoading(false); return; }
     const { data: platformsData, error: platformsError } = await supabase.from('platforms').select('*').order('name');
     if (platformsError) { setLoading(false); return; }
 
