@@ -1,11 +1,13 @@
 import { useState, useRef } from 'react';
 import { supabase } from '../lib/supabase';
+import MediaLibrary from './MediaLibrary';
 
 const BUCKET = 'campaign-assets';
 
 export default function ImageUpload({ value, onChange, label, placeholder, folder = 'uploads' }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
+  const [showLibrary, setShowLibrary] = useState(false);
   const fileRef = useRef(null);
 
   const handleFileSelect = async (e) => {
@@ -82,6 +84,13 @@ export default function ImageUpload({ value, onChange, label, placeholder, folde
         >
           {uploading ? 'Uploading...' : 'Upload Image'}
         </button>
+        <button
+          type="button"
+          className="btn-secondary image-upload-btn"
+          onClick={() => setShowLibrary(true)}
+        >
+          Browse Library
+        </button>
         <span className="image-upload-or">or</span>
         <input
           type="text"
@@ -118,6 +127,15 @@ export default function ImageUpload({ value, onChange, label, placeholder, folde
           </button>
         </div>
       )}
+
+      <MediaLibrary
+        isOpen={showLibrary}
+        onClose={() => setShowLibrary(false)}
+        onSelect={(url) => {
+          onChange(url);
+          setShowLibrary(false);
+        }}
+      />
     </div>
   );
 }

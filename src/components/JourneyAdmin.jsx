@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import MarkerEditor from './MarkerEditor';
+import MediaLibrary from './MediaLibrary';
 import './Badge.css';
 import './JourneyAdmin.css';
 
@@ -19,6 +20,7 @@ export default function JourneyAdmin({ campaignId }) {
   const [expandedPage, setExpandedPage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [showMediaLibrary, setShowMediaLibrary] = useState(false);
 
   // Page form state
   const [showPageForm, setShowPageForm] = useState(false);
@@ -580,6 +582,9 @@ export default function JourneyAdmin({ campaignId }) {
                     {uploading ? 'Uploading...' : 'Upload Image'}
                     <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'page')} disabled={uploading} style={{ display: 'none' }} />
                   </label>
+                  <button type="button" className="btn-secondary upload-btn" onClick={() => setShowMediaLibrary(true)}>
+                    Browse Library
+                  </button>
                   <span className="or-text">or paste URL:</span>
                 </div>
                 <input type="url" value={pageFormData.screenshot_url || ''} onChange={(e) => setPageFormData({ ...pageFormData, screenshot_url: e.target.value })} placeholder="https://..." />
@@ -632,6 +637,15 @@ export default function JourneyAdmin({ campaignId }) {
           </div>
         </div>
       )}
+
+      <MediaLibrary
+        isOpen={showMediaLibrary}
+        onClose={() => setShowMediaLibrary(false)}
+        onSelect={(url) => {
+          setPageFormData({ ...pageFormData, screenshot_url: url });
+          setShowMediaLibrary(false);
+        }}
+      />
     </div>
   );
 }
