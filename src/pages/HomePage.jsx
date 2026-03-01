@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import CompactCampaignCard from "../components/CompactCampaignCard";
+import CampaignCard from "../components/CompactCampaignCard";
 import { api } from "../lib/api";
 import "./HomePage.css";
 
@@ -46,18 +46,17 @@ export default function HomePage() {
               <div className="campaign-loading">Loading campaigns...</div>
             ) : campaigns.length > 0 ? (
               campaigns.map((campaign) => (
-                <CompactCampaignCard
+                <CampaignCard
                   key={campaign.id}
                   id={campaign.id}
                   name={campaign.name}
                   subtitle={campaign.subtitle}
-                  year={campaign.year}
                   heroImage={campaign.hero_image_url}
                   activationDates={campaign.activation_dates}
                   scope={campaign.scope}
                   channels={campaign.channels}
                   primaryColor={campaign.primary_color}
-                  features={campaign.features}
+                  variant="vertical"
                 />
               ))
             ) : (

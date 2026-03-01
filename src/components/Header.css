@@ -1,50 +1,36 @@
+/* ===== Header — Two-Row Layout (Topbar + Subnav) ===== */
+
 .header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50px;
-  background-color: #161616;
-  border-bottom: 1px solid #2B2B2B;
+  --header-bg: #161616;
+  position: sticky;
+  top: -150px;
+  z-index: 1000;
+  font-family: var(--font-body, 'Saans', sans-serif);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 0 12px;
-  z-index: 1000;
-  font-family: 'DM Sans', sans-serif;
-  transition: background-color 0.3s ease;
 }
 
 .header.admin-mode {
-  background-color: #8F53F0 !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  --header-bg: #8F53F0;
 }
 
-/* Campaign color accent strip below header */
-.header-campaign-strip {
-  position: absolute;
-  bottom: -3px;
-  left: 0;
-  right: 0;
-  height: 3px;
-  opacity: 0.85;
+/* --- Row 1: Topbar (logo + admin) --- */
+
+.header-topbar {
+  background-color: var(--header-bg);
+  height: 150px;
+  display: flex;
+  justify-content: center;
 }
 
-.header-container {
+.header-topbar__inner {
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: var(--container-max-width, 1200px);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  height: 100%;
-}
-
-.header-left {
-  flex: 1 1 0;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  height: 150px;
+  padding: 12px var(--container-padding, 24px) 0;
 }
 
 .header-logo {
@@ -59,126 +45,116 @@
   display: block;
 }
 
-/* Campaign context indicator */
-.header-campaign-context {
+.header--light-bg .logo-image {
+  filter: brightness(0);
+}
+
+/* --- Row 2: Subnav (breadcrumbs + nav) --- */
+
+.header-subnav {
+  background-color: var(--header-bg);
+  display: flex;
+  justify-content: center;
+  height: auto;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.header-subnav__inner {
+  width: 100%;
+  max-width: var(--container-max-width, 1200px);
   display: flex;
   align-items: center;
-  margin-left: 16px;
-  padding-left: 16px;
-  border-left: 1px solid rgba(255, 255, 255, 0.15);
-  height: 24px;
-  gap: 8px;
-  white-space: nowrap;
+  justify-content: space-between;
+  gap: 16px;
+  height: 100%;
+  padding: 4px var(--container-padding, 24px);
 }
 
-.campaign-context-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
+/* --- Breadcrumbs --- */
+
+.header-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: 1 1 0;
 }
 
-.campaign-context-name {
-  font-size: 14px;
-  color: #fff;
-  font-weight: 500;
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.breadcrumb-link {
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: -0.09px;
 }
 
-.campaign-context-year {
-  font-size: 13px;
-  color: #666;
-  font-weight: 400;
+.breadcrumb-link--home {
+  color: rgb(37, 37, 37);
 }
+
+.breadcrumb-link--home:hover {
+  opacity: 0.7;
+}
+
+.breadcrumb-link--campaign {
+  color: rgb(70, 70, 70);
+}
+
+.breadcrumb-separator {
+  color: rgb(95, 95, 95);
+  font-size: 23px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 20px;
+}
+
+/* --- Navigation --- */
 
 .header-center {
   display: flex;
-  justify-content: center;
   align-items: center;
 }
 
 .header-nav {
   display: flex;
-  gap: 4px;
-  padding: 4px;
+  gap: 12px;
   align-items: center;
 }
 
 .nav-btn {
   background: none;
   border: none;
-  color: #F1F1F1;
-  font-size: 14px;
-  font-family: inherit;
-  font-weight: 400;
+  color: rgb(37, 37, 37);
+  font-size: 16px;
+  font-family: var(--font-body, 'Saans', sans-serif);
+  font-weight: 500;
   cursor: pointer;
-  padding: 6px 16px;
-  border-radius: 20px;
+  padding: 10px 16px;
+  border-radius: 8px;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: 0.2s;
   white-space: nowrap;
   display: flex;
   align-items: center;
-  height: 32px;
 }
 
 .nav-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background-color: rgba(0, 0, 0, 0.08);
 }
 
 .nav-btn-active {
-  background-color: #333333;
-  color: #FFFFFF;
-  font-weight: 500;
+  background-color: rgb(43, 43, 43);
+  color: rgb(255, 255, 255);
 }
 
 .nav-btn-active:hover {
-  background-color: #444444;
+  background-color: rgb(51, 51, 51);
 }
 
+/* --- Admin Toggle (Desktop) --- */
+
 .header-right {
-  flex: 1 1 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 16px;
-}
-
-/* Global nav link (Calendar) — always visible, not campaign-scoped */
-.global-nav-link {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #999;
-  font-size: 13px;
-  font-weight: 400;
-  text-decoration: none;
-  padding: 5px 12px;
-  border-radius: 16px;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-  border: 1px solid transparent;
-}
-
-.global-nav-link:hover {
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.06);
-}
-
-.global-nav-link-active {
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.global-nav-mobile {
-  display: none !important;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  color: #999 !important;
-  font-size: 14px !important;
 }
 
 .admin-toggle-wrapper {
@@ -192,28 +168,28 @@
 .admin-toggle-switch {
   width: 48px;
   height: 24px;
-  background-color: #555555;
+  background-color: rgb(85, 85, 85);
   border-radius: 12px;
   position: relative;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
   padding: 3px;
   box-sizing: border-box;
 }
 
 .admin-toggle-switch.active {
-  background-color: #2B2B2B;
+  background-color: rgb(43, 43, 43);
 }
 
 .toggle-knob {
   width: 18px;
   height: 18px;
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   border-radius: 50%;
   position: absolute;
   top: 3px;
   left: 3px;
-  transition: left 0.3s ease;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06);
+  transition: left 0.3s;
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 2px;
 }
 
 .admin-toggle-switch.active .toggle-knob {
@@ -221,16 +197,17 @@
 }
 
 .admin-label {
-  color: #F1F1F1;
+  color: rgb(37, 37, 37);
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
 }
+
+/* --- Mobile --- */
 
 .mobile-admin-wrapper {
   display: none;
 }
 
-/* Mobile Menu Toggle */
 .mobile-menu-toggle {
   display: none;
   background: none;
@@ -244,13 +221,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #F1F1F1;
+  color: rgb(37, 37, 37);
   transition: transform 0.3s ease-in-out;
 }
 
 .menu-icon.open {
   transform: rotate(45deg);
 }
+
+/* ===== Responsive — Mobile (≤1100px) ===== */
 
 @media (max-width: 1100px) {
   .header-center {
@@ -261,29 +240,21 @@
     display: block;
   }
 
-  .header-right {
-    display: none;
-  }
-
   .mobile-menu-toggle {
     display: block;
-  }
-
-  .header-campaign-context {
-    display: none;
   }
 
   .header-nav.mobile-open {
     display: flex;
     position: fixed;
-    top: 50px;
+    top: 0;
     left: 0;
     right: 0;
-    height: calc(100vh - 50px);
-    background: #161616;
+    height: 100vh;
+    background: var(--header-bg, #161616);
     flex-direction: column;
     justify-content: flex-start;
-    padding-top: 0;
+    padding-top: 80px;
     align-items: stretch;
     gap: 0;
     z-index: 1001;
@@ -295,19 +266,16 @@
     height: auto;
     padding: 24px;
     width: 100%;
-    border-bottom: 1px solid #2B2B2B;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 0;
     justify-content: flex-start;
+    color: rgb(37, 37, 37);
   }
 
   .header-nav.mobile-open .nav-btn-active {
-    background-color: transparent;
-    color: #FFFFFF;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: rgb(37, 37, 37);
     font-weight: 600;
-  }
-
-  .global-nav-mobile {
-    display: flex !important;
   }
 
   .mobile-admin-wrapper {
@@ -315,7 +283,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 24px;
-    border-bottom: 1px solid #2B2B2B;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     width: 100%;
     box-sizing: border-box;
   }

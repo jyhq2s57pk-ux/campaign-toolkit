@@ -1,4 +1,4 @@
-/* Omnichannel Page - Redesigned Activation Ideas */
+/* Omnichannel Page — Matching live site design */
 
 .omnichannel-page {
     min-height: 100vh;
@@ -6,7 +6,7 @@
     flex-direction: column;
     background-color: #000;
     color: #fff;
-    overflow-x: hidden;
+    overflow-x: clip;
 }
 
 .omnichannel-main {
@@ -14,123 +14,44 @@
     padding-bottom: 120px;
 }
 
-.omnichannel-main .outer-container {
-    width: 100%;
-    max-width: var(--container-max-width);
-    margin: 0 auto;
-    padding: 0 var(--container-padding);
+/* page-header styles are in master-styles.css */
+
+/* Omnichannel-specific filter tabs override */
+.omnichannel-main .filter-tabs {
+    margin-top: 16px;
 }
 
 /* =====================================================
-   Omni Panel (Hero Banner)
+   Subheading
    ===================================================== */
-.omni-panel {
-    display: flex;
-    width: 100%;
-    max-width: 1200px;
-    min-width: 0;
-    padding: 56px 74px 56px 32px;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 24px;
-    border-radius: 32px;
-    background: #1E1E1E;
-    margin: 90px auto 0;
-    box-sizing: border-box;
-}
-
-.omni-panel__logo {
-    width: 69px;
-    height: 37px;
-    flex-shrink: 0;
-}
-
-.omni-panel__text {
-    max-width: 722px;
-    text-align: center;
-    font-size: 36px;
-    font-family: var(--font-display, 'Saans', sans-serif);
-    font-weight: 500;
-    line-height: 50px;
-    word-wrap: break-word;
-    margin: 0;
-}
-
-.omni-panel__text--purple {
-    color: var(--accent-purple, #8F53F0);
-}
-
-.omni-panel__text--white {
-    color: #fff;
-}
-
-.omni-panel__subheading {
+.omni-subheading {
     color: var(--text-secondary, #a1a1a6);
     font-size: 14px;
     font-family: var(--font-body, 'Saans', sans-serif);
     font-weight: 400;
     line-height: normal;
-    margin: 20px 0 0;
-}
-
-.omni-panel__scroll-indicator {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #000;
-    margin-top: 4px;
-}
-
-.omni-panel__arrow {
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-    opacity: 1;
-}
-
-@media (max-width: 768px) {
-    .omni-panel {
-        padding: 40px 24px;
-        border-radius: 24px;
-        gap: 20px;
-    }
-
-    .omni-panel__text {
-        font-size: 24px;
-        line-height: 34px;
-    }
-
-    .omni-panel__heading {
-        font-size: 28px;
-    }
+    margin: 0 0 8px;
+    text-align: center;
+    width: 100%;
 }
 
 /* =====================================================
    Activation Grid
    ===================================================== */
-.omnichannel-main .filter-tabs {
-    margin-top: 30px;
-    justify-content: center;
-}
-
 .activation-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-    margin-top: 32px;
 }
 
 @media (max-width: 1024px) {
     .activation-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
     .activation-grid {
         grid-template-columns: 1fr;
         gap: 16px;

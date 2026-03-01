@@ -120,10 +120,10 @@
      -------------------------------------------------------------------------- */
 
     /* Dimensions */
-    --content-max-width: 1100px;
+    --content-max-width: 1152px;
     --container-padding: 24px;
-    --container-max-width: 1148px;
-    /* 1100px + (24px * 2) */
+    --container-max-width: 1200px;
+    /* 1152px + (24px * 2) */
 
     /* Border Radius */
     --radius-xl: 24px;
@@ -177,8 +177,7 @@
 /* --- Page Header ---
    Usage: Standard Top-of-page Title Block */
 .page-header {
-    padding: 180px 24px 60px;
-    /* Top padding clears fixed navbar */
+    padding: 50px 24px 60px;
     text-align: left;
     background-color: transparent;
     max-width: var(--container-max-width);
@@ -213,12 +212,11 @@
 .inner-content-wrapper {
     width: 100%;
     max-width: var(--container-max-width);
-    /* 1148px */
     margin: 0 auto;
     padding: 0 var(--container-padding);
-    /* 24px */
     display: flex;
     flex-direction: column;
+    gap: 48px;
 }
 
 /* --- Buttons ---

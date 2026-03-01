@@ -26,152 +26,133 @@ export default function Header() {
     fetchCampaignContext();
   }, [campaignId]);
 
-  // Check if we are on admin page
   const isAdmin = location.pathname.startsWith('/admin');
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const closeMenu = () => {
-    setIsMenuOpen(false);
-  };
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const closeMenu = () => setIsMenuOpen(false);
 
   const toggleAdmin = () => {
     if (isAdmin) {
       navigate('/');
     } else {
-      // Preserve campaignId when entering admin
-      const adminPath = campaignId ? `/admin?campaignId=${campaignId}` : '/admin';
-      navigate(adminPath);
+      navigate('/admin');
     }
     closeMenu();
   };
 
-  // Helper to preserve campaignId in nav links
+  // Preserve campaignId in nav links
   const getNavLinkWithContext = (path) => {
-    if (campaignId) {
-      return `${path}?campaignId=${campaignId}`;
-    }
-    return path;
+    return campaignId ? `${path}?campaignId=${campaignId}` : path;
   };
 
-  const allNavLinks = [
-    { name: 'Customer Touchpoints', path: '/customer-journey' },
-    { name: 'Resources', path: '/resources', moduleKey: 'page_resources' },
-    { name: 'Activate', path: '/activate' },
-    { name: 'Omnichannel', path: '/omnichannel' },
+  // Campaign-scoped nav links (only shown when campaignId is present)
+  const campaignNavLinks = [
     { name: 'Insights', path: '/insights' },
+    { name: 'Touchpoints', path: '/customer-journey' },
+    { name: 'Activate', path: '/ways-of-working' },
+    { name: 'Omnichannel', path: '/omnichannel' },
+    { name: 'Resources', path: '/resources', moduleKey: 'page_resources' },
   ];
 
-  // Filter out pages disabled by campaign modules
-  const modules = campaign?.modules || {};
-  const navLinks = allNavLinks.filter(link => {
-    if (!link.moduleKey) return true;
-    return modules[link.moduleKey] !== false;
-  });
+  // Global nav links (always shown)
+  const globalNavLinks = [
+    { name: 'Calendar', path: '/calendar' },
+  ];
 
-  const campaignColor = campaign?.primary_color;
+  // Build visible nav links based on context
+  const modules = campaign?.modules || {};
+  const navLinks = campaignId
+    ? campaignNavLinks.filter(link => {
+        if (!link.moduleKey) return true;
+        return modules[link.moduleKey] !== false;
+      })
+    : globalNavLinks;
+
+  // Determine header inline style for campaign color
+  const headerStyle = campaign?.primary_color
+    ? { '--header-bg': campaign.primary_color }
+    : {};
 
   return (
     <header
-      className={`header ${isAdmin ? 'admin-mode' : ''} ${campaign ? 'has-campaign' : ''}`}
-      style={campaign && !isAdmin ? { '--campaign-color': campaignColor || '#8F53F0' } : undefined}
+      className={`header ${isAdmin ? 'admin-mode' : ''}`}
+      style={headerStyle}
     >
-      <div className="header-container">
-
-        <div className="header-left">
+      {/* Row 1: Topbar — logo + admin toggle */}
+      <div className="header-topbar">
+        <div className="header-topbar__inner">
           <Link to="/" className="header-logo" onClick={closeMenu}>
             <img src={logo} alt="Trading Toolkit" className="logo-image" />
           </Link>
-          {campaign && (
-            <div className="header-campaign-context">
-              <span
-                className="campaign-context-dot"
-                style={{ backgroundColor: campaignColor || '#8F53F0' }}
-              />
-              <span className="campaign-context-name">{campaign.name}</span>
-              {campaign.year && (
-                <span className="campaign-context-year">{campaign.year}</span>
-              )}
-            </div>
-          )}
-        </div>
-
-        <button
-          className="mobile-menu-toggle"
-          onClick={toggleMenu}
-          aria-label="Toggle menu"
-        >
-          <div className={`menu-icon ${isMenuOpen ? 'open' : ''}`}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 4V20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <path d="M4 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </div>
-        </button>
-
-        <div className={`header-center ${isMenuOpen ? 'open' : ''}`}>
-          <nav className={`header-nav ${isMenuOpen ? 'mobile-open' : ''}`}>
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={getNavLinkWithContext(link.path)}
-                className={`nav-btn ${(location.pathname === link.path || (link.path === '/activate' && location.pathname === '/ways-of-working')) ? 'nav-btn-active' : ''}`}
-                onClick={closeMenu}
-              >
-                {link.name}
-              </Link>
-            ))}
-
-            {/* Mobile-only Calendar + Admin */}
-            <Link
-              to="/calendar"
-              className={`nav-btn global-nav-mobile ${location.pathname === '/calendar' ? 'nav-btn-active' : ''}`}
-              onClick={closeMenu}
-            >
-              Calendar
-            </Link>
-            <div className="mobile-admin-wrapper" onClick={toggleAdmin}>
+          <div className="header-right">
+            <div className="admin-toggle-wrapper" onClick={toggleAdmin}>
               <div className={`admin-toggle-switch ${isAdmin ? 'active' : ''}`}>
                 <div className="toggle-knob"></div>
               </div>
               <span className="admin-label">Admin</span>
             </div>
-          </nav>
-        </div>
-
-        <div className="header-right">
-          <Link
-            to="/calendar"
-            className={`global-nav-link ${location.pathname === '/calendar' ? 'global-nav-link-active' : ''}`}
-            onClick={closeMenu}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2" />
-              <path d="M16 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <path d="M8 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <path d="M3 10H21" stroke="currentColor" strokeWidth="2" />
-            </svg>
-            Calendar
-          </Link>
-          <div className="admin-toggle-wrapper" onClick={toggleAdmin}>
-            <div className={`admin-toggle-switch ${isAdmin ? 'active' : ''}`}>
-              <div className="toggle-knob"></div>
-            </div>
-            <span className="admin-label">Admin</span>
           </div>
         </div>
-
       </div>
 
-      {/* Campaign color accent strip */}
-      {campaign && !isAdmin && (
-        <div
-          className="header-campaign-strip"
-          style={{ backgroundColor: campaignColor || '#8F53F0' }}
-        />
-      )}
+      {/* Row 2: Subnav — breadcrumbs + nav links */}
+      <div className="header-subnav">
+        <div className="header-subnav__inner">
+          <div className="header-breadcrumbs">
+            <Link
+              className="breadcrumb-link breadcrumb-link--home"
+              to="/"
+              onClick={closeMenu}
+            >
+              Home
+            </Link>
+            {campaign && (
+              <>
+                <span className="breadcrumb-separator">/</span>
+                <span className="breadcrumb-link breadcrumb-link--campaign">
+                  {campaign.name}
+                </span>
+              </>
+            )}
+          </div>
+
+          <button
+            className="mobile-menu-toggle"
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+          >
+            <div className={`menu-icon ${isMenuOpen ? 'open' : ''}`}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 4V20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                <path d="M4 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </div>
+          </button>
+
+          <div className={`header-center ${isMenuOpen ? 'open' : ''}`}>
+            <nav className={`header-nav ${isMenuOpen ? 'mobile-open' : ''}`}>
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={getNavLinkWithContext(link.path)}
+                  className={`nav-btn ${(location.pathname === link.path || (link.path === '/ways-of-working' && location.pathname === '/activate')) ? 'nav-btn-active' : ''}`}
+                  onClick={closeMenu}
+                >
+                  {link.name}
+                </Link>
+              ))}
+
+              {/* Mobile-only Admin Toggle */}
+              <div className="mobile-admin-wrapper" onClick={toggleAdmin}>
+                <div className={`admin-toggle-switch ${isAdmin ? 'active' : ''}`}>
+                  <div className="toggle-knob"></div>
+                </div>
+                <span className="admin-label">Admin</span>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
     </header>
   );
 }

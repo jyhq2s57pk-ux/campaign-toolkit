@@ -61,8 +61,10 @@ export default function AdminPage() {
   const [calendarEvents, setCalendarEvents] = useState([]);
   const [csvError, setCsvError] = useState(null);
   const [campaign, setCampaign] = useState(null);
+  const [campaigns, setCampaigns] = useState([]);
   const [csvPreview, setCsvPreview] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [creating, setCreating] = useState(false);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -87,21 +89,43 @@ export default function AdminPage() {
     }
   };
 
+  // Fetch all campaigns for dropdown
+  const fetchAllCampaigns = async () => {
+    const data = await api.getCampaigns();
+    setCampaigns(data || []);
+  };
+
   // Fetch campaign data — use campaignId from URL if available
   const fetchCampaign = async () => {
     if (campaignId) {
       const data = await api.getCampaignById(campaignId);
       setCampaign(data);
+      setCreating(false); // Exit create mode when a campaign is selected
     } else {
-      const data = await api.getCampaign();
-      setCampaign(data);
+      setCampaign(null);
     }
   };
 
   useEffect(() => {
     fetchCalendarEvents();
+    fetchAllCampaigns();
+  }, []);
+
+  useEffect(() => {
     fetchCampaign();
   }, [campaignId]);
+
+  const handleNewCampaign = () => {
+    setCreating(true);
+    setActiveTab('campaign');
+  };
+
+  const handleCampaignSelect = (e) => {
+    const id = e.target.value;
+    if (id) {
+      navigate(`/admin?campaignId=${id}`);
+    }
+  };
 
   // Calendar management functions
   // Helper to validate and normalize tier
@@ -308,234 +332,264 @@ export default function AdminPage() {
     }
   };
 
+  // Whether to show admin content (tabs + panels)
+  const showAdminContent = !!campaignId || creating;
+
   return (
     <div className="admin-page-wrapper">
       <Header />
 
       <main style={{ paddingTop: '56px' }}>
         <div className="admin-container inner-content-wrapper">
+          {/* Page Header — Figma 883:39169 */}
           <div className="admin-header">
-            <div>
-              <div className="admin-title-row">
-                <h1>Admin</h1>
-                {campaign && (
-                  <div className="admin-campaign-badge" style={{ borderColor: campaign.primary_color || '#8F53F0' }}>
-                    <span
-                      className="admin-campaign-dot"
-                      style={{ backgroundColor: campaign.primary_color || '#8F53F0' }}
-                    />
-                    <span className="admin-campaign-name">{campaign.name}</span>
-                    {campaign.year && (
-                      <span className="admin-campaign-year">{campaign.year}</span>
-                    )}
-                  </div>
-                )}
-              </div>
+            <h1 className="admin-title">Admin</h1>
+            <div className="admin-header-meta">
               {user && (
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', margin: '0.5rem 0 0 0' }}>
+                <p className="admin-logged-in">
                   Logged in as: {user.email}
                 </p>
               )}
+              <button onClick={handleSignOut} className="admin-signout-btn">
+                Sign Out
+              </button>
             </div>
-            <button onClick={handleSignOut} className="btn-secondary">
-              Sign Out
+          </div>
+
+          {/* Campaign Toolbar — Figma 883:40739 */}
+          <div className="admin-campaign-toolbar">
+            <div className="admin-campaign-toolbar-left">
+              <h2 className="admin-campaign-toolbar-heading">Campaigns</h2>
+              <div className="admin-campaign-select-wrap">
+                <select
+                  className="admin-campaign-select"
+                  value={campaignId || ''}
+                  onChange={handleCampaignSelect}
+                >
+                  <option value="" disabled>Select</option>
+                  {campaigns.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+                <svg className="admin-campaign-select-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <button className="admin-new-campaign-btn" onClick={handleNewCampaign}>
+              + New Campaign
             </button>
           </div>
 
-          {/* Tab Navigation */}
-          <div className="admin-tabs">
-            <button
-              className={activeTab === 'campaign' ? 'btn-primary' : 'btn-secondary'}
-              onClick={() => setActiveTab('campaign')}
-            >
-              Campaign
-            </button>
-            <button
-              className={activeTab === 'wow' ? 'btn-primary' : 'btn-secondary'}
-              onClick={() => setActiveTab('wow')}
-            >
-              Ways of Working
-            </button>
-            <button
-              className={activeTab === 'omnichannel' ? 'btn-primary' : 'btn-secondary'}
-              onClick={() => setActiveTab('omnichannel')}
-            >
-              Omnichannel Ideas
-            </button>
-            <button
-              className={activeTab === 'journey' ? 'btn-primary' : 'btn-secondary'}
-              onClick={() => setActiveTab('journey')}
-            >
-              Customer Touchpoints
-            </button>
-            <button
-              className={activeTab === 'calendar' ? 'btn-primary' : 'btn-secondary'}
-              onClick={() => setActiveTab('calendar')}
-            >
-              Manage Calendar
-            </button>
-            <button
-              className={activeTab === 'resources' ? 'btn-primary' : 'btn-secondary'}
-              onClick={() => setActiveTab('resources')}
-            >
-              Resources
-            </button>
-            <button
-              className={activeTab === 'insights' ? 'btn-primary' : 'btn-secondary'}
-              onClick={() => setActiveTab('insights')}
-            >
-              Insight Pages
-            </button>
-          </div>
-
-          {/* Campaign Tab */}
-          {activeTab === 'campaign' && <CampaignAdmin campaignId={campaign?.id} />}
-
-          {/* Ways of Working Tab */}
-          {activeTab === 'wow' && <WaysOfWorkingAdmin campaignId={campaignId} />}
-
-          {/* Omnichannel Ideas Tab */}
-          {activeTab === 'omnichannel' && <OmnichannelIdeasAdmin />}
-
-          {/* Journey Tab */}
-          {activeTab === 'journey' && <JourneyAdmin campaignId={campaignId} />}
-
-          {/* Resources Tab */}
-          {activeTab === 'resources' && <ResourcesAdmin />}
-
-          {/* Insight Pages Tab */}
-          {activeTab === 'insights' && <InsightPagesAdmin />}
-
-          {activeTab === 'calendar' && (
-            <div className="calendar-admin-section">
-              <div className="admin-section-header">
-                <h2>Campaign Calendar Management</h2>
+          {/* Admin Content — only when campaign selected or creating */}
+          {showAdminContent && (
+            <>
+              {/* Tab Navigation */}
+              <div className="admin-tabs">
+                <button
+                  className={activeTab === 'campaign' ? 'btn-primary' : 'btn-secondary'}
+                  onClick={() => setActiveTab('campaign')}
+                >
+                  Campaign
+                </button>
+                <button
+                  className={activeTab === 'wow' ? 'btn-primary' : 'btn-secondary'}
+                  onClick={() => setActiveTab('wow')}
+                >
+                  Ways of Working
+                </button>
+                <button
+                  className={activeTab === 'omnichannel' ? 'btn-primary' : 'btn-secondary'}
+                  onClick={() => setActiveTab('omnichannel')}
+                >
+                  Omnichannel Ideas
+                </button>
+                <button
+                  className={activeTab === 'journey' ? 'btn-primary' : 'btn-secondary'}
+                  onClick={() => setActiveTab('journey')}
+                >
+                  Customer Touchpoints
+                </button>
+                <button
+                  className={activeTab === 'calendar' ? 'btn-primary' : 'btn-secondary'}
+                  onClick={() => setActiveTab('calendar')}
+                >
+                  Manage Calendar
+                </button>
+                <button
+                  className={activeTab === 'resources' ? 'btn-primary' : 'btn-secondary'}
+                  onClick={() => setActiveTab('resources')}
+                >
+                  Resources
+                </button>
+                <button
+                  className={activeTab === 'insights' ? 'btn-primary' : 'btn-secondary'}
+                  onClick={() => setActiveTab('insights')}
+                >
+                  Insight Pages
+                </button>
               </div>
 
-              <div className="calendar-admin-card">
-                <p className="calendar-admin-info">
-                  Manage your {campaign?.year || '2026'} campaign calendar data. Import/export campaigns as CSV or reset to defaults.
-                </p>
-                {csvError && <div className="import-error">{csvError}</div>}
+              {/* Campaign Tab */}
+              {activeTab === 'campaign' && (
+                <CampaignAdmin
+                  campaignId={campaign?.id}
+                  startInCreateMode={creating}
+                  onCampaignCreated={(newId) => {
+                    setCreating(false);
+                    fetchAllCampaigns();
+                    navigate(`/admin?campaignId=${newId}`);
+                  }}
+                />
+              )}
 
-                <div className="calendar-admin-actions">
-                  <label className="btn-primary">
-                    Import CSV
-                    <input
-                      type="file"
-                      accept=".csv,text/csv"
-                      style={{ display: 'none' }}
-                      onChange={(e) => {
-                        const f = e.target.files?.[0];
-                        if (f) handleCalendarImport(f);
-                      }}
-                    />
-                  </label>
+              {/* Ways of Working Tab */}
+              {activeTab === 'wow' && <WaysOfWorkingAdmin campaignId={campaignId} />}
 
-                  <button onClick={handleCalendarExport} className="btn-secondary">
-                    Export CSV
-                  </button>
+              {/* Omnichannel Ideas Tab */}
+              {activeTab === 'omnichannel' && <OmnichannelIdeasAdmin />}
 
-                  <button onClick={handleCalendarReset} className="btn-secondary">
-                    Reset to Defaults
-                  </button>
-                </div>
+              {/* Journey Tab */}
+              {activeTab === 'journey' && <JourneyAdmin campaignId={campaignId} />}
 
-                <div className="calendar-admin-help">
-                  <h3>CSV Format</h3>
-                  <code>title,startDate,endDate,tier</code>
-                  <p style={{ marginTop: '8px', fontSize: '14px', color: 'var(--text-secondary)' }}>
-                    Valid tiers: Overarching Campaign, Category-Led, Omnichannel Campaigns, Digital Campaigns, Local Campaigns (supported by Global)
-                  </p>
-                </div>
+              {/* Resources Tab */}
+              {activeTab === 'resources' && <ResourcesAdmin />}
 
-                {/* CSV Preview Modal */}
-                {showPreview && csvPreview && (
-                  <div className="modal-overlay" onClick={handleCancelImport}>
-                    <div className="modal-content" style={{ maxWidth: '800px' }} onClick={(e) => e.stopPropagation()}>
-                      <h3>CSV Import Preview</h3>
+              {/* Insight Pages Tab */}
+              {activeTab === 'insights' && <InsightPagesAdmin />}
 
-                      <div className="admin-message info">
-                        <strong>⚠️ Warning:</strong> This will replace ALL {calendarEvents.length} existing calendar events with {csvPreview.length} new events from the CSV.
-                      </div>
+              {activeTab === 'calendar' && (
+                <div className="calendar-admin-section">
+                  <div className="admin-section-header">
+                    <h2>Campaign Calendar Management</h2>
+                  </div>
 
-                      <div style={{ marginBottom: '1rem' }}>
-                        <p><strong>Preview of events to import:</strong></p>
-                        <div style={{
-                          maxHeight: '400px',
-                          overflowY: 'auto',
-                          background: 'rgba(0,0,0,0.2)',
-                          padding: '1rem',
-                          borderRadius: '6px',
-                          marginTop: '0.5rem'
-                        }}>
-                          <table style={{ width: '100%', fontSize: '0.9rem', borderCollapse: 'collapse' }}>
-                            <thead>
-                              <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                                <th style={{ textAlign: 'left', padding: '0.5rem' }}>Title</th>
-                                <th style={{ textAlign: 'left', padding: '0.5rem' }}>Start</th>
-                                <th style={{ textAlign: 'left', padding: '0.5rem' }}>End</th>
-                                <th style={{ textAlign: 'left', padding: '0.5rem' }}>Tier (Normalized)</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {csvPreview.map((event, idx) => (
-                                <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                  <td style={{ padding: '0.5rem' }}>{event.title}</td>
-                                  <td style={{ padding: '0.5rem' }}>{event.startDate}</td>
-                                  <td style={{ padding: '0.5rem' }}>{event.endDate}</td>
-                                  <td style={{ padding: '0.5rem' }}>
-                                    <span style={{
-                                      background: 'rgba(139, 92, 246, 0.2)',
-                                      padding: '2px 8px',
-                                      borderRadius: '4px',
-                                      fontSize: '0.85em'
-                                    }}>
-                                      {event.tier}
-                                    </span>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
+                  <div className="calendar-admin-card">
+                    <p className="calendar-admin-info">
+                      Manage your {campaign?.year || '2026'} campaign calendar data. Import/export campaigns as CSV or reset to defaults.
+                    </p>
+                    {csvError && <div className="import-error">{csvError}</div>}
+
+                    <div className="calendar-admin-actions">
+                      <label className="btn-primary">
+                        Import CSV
+                        <input
+                          type="file"
+                          accept=".csv,text/csv"
+                          style={{ display: 'none' }}
+                          onChange={(e) => {
+                            const f = e.target.files?.[0];
+                            if (f) handleCalendarImport(f);
+                          }}
+                        />
+                      </label>
+
+                      <button onClick={handleCalendarExport} className="btn-secondary">
+                        Export CSV
+                      </button>
+
+                      <button onClick={handleCalendarReset} className="btn-secondary">
+                        Reset to Defaults
+                      </button>
+                    </div>
+
+                    <div className="calendar-admin-help">
+                      <h3>CSV Format</h3>
+                      <code>title,startDate,endDate,tier</code>
+                      <p style={{ marginTop: '8px', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                        Valid tiers: Overarching Campaign, Category-Led, Omnichannel Campaigns, Digital Campaigns, Local Campaigns (supported by Global)
+                      </p>
+                    </div>
+
+                    {/* CSV Preview Modal */}
+                    {showPreview && csvPreview && (
+                      <div className="modal-overlay" onClick={handleCancelImport}>
+                        <div className="modal-content" style={{ maxWidth: '800px' }} onClick={(e) => e.stopPropagation()}>
+                          <h3>CSV Import Preview</h3>
+
+                          <div className="admin-message info">
+                            <strong>Warning:</strong> This will replace ALL {calendarEvents.length} existing calendar events with {csvPreview.length} new events from the CSV.
+                          </div>
+
+                          <div style={{ marginBottom: '1rem' }}>
+                            <p><strong>Preview of events to import:</strong></p>
+                            <div style={{
+                              maxHeight: '400px',
+                              overflowY: 'auto',
+                              background: 'rgba(0,0,0,0.2)',
+                              padding: '1rem',
+                              borderRadius: '6px',
+                              marginTop: '0.5rem'
+                            }}>
+                              <table style={{ width: '100%', fontSize: '0.9rem', borderCollapse: 'collapse' }}>
+                                <thead>
+                                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                                    <th style={{ textAlign: 'left', padding: '0.5rem' }}>Title</th>
+                                    <th style={{ textAlign: 'left', padding: '0.5rem' }}>Start</th>
+                                    <th style={{ textAlign: 'left', padding: '0.5rem' }}>End</th>
+                                    <th style={{ textAlign: 'left', padding: '0.5rem' }}>Tier (Normalized)</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {csvPreview.map((event, idx) => (
+                                    <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                      <td style={{ padding: '0.5rem' }}>{event.title}</td>
+                                      <td style={{ padding: '0.5rem' }}>{event.startDate}</td>
+                                      <td style={{ padding: '0.5rem' }}>{event.endDate}</td>
+                                      <td style={{ padding: '0.5rem' }}>
+                                        <span style={{
+                                          background: 'rgba(139, 92, 246, 0.2)',
+                                          padding: '2px 8px',
+                                          borderRadius: '4px',
+                                          fontSize: '0.85em'
+                                        }}>
+                                          {event.tier}
+                                        </span>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+
+                          <div className="admin-info-box" style={{ marginTop: '1rem' }}>
+                            <h3>Tier Mapping Applied:</h3>
+                            <ul style={{ fontSize: '0.85rem' }}>
+                              <li>"Omnichannel Campaigns" → "Campaigns"</li>
+                              <li>"Digital Campaigns" → "Other Global Campaigns"</li>
+                              <li>"Local Campaigns (supported by Global)" → "Other Local Campaigns"</li>
+                            </ul>
+                          </div>
+
+                          <div className="form-actions" style={{ marginTop: '1.5rem' }}>
+                            <button
+                              className="btn-secondary"
+                              onClick={handleCalendarExport}
+                              style={{ marginRight: 'auto' }}
+                            >
+                              Export Current Events (Backup)
+                            </button>
+                            <button
+                              className="btn-secondary"
+                              onClick={handleCancelImport}
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              className="btn-primary"
+                              onClick={handleConfirmImport}
+                            >
+                              Confirm Import
+                            </button>
+                          </div>
                         </div>
                       </div>
-
-                      <div className="admin-info-box" style={{ marginTop: '1rem' }}>
-                        <h3>Tier Mapping Applied:</h3>
-                        <ul style={{ fontSize: '0.85rem' }}>
-                          <li>"Omnichannel Campaigns" → "Campaigns"</li>
-                          <li>"Digital Campaigns" → "Other Global Campaigns"</li>
-                          <li>"Local Campaigns (supported by Global)" → "Other Local Campaigns"</li>
-                        </ul>
-                      </div>
-
-                      <div className="form-actions" style={{ marginTop: '1.5rem' }}>
-                        <button
-                          className="btn-secondary"
-                          onClick={handleCalendarExport}
-                          style={{ marginRight: 'auto' }}
-                        >
-                          Export Current Events (Backup)
-                        </button>
-                        <button
-                          className="btn-secondary"
-                          onClick={handleCancelImport}
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          className="btn-primary"
-                          onClick={handleConfirmImport}
-                        >
-                          Confirm Import
-                        </button>
-                      </div>
-                    </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </main>

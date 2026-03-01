@@ -369,17 +369,14 @@
 
 /* Campaign Selector */
 .campaign-selector {
-  background: var(--surface-card);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .campaign-selector-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .campaign-selector-header h2 {
@@ -388,55 +385,23 @@
   color: var(--text-primary);
 }
 
-.campaign-selector-list {
+.campaign-selector-cards {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 16px;
 }
 
-.campaign-selector-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: inherit;
-  font-size: 0.95rem;
-  text-align: left;
-  width: 100%;
+.campaign-selector-card-wrap {
+  border-radius: 40px;
+  transition: box-shadow 0.2s ease;
 }
 
-.campaign-selector-item:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text-primary);
+.campaign-selector-card-wrap.active {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.25);
 }
 
-.campaign-selector-item.active {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: var(--text-primary);
-}
-
-.campaign-selector-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.campaign-selector-name {
-  flex: 1;
-  font-weight: 500;
-}
-
-.campaign-selector-year {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+.campaign-selector-card-wrap .campaign-card__wrapper:hover {
+  transform: translateY(-2px);
 }
 
 /* Color Input */

@@ -1,4 +1,4 @@
-/* ActivationCard - Desktop vertical / Mobile horizontal */
+/* ActivationCard — Desktop vertical / Mobile horizontal — matching live site */
 
 .activation-card {
   cursor: pointer;
@@ -10,24 +10,21 @@
 .activation-card__desktop {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background: #232323;
+  background: rgb(30, 30, 30);
   border-radius: 24px;
   overflow: hidden;
   position: relative;
-  min-width: 250px;
-  aspect-ratio: 4 / 5;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  aspect-ratio: 352 / 441;
+  transition: background 0.2s;
 }
 
 .activation-card__desktop:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  background: var(--surface-card-hover);
 }
 
 .activation-card__image-wrapper {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 52.8%;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -42,16 +39,17 @@
 .activation-card__image-placeholder {
   width: 100%;
   height: 100%;
-  background: #1a1a1a;
+  background: rgb(26, 26, 26);
 }
 
 .activation-card__body {
-  padding: 20px 20px 16px 20px;
+  padding: 20px 63px 16px 20px;
   display: flex;
   flex-direction: column;
   gap: 13px;
   flex: 1;
   min-height: 0;
+  overflow: hidden;
 }
 
 .activation-card__badges {
@@ -62,20 +60,24 @@
 }
 
 .activation-card__title {
-  color: #fff;
-  font-size: 30px;
+  color: rgb(255, 255, 255);
+  font-size: 28px;
   font-family: var(--font-display, 'Saans', sans-serif);
   font-weight: 500;
-  line-height: 39px;
-  word-wrap: break-word;
-  padding-right: 43px;
+  line-height: 1.3;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .activation-card__action {
   position: absolute;
-  right: 16px;
+  right: 17px;
   bottom: 16px;
-  background: #FFFFFF;
+  background: none;
   border-radius: 50%;
   border: none;
   width: 42px;
@@ -85,11 +87,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s;
 }
 
 .activation-card__action:hover {
-  transform: scale(1.1);
+  opacity: 0.8;
 }
 
 /* =====================================================
@@ -99,17 +101,15 @@
   display: none;
   position: relative;
   width: 100%;
-  max-width: 528px;
-  height: 139px;
   padding-right: 16px;
-  background: #222222;
+  background: rgb(30, 30, 30);
   border-radius: 20px;
   align-items: center;
-  transition: transform 0.2s ease;
+  transition: background 0.2s;
 }
 
-.activation-card__mobile:active {
-  transform: scale(0.98);
+.activation-card__mobile:hover {
+  background: var(--surface-card-hover);
 }
 
 .activation-card__mobile-link {
@@ -122,19 +122,19 @@
 }
 
 .activation-card__mobile-image {
-  width: 93px;
-  height: 107px;
+  width: 80px;
+  height: 80px;
   border-radius: 14px;
   object-fit: cover;
-  background: #191919;
+  background: rgb(30, 30, 30);
   flex-shrink: 0;
 }
 
 .activation-card__mobile-image-placeholder {
-  width: 93px;
-  height: 107px;
+  width: 80px;
+  height: 80px;
   border-radius: 14px;
-  background: #191919;
+  background: rgb(30, 30, 30);
   flex-shrink: 0;
 }
 
@@ -165,17 +165,62 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s;
 }
 
 .activation-card__mobile-action:hover {
-  transform: scale(1.1);
+  opacity: 0.8;
 }
 
 /* =====================================================
-   Responsive Switching
+   Responsive
    ===================================================== */
-@media (max-width: 768px) {
+
+/* Tablet (769px–1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .activation-card__title {
+    font-size: 24px;
+  }
+
+  .activation-card__body {
+    padding: 20px 50px 14px 16px;
+  }
+
+  .activation-card__action {
+    right: 14px;
+    bottom: 14px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .activation-card__action svg {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Small tablet (481px–768px) */
+@media (max-width: 768px) and (min-width: 481px) {
+  .activation-card__desktop {
+    border-radius: 18px;
+  }
+
+  .activation-card__title {
+    font-size: 20px;
+  }
+
+  .activation-card__body {
+    padding: 16px 44px 12px 14px;
+    gap: 6px;
+  }
+
+  .activation-card__badges {
+    gap: 6px;
+  }
+}
+
+/* Mobile (≤480px) — switch to horizontal card */
+@media (max-width: 480px) {
   .activation-card__desktop {
     display: none;
   }

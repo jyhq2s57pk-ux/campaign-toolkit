@@ -110,9 +110,9 @@
 .badge--channel {
   background: #464646;
   color: #ffffff;
-  padding: 10px 13px;
-  border-radius: 18px;
-  font-size: 14px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 13px;
   font-weight: 400;
   height: auto;
 }

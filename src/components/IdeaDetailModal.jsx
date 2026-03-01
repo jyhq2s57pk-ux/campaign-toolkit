@@ -86,7 +86,17 @@ export default function IdeaDetailModal({ idea, onClose, imageMap = {} }) {
               {/* Description */}
               {idea.description && (
                 <div className="idea-modal__description-section">
+                  {idea.description_title && (
+                    <div className="idea-modal__description-heading">{idea.description_title}</div>
+                  )}
                   <div className="idea-modal__description">{idea.description}</div>
+                </div>
+              )}
+
+              {/* Secondary description */}
+              {idea.description_secondary && (
+                <div className="idea-modal__description-section">
+                  <div className="idea-modal__description">{idea.description_secondary}</div>
                 </div>
               )}
 
@@ -107,8 +117,8 @@ export default function IdeaDetailModal({ idea, onClose, imageMap = {} }) {
 
         {/* Close button */}
         <button className="idea-modal__close" onClick={onClose} aria-label="Close modal">
-          <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22.6272 21.2132L17.6774 16.2635L16.2632 17.6777L21.213 22.6274L16.2632 27.5772L17.6774 28.9914L22.6272 24.0416L27.5769 28.9914L28.9911 27.5772L24.0414 22.6274L28.9911 17.6777L27.5769 16.2635L22.6272 21.2132Z" fill="white"/>
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 14.586L11.05 9.636L9.636 11.05L14.586 16L9.636 20.95L11.05 22.364L16 17.414L20.95 22.364L22.364 20.95L17.414 16L22.364 11.05L20.95 9.636L16 14.586Z" fill="white"/>
           </svg>
         </button>
       </div>

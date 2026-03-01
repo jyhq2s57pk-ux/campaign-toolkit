@@ -51,14 +51,8 @@
   font-size: 13px;
 }
 
-/* Inner Content Wrapper */
-.inner-content-wrapper {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: flex;
-  flex-direction: column;
+/* Inner Content Wrapper — scoped to homepage */
+.home-page .inner-content-wrapper {
   gap: 24px;
 }
 
@@ -89,7 +83,7 @@
     gap: 16px;
   }
 
-  .inner-content-wrapper {
+  .home-page .inner-content-wrapper {
     gap: 16px;
   }
 }

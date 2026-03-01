@@ -115,6 +115,7 @@
   font-family: var(--font-display, 'Saans', sans-serif);
   font-weight: 600;
   line-height: 1.19;
+  letter-spacing: -0.44px;
   word-wrap: break-word;
 }
 
@@ -124,6 +125,7 @@
   font-family: var(--font-display, 'Saans', sans-serif);
   font-weight: 600;
   line-height: 1.19;
+  letter-spacing: -0.38px;
   word-wrap: break-word;
 }
 
@@ -131,7 +133,17 @@
 .idea-modal__description-section {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
+}
+
+.idea-modal__description-heading {
+  color: #252525;
+  font-size: 20px;
+  font-family: var(--font-display, 'Saans', sans-serif);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.2px;
+  word-wrap: break-word;
 }
 
 .idea-modal__description {
@@ -185,10 +197,10 @@
   position: absolute;
   top: 48px;
   right: 48px;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   background: #232323;
-  border-radius: 50%;
+  border-radius: 20px;
   border: none;
   display: flex;
   align-items: center;
@@ -290,7 +302,8 @@
   .idea-modal__close {
     top: 16px;
     right: 16px;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
+    border-radius: 16px;
   }
 }

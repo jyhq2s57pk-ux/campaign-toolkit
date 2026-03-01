@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { api } from '../lib/api';
+import CampaignCard from './CompactCampaignCard';
 import ImageUpload from './ImageUpload';
 import './AdminComponents.css';
 
@@ -39,13 +40,13 @@ const MODULE_LABELS = {
   ways_of_working_tips: { label: 'Implementation Tips', group: 'Sections' }
 };
 
-export default function CampaignAdmin({ campaignId }) {
+export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaignCreated }) {
   const [campaigns, setCampaigns] = useState([]);
   const [selectedId, setSelectedId] = useState(campaignId || null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState(null);
-  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showCreateForm, setShowCreateForm] = useState(!!startInCreateMode);
   const [duplicateFromId, setDuplicateFromId] = useState(null);
   const [formData, setFormData] = useState({ ...EMPTY_FORM });
 
@@ -53,9 +54,17 @@ export default function CampaignAdmin({ campaignId }) {
     fetchCampaigns();
   }, []);
 
+  // When startInCreateMode prop becomes true, trigger create flow
+  useEffect(() => {
+    if (startInCreateMode && !showCreateForm) {
+      handleCreateNew();
+    }
+  }, [startInCreateMode]);
+
   useEffect(() => {
     if (campaignId && campaignId !== selectedId) {
       setSelectedId(campaignId);
+      setShowCreateForm(false);
     }
   }, [campaignId]);
 
@@ -69,8 +78,8 @@ export default function CampaignAdmin({ campaignId }) {
     setLoading(true);
     const data = await api.getCampaigns();
     setCampaigns(data || []);
-    // Auto-select if we have a campaignId prop or pick first
-    if (!selectedId && data && data.length > 0) {
+    // Auto-select if we have a campaignId prop or pick first (but not in create mode)
+    if (!selectedId && !startInCreateMode && data && data.length > 0) {
       const target = campaignId ? data.find(c => c.id === campaignId) : data[0];
       if (target) setSelectedId(target.id);
     }
@@ -195,6 +204,10 @@ export default function CampaignAdmin({ campaignId }) {
       if (showCreateForm) {
         setShowCreateForm(false);
         setSelectedId(saveId);
+        // Notify parent (AdminPage) of the new campaign
+        if (onCampaignCreated) {
+          onCampaignCreated(saveId);
+        }
       }
 
       // Refresh list
@@ -223,20 +236,22 @@ export default function CampaignAdmin({ campaignId }) {
           </button>
         </div>
 
-        <div className="campaign-selector-list">
+        <div className="campaign-selector-cards">
           {campaigns.map((c) => (
-            <button
-              key={c.id}
-              className={`campaign-selector-item ${selectedId === c.id && !showCreateForm ? 'active' : ''}`}
-              onClick={() => handleSelectCampaign(c.id)}
-            >
-              <span
-                className="campaign-selector-dot"
-                style={{ backgroundColor: c.primary_color || '#8F53F0' }}
+            <div key={c.id} className={`campaign-selector-card-wrap ${selectedId === c.id && !showCreateForm ? 'active' : ''}`}>
+              <CampaignCard
+                id={c.id}
+                name={c.name}
+                subtitle={c.subtitle}
+                heroImage={c.hero_image_url}
+                activationDates={c.activation_dates}
+                scope={c.scope}
+                channels={c.channels}
+                primaryColor={c.primary_color}
+                variant="horizontal"
+                onClick={() => handleSelectCampaign(c.id)}
               />
-              <span className="campaign-selector-name">{c.name}</span>
-              <span className="campaign-selector-year">{c.year}</span>
-            </button>
+            </div>
           ))}
           {campaigns.length === 0 && (
             <p style={{ color: 'var(--text-secondary)', padding: '1rem', margin: 0 }}>
