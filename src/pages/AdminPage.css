@@ -141,6 +141,38 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
+/* Toolbar right buttons */
+.admin-campaign-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Media Library button */
+.admin-media-library-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+}
+
+.admin-media-library-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
 /* New Campaign button */
 .admin-new-campaign-btn {
   display: inline-flex;
@@ -391,8 +423,15 @@
     width: 100%;
   }
 
+  .admin-campaign-toolbar-right {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .admin-media-library-btn,
   .admin-new-campaign-btn {
-    width: 100%;
+    flex: 1;
+    justify-content: center;
   }
 
   .admin-tabs {

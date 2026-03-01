@@ -12,6 +12,7 @@ import OmnichannelIdeasAdmin from '../components/OmnichannelIdeasAdmin';
 import JourneyAdmin from '../components/JourneyAdmin';
 import ResourcesAdmin from '../components/ResourcesAdmin';
 import InsightPagesAdmin from '../components/InsightPagesAdmin';
+import MediaLibrary from '../components/MediaLibrary';
 
 const STORAGE_KEY = "avolta_toolkit_calendar_v1";
 
@@ -65,6 +66,7 @@ export default function AdminPage() {
   const [csvPreview, setCsvPreview] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [showMediaLibrary, setShowMediaLibrary] = useState(false);
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -378,9 +380,19 @@ export default function AdminPage() {
                 </svg>
               </div>
             </div>
-            <button className="admin-new-campaign-btn" onClick={handleNewCampaign}>
-              + New Campaign
-            </button>
+            <div className="admin-campaign-toolbar-right">
+              <button className="admin-media-library-btn" onClick={() => setShowMediaLibrary(true)}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <polyline points="21 15 16 10 5 21" />
+                </svg>
+                Media Library
+              </button>
+              <button className="admin-new-campaign-btn" onClick={handleNewCampaign}>
+                + New Campaign
+              </button>
+            </div>
           </div>
 
           {/* Admin Content — only when campaign selected or creating */}
@@ -598,6 +610,12 @@ export default function AdminPage() {
           )}
         </div>
       </main>
+
+      <MediaLibrary
+        isOpen={showMediaLibrary}
+        onClose={() => setShowMediaLibrary(false)}
+        onSelect={() => setShowMediaLibrary(false)}
+      />
     </div>
   );
 }
