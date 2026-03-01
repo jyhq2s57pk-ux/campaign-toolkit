@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { api } from '../lib/api';
-import CampaignCard from './CompactCampaignCard';
 import ImageUpload from './ImageUpload';
 import './AdminComponents.css';
 
@@ -123,11 +122,6 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSelectCampaign = (id) => {
-    setSelectedId(id);
-    setShowCreateForm(false);
-  };
-
   const handleCreateNew = () => {
     // Duplicate from last campaign if available
     if (campaigns.length > 0) {
@@ -227,44 +221,10 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
 
   return (
     <div className="campaign-admin-section">
-      {/* Campaign Selector */}
-      <div className="campaign-selector">
-        <div className="campaign-selector-header">
-          <h2>Campaigns</h2>
-          <button className="btn-primary" onClick={handleCreateNew}>
-            + New Campaign
-          </button>
-        </div>
-
-        <div className="campaign-selector-cards">
-          {campaigns.map((c) => (
-            <div key={c.id} className={`campaign-selector-card-wrap ${selectedId === c.id && !showCreateForm ? 'active' : ''}`}>
-              <CampaignCard
-                id={c.id}
-                name={c.name}
-                subtitle={c.subtitle}
-                heroImage={c.hero_image_url}
-                activationDates={c.activation_dates}
-                scope={c.scope}
-                channels={c.channels}
-                primaryColor={c.primary_color}
-                variant="horizontal"
-                onClick={() => handleSelectCampaign(c.id)}
-              />
-            </div>
-          ))}
-          {campaigns.length === 0 && (
-            <p style={{ color: 'var(--text-secondary)', padding: '1rem', margin: 0 }}>
-              No campaigns yet. Create your first one.
-            </p>
-          )}
-        </div>
-      </div>
-
-      {/* Form */}
+      {/* Form — campaign selection is handled by AdminPage toolbar */}
       {(selectedId || showCreateForm) && (
         <>
-          <div className="admin-section-header" style={{ marginTop: '2rem' }}>
+          <div className="admin-section-header">
             <h2>{showCreateForm ? 'Create New Campaign' : 'Edit Campaign'}</h2>
             <p className="section-description">
               {showCreateForm
