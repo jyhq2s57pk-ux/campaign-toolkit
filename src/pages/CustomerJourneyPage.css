@@ -75,6 +75,16 @@
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
 }
 
+@media (max-width: 768px) {
+  .touchpoint-filter-strip {
+    padding: 10px 0 2px;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
 /* =====================================================
    Section Headers
    ===================================================== */
@@ -434,10 +444,6 @@
    Responsive Styles
    ===================================================== */
 @media (max-width: 800px) {
-  .touchpoint-filter-strip .filter-tabs {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
   .content-layout {
     flex-direction: column;
     gap: 32px;
@@ -500,10 +506,6 @@
 }
 
 @media (max-width: 480px) {
-  .touchpoint-filter-strip .filter-tabs {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
   .journey-page {
     padding-top: 100px;
     /* Account for fixed header if any */
