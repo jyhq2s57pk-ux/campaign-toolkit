@@ -440,6 +440,15 @@ export default function AdminPage() {
                     fetchAllCampaigns();
                     navigate(`/admin?campaignId=${newId}`);
                   }}
+                  onCampaignDeleted={(nextId) => {
+                    fetchAllCampaigns();
+                    if (nextId) {
+                      navigate(`/admin?campaignId=${nextId}`);
+                    } else {
+                      setCampaign(null);
+                      navigate('/admin');
+                    }
+                  }}
                 />
               )}
 

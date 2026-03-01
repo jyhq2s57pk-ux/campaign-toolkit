@@ -39,11 +39,12 @@ const MODULE_LABELS = {
   ways_of_working_tips: { label: 'Implementation Tips', group: 'Sections' }
 };
 
-export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaignCreated }) {
+export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaignCreated, onCampaignDeleted }) {
   const [campaigns, setCampaigns] = useState([]);
   const [selectedId, setSelectedId] = useState(campaignId || null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [message, setMessage] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(!!startInCreateMode);
   const [duplicateFromId, setDuplicateFromId] = useState(null);
@@ -120,6 +121,42 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleDelete = async () => {
+    if (!selectedId) return;
+    const campaignName = formData.name || selectedId;
+    if (!confirm(`Are you sure you want to delete "${campaignName}"?\n\nThis will permanently remove the campaign and ALL related data (touchpoints, resources, insights, omnichannel ideas, calendar events, etc.).\n\nThis action cannot be undone.`)) {
+      return;
+    }
+
+    setDeleting(true);
+    setMessage(null);
+
+    try {
+      const result = await api.deleteCampaign(selectedId);
+
+      if (!result.success) {
+        throw new Error(result.errors.join(', '));
+      }
+
+      setMessage({ type: 'success', text: `Campaign "${campaignName}" deleted successfully.` });
+      setFormData({ ...EMPTY_FORM });
+      setSelectedId(null);
+
+      // Refresh list and notify parent
+      const freshData = await api.getCampaigns();
+      setCampaigns(freshData || []);
+
+      if (onCampaignDeleted) {
+        onCampaignDeleted(freshData?.[0]?.id || null);
+      }
+    } catch (err) {
+      console.error('Error deleting campaign:', err);
+      setMessage({ type: 'error', text: 'Error deleting campaign: ' + err.message });
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const handleCreateNew = () => {
@@ -423,7 +460,7 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
             </div>
 
             <div className="form-actions">
-              <button type="submit" className="btn-primary" disabled={saving}>
+              <button type="submit" className="btn-primary" disabled={saving || deleting}>
                 {saving ? 'Saving...' : (showCreateForm ? 'Create Campaign' : 'Save Campaign')}
               </button>
               {!showCreateForm && (
@@ -431,7 +468,7 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
                   type="button"
                   className="btn-secondary"
                   onClick={() => loadCampaign(selectedId)}
-                  disabled={saving}
+                  disabled={saving || deleting}
                 >
                   Reset
                 </button>
@@ -446,6 +483,16 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
                   }}
                 >
                   Cancel
+                </button>
+              )}
+              {!showCreateForm && selectedId && (
+                <button
+                  type="button"
+                  className="btn-danger"
+                  onClick={handleDelete}
+                  disabled={saving || deleting}
+                >
+                  {deleting ? 'Deleting...' : 'Delete Campaign'}
                 </button>
               )}
             </div>

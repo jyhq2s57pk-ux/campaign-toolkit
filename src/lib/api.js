@@ -550,5 +550,51 @@ export const api = {
             copied: results.copied,
             errors: results.errors
         };
+    },
+
+    async deleteCampaign(campaignId) {
+        if (!supabase) return { success: false, error: 'No database connection' };
+        if (!campaignId) return { success: false, error: 'No campaign ID provided' };
+
+        const errors = [];
+
+        // Delete all related data first (respect foreign key order)
+        const relatedTables = [
+            'insight_pages',
+            'omnichannel_ideas',
+            'resources',
+            'touchpoints',
+            'platforms',
+            'wow_process',
+            'wow_timeline',
+            'calendar_events',
+        ];
+
+        for (const table of relatedTables) {
+            const { error } = await supabase
+                .from(table)
+                .delete()
+                .eq('campaign_id', campaignId);
+
+            if (error && error.code !== '42703') {
+                // 42703 = column doesn't exist, safe to skip
+                errors.push(`${table}: ${error.message}`);
+            }
+        }
+
+        // Finally delete the campaign itself
+        const { error } = await supabase
+            .from('campaigns')
+            .delete()
+            .eq('id', campaignId);
+
+        if (error) {
+            errors.push(`campaigns: ${error.message}`);
+        }
+
+        return {
+            success: errors.length === 0,
+            errors
+        };
     }
 };
