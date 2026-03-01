@@ -40,12 +40,18 @@ export const api = {
         return this.getCampaigns().then(campaigns => campaigns[0]);
     },
 
-    async getCampaigns() {
+    async getCampaigns({ includeHidden = false } = {}) {
         if (!supabase) return MOCK_CAMPAIGNS;
 
-        const { data, error } = await supabase
+        let query = supabase
             .from('campaigns')
-            .select('*')
+            .select('*');
+
+        if (!includeHidden) {
+            query = query.neq('is_visible', false);
+        }
+
+        const { data, error } = await query
             .order('activation_start_date', { ascending: false });
 
         if (error) {
@@ -55,9 +61,23 @@ export const api = {
         return data;
     },
 
+    async toggleCampaignVisibility(campaignId, isVisible) {
+        if (!supabase) return { success: false, error: 'No database connection' };
+
+        const { error } = await supabase
+            .from('campaigns')
+            .update({ is_visible: isVisible })
+            .eq('id', campaignId);
+
+        if (error) {
+            return { success: false, error: error.message };
+        }
+        return { success: true };
+    },
+
     async getCampaignById(id) {
         if (!id) return null;
-        const campaigns = await this.getCampaigns();
+        const campaigns = await this.getCampaigns({ includeHidden: true });
         return campaigns.find(c => c.id === id) || null;
     },
 

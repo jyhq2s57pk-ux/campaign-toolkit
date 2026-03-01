@@ -39,12 +39,12 @@ const MODULE_LABELS = {
   ways_of_working_tips: { label: 'Implementation Tips', group: 'Sections' }
 };
 
-export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaignCreated, onCampaignDeleted }) {
+export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaignCreated, onVisibilityChanged }) {
   const [campaigns, setCampaigns] = useState([]);
   const [selectedId, setSelectedId] = useState(campaignId || null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+  const [toggling, setToggling] = useState(false);
   const [message, setMessage] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(!!startInCreateMode);
   const [duplicateFromId, setDuplicateFromId] = useState(null);
@@ -76,7 +76,7 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
 
   const fetchCampaigns = async () => {
     setLoading(true);
-    const data = await api.getCampaigns();
+    const data = await api.getCampaigns({ includeHidden: true });
     setCampaigns(data || []);
     // Auto-select if we have a campaignId prop or pick first (but not in create mode)
     if (!selectedId && !startInCreateMode && data && data.length > 0) {
@@ -112,7 +112,8 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
       hero_image_url: data.hero_image_url || '',
       primary_color: data.primary_color || '#8F53F0',
       features: data.features || [],
-      modules: { ...DEFAULT_MODULES, ...(data.modules || {}) }
+      modules: { ...DEFAULT_MODULES, ...(data.modules || {}) },
+      is_visible: data.is_visible !== false
     });
     setShowCreateForm(false);
     setMessage(null);
@@ -123,39 +124,42 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleDelete = async () => {
-    if (!selectedId) return;
-    const campaignName = formData.name || selectedId;
-    if (!confirm(`Are you sure you want to delete "${campaignName}"?\n\nThis will permanently remove the campaign and ALL related data (touchpoints, resources, insights, omnichannel ideas, calendar events, etc.).\n\nThis action cannot be undone.`)) {
-      return;
-    }
+  const isCurrentlyVisible = formData.is_visible !== false;
 
-    setDeleting(true);
+  const handleToggleVisibility = async () => {
+    if (!selectedId) return;
+    const newVisibility = !isCurrentlyVisible;
+
+    setToggling(true);
     setMessage(null);
 
     try {
-      const result = await api.deleteCampaign(selectedId);
+      const result = await api.toggleCampaignVisibility(selectedId, newVisibility);
 
       if (!result.success) {
-        throw new Error(result.errors.join(', '));
+        throw new Error(result.error);
       }
 
-      setMessage({ type: 'success', text: `Campaign "${campaignName}" deleted successfully.` });
-      setFormData({ ...EMPTY_FORM });
-      setSelectedId(null);
+      setFormData(prev => ({ ...prev, is_visible: newVisibility }));
+      setMessage({
+        type: 'success',
+        text: newVisibility
+          ? `Campaign "${formData.name}" is now visible on the site.`
+          : `Campaign "${formData.name}" is now hidden from the site.`
+      });
 
       // Refresh list and notify parent
-      const freshData = await api.getCampaigns();
+      const freshData = await api.getCampaigns({ includeHidden: true });
       setCampaigns(freshData || []);
 
-      if (onCampaignDeleted) {
-        onCampaignDeleted(freshData?.[0]?.id || null);
+      if (onVisibilityChanged) {
+        onVisibilityChanged();
       }
     } catch (err) {
-      console.error('Error deleting campaign:', err);
-      setMessage({ type: 'error', text: 'Error deleting campaign: ' + err.message });
+      console.error('Error toggling visibility:', err);
+      setMessage({ type: 'error', text: 'Error toggling visibility: ' + err.message });
     } finally {
-      setDeleting(false);
+      setToggling(false);
     }
   };
 
@@ -242,7 +246,7 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
       }
 
       // Refresh list
-      const freshData = await api.getCampaigns();
+      const freshData = await api.getCampaigns({ includeHidden: true });
       setCampaigns(freshData || []);
     } catch (err) {
       console.error('Error saving campaign:', err);
@@ -459,8 +463,33 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
               ))}
             </div>
 
+            {/* Visibility Toggle */}
+            {!showCreateForm && selectedId && (
+              <div className="campaign-visibility-section">
+                <div className="campaign-visibility-row">
+                  <div className="campaign-visibility-info">
+                    <span className="campaign-visibility-label">Campaign Visibility</span>
+                    <span className="campaign-visibility-hint">
+                      {isCurrentlyVisible
+                        ? 'This campaign is live and visible on the public site.'
+                        : 'This campaign is hidden from the public site.'}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    className={`campaign-visibility-toggle ${isCurrentlyVisible ? 'is-visible' : 'is-hidden'}`}
+                    onClick={handleToggleVisibility}
+                    disabled={toggling}
+                  >
+                    <span className="visibility-toggle-icon">{isCurrentlyVisible ? '👁' : '👁‍🗨'}</span>
+                    {toggling ? 'Updating...' : (isCurrentlyVisible ? 'Visible' : 'Hidden')}
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="form-actions">
-              <button type="submit" className="btn-primary" disabled={saving || deleting}>
+              <button type="submit" className="btn-primary" disabled={saving || toggling}>
                 {saving ? 'Saving...' : (showCreateForm ? 'Create Campaign' : 'Save Campaign')}
               </button>
               {!showCreateForm && (
@@ -468,7 +497,7 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
                   type="button"
                   className="btn-secondary"
                   onClick={() => loadCampaign(selectedId)}
-                  disabled={saving || deleting}
+                  disabled={saving || toggling}
                 >
                   Reset
                 </button>
@@ -483,16 +512,6 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
                   }}
                 >
                   Cancel
-                </button>
-              )}
-              {!showCreateForm && selectedId && (
-                <button
-                  type="button"
-                  className="btn-danger"
-                  onClick={handleDelete}
-                  disabled={saving || deleting}
-                >
-                  {deleting ? 'Deleting...' : 'Delete Campaign'}
                 </button>
               )}
             </div>

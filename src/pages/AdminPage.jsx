@@ -89,9 +89,9 @@ export default function AdminPage() {
     }
   };
 
-  // Fetch all campaigns for dropdown
+  // Fetch all campaigns for dropdown (admin sees all, including hidden)
   const fetchAllCampaigns = async () => {
-    const data = await api.getCampaigns();
+    const data = await api.getCampaigns({ includeHidden: true });
     setCampaigns(data || []);
   };
 
@@ -368,7 +368,9 @@ export default function AdminPage() {
                 >
                   <option value="" disabled>Select</option>
                   {campaigns.map(c => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
+                    <option key={c.id} value={c.id}>
+                      {c.name}{c.is_visible === false ? ' (Hidden)' : ''}
+                    </option>
                   ))}
                 </select>
                 <svg className="admin-campaign-select-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -440,14 +442,8 @@ export default function AdminPage() {
                     fetchAllCampaigns();
                     navigate(`/admin?campaignId=${newId}`);
                   }}
-                  onCampaignDeleted={(nextId) => {
+                  onVisibilityChanged={() => {
                     fetchAllCampaigns();
-                    if (nextId) {
-                      navigate(`/admin?campaignId=${nextId}`);
-                    } else {
-                      setCampaign(null);
-                      navigate('/admin');
-                    }
                   }}
                 />
               )}
