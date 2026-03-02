@@ -56,7 +56,7 @@
   display: flex;
   justify-content: center;
   height: auto;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .header-subnav__inner {
@@ -87,7 +87,7 @@
 }
 
 .breadcrumb-link--home {
-  color: rgb(37, 37, 37);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .breadcrumb-link--home:hover {
@@ -95,11 +95,11 @@
 }
 
 .breadcrumb-link--campaign {
-  color: rgb(70, 70, 70);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .breadcrumb-separator {
-  color: rgb(95, 95, 95);
+  color: rgba(255, 255, 255, 0.4);
   font-size: 23px;
   font-family: 'DM Sans', sans-serif;
   font-weight: 300;
@@ -122,7 +122,7 @@
 .nav-btn {
   background: none;
   border: none;
-  color: rgb(37, 37, 37);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 16px;
   font-family: var(--font-body, 'Saans', sans-serif);
   font-weight: 500;
@@ -137,7 +137,7 @@
 }
 
 .nav-btn:hover {
-  background-color: rgba(0, 0, 0, 0.08);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .nav-btn-active {
@@ -197,7 +197,7 @@
 }
 
 .admin-label {
-  color: rgb(37, 37, 37);
+  color: rgba(255, 255, 255, 0.85);
   font-size: 14px;
   font-weight: 500;
 }
@@ -221,7 +221,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgb(37, 37, 37);
+  color: rgba(255, 255, 255, 0.85);
   transition: transform 0.3s ease-in-out;
 }
 
@@ -266,15 +266,15 @@
     height: auto;
     padding: 24px;
     width: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 0;
     justify-content: flex-start;
-    color: rgb(37, 37, 37);
+    color: rgba(255, 255, 255, 0.85);
   }
 
   .header-nav.mobile-open .nav-btn-active {
-    background-color: rgba(0, 0, 0, 0.1);
-    color: rgb(37, 37, 37);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
     font-weight: 600;
   }
 
@@ -283,7 +283,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 24px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     width: 100%;
     box-sizing: border-box;
   }

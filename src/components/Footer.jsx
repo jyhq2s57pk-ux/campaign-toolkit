@@ -1,26 +1,11 @@
-import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import FooterLogo from './FooterLogo';
 import './Footer.css';
 
 export default function Footer() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const isAdmin = location.pathname.startsWith('/admin');
-  const campaignId = searchParams.get('campaignId');
-
-  const footerLinks = [
-    { name: 'Customer Touchpoints', path: '/customer-journey' },
-    { name: 'Calendar', path: '/calendar' },
-    { name: 'Omnichannel', path: '/omnichannel' },
-    { name: 'Insights', path: '/insights' },
-    { name: 'Resources', path: '/resources' },
-    { name: 'Activate', path: '/ways-of-working' },
-    { name: 'Design System', path: '/design-system' },
-  ];
-
-  // Footer links use plain paths (no campaignId), matching live site
-  const getLinkPath = (path) => path;
 
   const toggleAdmin = () => {
     if (isAdmin) {
@@ -66,20 +51,6 @@ export default function Footer() {
 
           </div>
 
-          {/* Right Column: Navigation Links */}
-          <div className="footer-nav-column" data-layer="Nav - Site nav">
-            <div className="footer-nav-list" data-layer="List">
-              {footerLinks.map((link) => (
-                <div key={link.name} className="footer-nav-item" data-layer="Item">
-                  <Link to={getLinkPath(link.path)} className="footer-nav-link" data-layer="Link">
-                    <div className="footer-link-text" data-layer={link.name}>
-                      {link.name}
-                    </div>
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
         {/* Bottom Section: Logo */}
