@@ -16,10 +16,27 @@
 
 /* page-header styles are in master-styles.css */
 
+/* Omnichannel-specific: page-header subtitle */
+.omnichannel-main .page-header {
+    padding-bottom: 12px;
+}
+
+.omnichannel-main .page-header p {
+    font-size: 17px;
+    line-height: 1.5;
+    max-width: 560px;
+    color: var(--text-secondary, #a1a1a6);
+}
+
+/* Tighter inner content gap for this page */
+.omnichannel-main .inner-content-wrapper {
+    gap: 12px;
+}
+
 /* Omnichannel-specific filter tabs override */
 .omnichannel-main .filter-tabs {
-    margin-top: 4px;
-    margin-bottom: 24px;
+    margin-top: 0;
+    margin-bottom: 8px;
 }
 
 /* =====================================================
@@ -31,7 +48,7 @@
     font-family: var(--font-body, 'Saans', sans-serif);
     font-weight: 400;
     line-height: normal;
-    margin: 0;
+    margin: 0 0 4px 0;
     text-align: center;
     width: 100%;
 }
