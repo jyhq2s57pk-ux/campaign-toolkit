@@ -68,7 +68,7 @@
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  padding: 16px 0 4px;
+  padding: 5px 0 2px;
 }
 
 /* Filter tabs are flex-based and auto-scroll horizontally */
