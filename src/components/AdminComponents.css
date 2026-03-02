@@ -714,7 +714,7 @@
 }
 
 .modal-content-wide {
-  max-width: 700px;
+  max-width: 960px;
   max-height: 90vh;
   overflow-y: auto;
 }

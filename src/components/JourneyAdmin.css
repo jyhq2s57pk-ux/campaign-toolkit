@@ -354,7 +354,7 @@
   z-index: 1000;
 }
 
-.modal-content {
+.journey-admin .modal-content {
   background: #1e1e1e;
   border-radius: 12px;
   padding: 24px;
@@ -365,7 +365,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.modal-content h2 {
+.journey-admin .modal-content h2 {
   margin: 0 0 20px;
   font-size: 20px;
 }
