@@ -620,6 +620,7 @@
 
 .stats-left {
     flex-shrink: 0;
+    padding-left: 48px;
 }
 
 @media (min-width: 768px) {
@@ -693,7 +694,8 @@
 .double-image-img {
     flex: 1;
     min-width: 0;
-    height: auto;
+    width: 100%;
+    height: 280px;
     border-radius: 24px;
     object-fit: cover;
     display: block;

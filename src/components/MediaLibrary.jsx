@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { supabase } from '../lib/supabase';
 import './MediaLibrary.css';
 
@@ -209,7 +210,7 @@ export default function MediaLibrary({ isOpen, onClose, onSelect }) {
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="media-library-overlay" onClick={onClose}>
       <div className="media-library" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
@@ -349,6 +350,7 @@ export default function MediaLibrary({ isOpen, onClose, onSelect }) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
