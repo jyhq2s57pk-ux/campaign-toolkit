@@ -177,7 +177,7 @@
 }
 
 .admin-toggle-switch.active {
-  background-color: rgb(43, 43, 43);
+  background-color: var(--accent-purple, #8F53F0);
 }
 
 .toggle-knob {

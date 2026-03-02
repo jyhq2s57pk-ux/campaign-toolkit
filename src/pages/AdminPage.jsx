@@ -473,7 +473,7 @@ export default function AdminPage() {
               {activeTab === 'resources' && <ResourcesAdmin />}
 
               {/* Insight Pages Tab */}
-              {activeTab === 'insights' && <InsightPagesAdmin />}
+              {activeTab === 'insights' && <InsightPagesAdmin campaignId={campaignId} />}
 
               {activeTab === 'calendar' && (
                 <div className="calendar-admin-section">

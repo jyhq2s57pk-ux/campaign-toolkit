@@ -60,7 +60,12 @@
    Touchpoint Filter (inline under section heading)
    ===================================================== */
 .touchpoint-filter-inline {
-  margin-bottom: 28px;
+  position: sticky;
+  top: 50px;
+  z-index: 100;
+  background: #000;
+  padding: 16px 0;
+  margin-bottom: 12px;
 }
 
 /* =====================================================
@@ -98,7 +103,7 @@
   border: 1px solid var(--border-light);
   overflow: hidden;
   transition: all 0.3s ease;
-  scroll-margin-top: 70px;
+  scroll-margin-top: 140px;
 }
 
 .accordion-item.expanded {

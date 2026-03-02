@@ -52,6 +52,7 @@ export default function Header() {
     { name: 'Activate', path: '/ways-of-working' },
     { name: 'Omnichannel', path: '/omnichannel' },
     { name: 'Resources', path: '/resources', moduleKey: 'page_resources' },
+    { name: 'Calendar', path: '/calendar', moduleKey: 'page_calendar' },
   ];
 
   // Global nav links (always shown)

@@ -24,7 +24,7 @@ export default function CustomerJourneyPage() {
   const [activeComponent, setActiveComponent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [expandedCopyIdeas, setExpandedCopyIdeas] = useState(null);
-  const [activeFilter, setActiveFilter] = useState('All');
+  const [activeAnchor, setActiveAnchor] = useState(null);
   const detailRefs = useRef({});
   const sectionRefs = useRef({});
   const screenshotRef = useRef(null);
@@ -59,6 +59,7 @@ export default function CustomerJourneyPage() {
     if (loadedPages.length > 0) {
       const firstPage = loadedPages[0];
       setExpandedPage(firstPage);
+      setActiveAnchor(firstPage.title);
       const pc = grouped[firstPage.id] || [];
       if (pc.length > 0) setActiveComponent(pc[0]);
     }
@@ -87,32 +88,57 @@ export default function CustomerJourneyPage() {
   const toggleCopyIdeas = (compId, e) => { e.stopPropagation(); setExpandedCopyIdeas(expandedCopyIdeas === compId ? null : compId); };
   const getPlatformStyle = (pt) => { const c = PLATFORM_COLORS[pt] || PLATFORM_COLORS['Web']; return { background: c.bg, color: c.text, border: '1px solid ' + c.border }; };
 
-  // FilterTabs data
-  const filterTabList = ['All', ...pages.map(p => p.title)];
-  const filteredPages = activeFilter === 'All' ? pages : pages.filter(p => p.title === activeFilter);
+  // Anchor tab list (no "All" filter — tabs are anchor links)
+  const anchorTabList = pages.map(p => p.title);
 
-  const handleFilterChange = (tab) => {
-    setActiveFilter(tab);
-    if (tab === 'All') {
-      // Expand the first page
-      if (pages.length > 0) {
-        setExpandedPage(pages[0]);
-        const pc = components[pages[0].id] || [];
-        if (pc.length > 0) setActiveComponent(pc[0]);
-      }
-    } else {
-      const page = pages.find(p => p.title === tab);
-      if (page) {
-        setExpandedPage(page);
-        const pc = components[page.id] || [];
-        if (pc.length > 0) setActiveComponent(pc[0]);
-        setTimeout(() => {
-          const el = sectionRefs.current[page.id];
-          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
-      }
+  const scrollLockRef = useRef(false);
+
+  const handleAnchorClick = (tab) => {
+    const page = pages.find(p => p.title === tab);
+    if (page) {
+      scrollLockRef.current = true;
+      setActiveAnchor(tab);
+      setExpandedPage(page);
+      const pc = components[page.id] || [];
+      if (pc.length > 0) setActiveComponent(pc[0]);
+      setTimeout(() => {
+        const el = sectionRefs.current[page.id];
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Unlock observer after scroll animation completes
+        setTimeout(() => { scrollLockRef.current = false; }, 800);
+      }, 100);
     }
   };
+
+  // Scroll-spy: track which section is in view to highlight the anchor tab
+  useEffect(() => {
+    if (pages.length === 0) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (scrollLockRef.current) return;
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const pageId = entry.target.dataset.pageId;
+            const page = pages.find(p => p.id === pageId);
+            if (page) setActiveAnchor(page.title);
+          }
+        }
+      },
+      { rootMargin: '-140px 0px -50% 0px', threshold: 0 }
+    );
+
+    const timer = setTimeout(() => {
+      pages.forEach(p => {
+        const el = sectionRefs.current[p.id];
+        if (el) {
+          el.dataset.pageId = p.id;
+          observer.observe(el);
+        }
+      });
+    }, 200);
+
+    return () => { clearTimeout(timer); observer.disconnect(); };
+  }, [pages]);
 
   return (
     <div className="page-wrapper">
@@ -139,9 +165,9 @@ export default function CustomerJourneyPage() {
             {pages.length > 0 && (
               <div className="touchpoint-filter-inline">
                 <FilterTabs
-                  tabs={filterTabList}
-                  activeTab={activeFilter}
-                  onTabChange={handleFilterChange}
+                  tabs={anchorTabList}
+                  activeTab={activeAnchor || ''}
+                  onTabChange={handleAnchorClick}
                 />
               </div>
             )}
@@ -151,7 +177,7 @@ export default function CustomerJourneyPage() {
               <div className="loading-state">Loading...</div>
             ) : (
               <div className="accordion-container">
-                {filteredPages.map((page) => {
+                {pages.map((page) => {
                   const isExp = expandedPage?.id === page.id;
                   const cc = (components[page.id] || []).length;
                   return (

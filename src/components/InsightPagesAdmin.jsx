@@ -3,35 +3,268 @@ import { supabase } from '../lib/supabase';
 import ImageUpload from './ImageUpload';
 import './AdminComponents.css';
 
-const EMPTY_BLOCK = { title: '', body: '', image_url: '' };
+/* ─── Block Type Definitions ─── */
 
-export default function InsightPagesAdmin() {
-  const [pages, setPages] = useState([]);
+const BLOCK_TYPES = [
+  { value: 'body_copy', label: 'Body Copy', description: 'Paragraph text' },
+  { value: 'section_headline', label: 'Section Headline', description: 'Large two-line headline' },
+  { value: 'image_text_card', label: 'Image + Text Card', description: 'Card with image and text' },
+  { value: 'stats', label: 'Stats', description: 'Title with stat numbers' },
+  { value: 'double_image', label: 'Double Image', description: 'Two images side by side' },
+];
+
+const BLOCK_TYPE_LABELS = Object.fromEntries(BLOCK_TYPES.map(t => [t.value, t.label]));
+
+function getEmptyBlock(type) {
+  switch (type) {
+    case 'body_copy':        return { type, body: '' };
+    case 'section_headline': return { type, line1: '', line2: '' };
+    case 'image_text_card':  return { type, label: '', title: '', body: '', image_url: '' };
+    case 'stats':            return { type, title: '', items: [{ number: '', description: '' }] };
+    case 'double_image':     return { type, image1_url: '', image2_url: '', caption: '' };
+    default:                 return { type: 'body_copy', body: '' };
+  }
+}
+
+/* ─── Type-Specific Block Editors ─── */
+
+function BodyCopyEditor({ block, index, updateBlock }) {
+  return (
+    <div className="form-group">
+      <label>Body Text</label>
+      <textarea
+        value={block.body || ''}
+        onChange={(e) => updateBlock(index, 'body', e.target.value)}
+        rows="4"
+        placeholder="Paragraph text..."
+      />
+    </div>
+  );
+}
+
+function SectionHeadlineEditor({ block, index, updateBlock }) {
+  return (
+    <>
+      <div className="form-group">
+        <label>Line 1 (white)</label>
+        <input
+          type="text"
+          value={block.line1 || ''}
+          onChange={(e) => updateBlock(index, 'line1', e.target.value)}
+          placeholder="Top line text"
+        />
+      </div>
+      <div className="form-group">
+        <label>Line 2 (campaign colour)</label>
+        <input
+          type="text"
+          value={block.line2 || ''}
+          onChange={(e) => updateBlock(index, 'line2', e.target.value)}
+          placeholder="Bottom line text (displayed in campaign colour)"
+        />
+      </div>
+    </>
+  );
+}
+
+function ImageTextCardEditor({ block, index, updateBlock }) {
+  return (
+    <>
+      <div className="form-group">
+        <label>Label (small text above title)</label>
+        <input
+          type="text"
+          value={block.label || ''}
+          onChange={(e) => updateBlock(index, 'label', e.target.value)}
+          placeholder="e.g., CATEGORY or INSIGHT"
+        />
+      </div>
+      <div className="form-group">
+        <label>Title</label>
+        <input
+          type="text"
+          value={block.title || ''}
+          onChange={(e) => updateBlock(index, 'title', e.target.value)}
+          placeholder="Card headline"
+        />
+      </div>
+      <div className="form-group">
+        <label>Body</label>
+        <textarea
+          value={block.body || ''}
+          onChange={(e) => updateBlock(index, 'body', e.target.value)}
+          rows="3"
+          placeholder="Card description text..."
+        />
+      </div>
+      <ImageUpload
+        label="Card Image"
+        value={block.image_url || ''}
+        onChange={(url) => updateBlock(index, 'image_url', url)}
+        placeholder="Paste image URL or upload"
+        folder="insights"
+      />
+    </>
+  );
+}
+
+function StatsEditor({ block, index, updateBlock }) {
+  const items = block.items || [];
+
+  const updateItem = (itemIdx, field, value) => {
+    const newItems = [...items];
+    newItems[itemIdx] = { ...newItems[itemIdx], [field]: value };
+    updateBlock(index, 'items', newItems);
+  };
+
+  const addItem = () => {
+    updateBlock(index, 'items', [...items, { number: '', description: '' }]);
+  };
+
+  const removeItem = (itemIdx) => {
+    const newItems = items.filter((_, i) => i !== itemIdx);
+    updateBlock(index, 'items', newItems.length > 0 ? newItems : [{ number: '', description: '' }]);
+  };
+
+  return (
+    <>
+      <div className="form-group">
+        <label>Section Title (left side)</label>
+        <input
+          type="text"
+          value={block.title || ''}
+          onChange={(e) => updateBlock(index, 'title', e.target.value)}
+          placeholder="e.g., Key Performance Metrics"
+        />
+      </div>
+
+      <div className="stats-items-editor">
+        <div className="stats-items-header">
+          <label>Stat Items</label>
+          <button type="button" className="btn-secondary btn-sm" onClick={addItem}>
+            + Add Stat
+          </button>
+        </div>
+        {items.map((item, itemIdx) => (
+          <div key={itemIdx} className="stats-item-editor">
+            <div className="stats-item-fields">
+              <div className="form-group form-group-inline">
+                <label>Number</label>
+                <input
+                  type="text"
+                  value={item.number || ''}
+                  onChange={(e) => updateItem(itemIdx, 'number', e.target.value)}
+                  placeholder="e.g., 73% or 2.4M"
+                />
+              </div>
+              <div className="form-group form-group-inline">
+                <label>Description</label>
+                <input
+                  type="text"
+                  value={item.description || ''}
+                  onChange={(e) => updateItem(itemIdx, 'description', e.target.value)}
+                  placeholder="What this stat means"
+                />
+              </div>
+            </div>
+            {items.length > 1 && (
+              <button type="button" className="btn-secondary btn-remove-stat" onClick={() => removeItem(itemIdx)}>
+                &times;
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function DoubleImageEditor({ block, index, updateBlock }) {
+  return (
+    <>
+      <div className="double-image-uploads">
+        <ImageUpload
+          label="Image 1"
+          value={block.image1_url || ''}
+          onChange={(url) => updateBlock(index, 'image1_url', url)}
+          placeholder="Paste image URL or upload"
+          folder="insights"
+        />
+        <ImageUpload
+          label="Image 2"
+          value={block.image2_url || ''}
+          onChange={(url) => updateBlock(index, 'image2_url', url)}
+          placeholder="Paste image URL or upload"
+          folder="insights"
+        />
+      </div>
+      <div className="form-group">
+        <label>Caption (optional)</label>
+        <input
+          type="text"
+          value={block.caption || ''}
+          onChange={(e) => updateBlock(index, 'caption', e.target.value)}
+          placeholder="Image caption text"
+        />
+      </div>
+    </>
+  );
+}
+
+function BlockEditor({ block, index, updateBlock }) {
+  switch (block.type) {
+    case 'body_copy':        return <BodyCopyEditor block={block} index={index} updateBlock={updateBlock} />;
+    case 'section_headline': return <SectionHeadlineEditor block={block} index={index} updateBlock={updateBlock} />;
+    case 'image_text_card':  return <ImageTextCardEditor block={block} index={index} updateBlock={updateBlock} />;
+    case 'stats':            return <StatsEditor block={block} index={index} updateBlock={updateBlock} />;
+    case 'double_image':     return <DoubleImageEditor block={block} index={index} updateBlock={updateBlock} />;
+    default:                 return <BodyCopyEditor block={block} index={index} updateBlock={updateBlock} />;
+  }
+}
+
+/* ─── Main Admin Component ─── */
+
+export default function InsightPagesAdmin({ campaignId }) {
+  const [insightPage, setInsightPage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState(null);
-  const [editingPage, setEditingPage] = useState(null);
+  const [editing, setEditing] = useState(false);
+  const [formData, setFormData] = useState(null);
+  const [showTypeMenu, setShowTypeMenu] = useState(false);
 
   useEffect(() => {
-    fetchPages();
-  }, []);
+    if (campaignId) fetchPage();
+  }, [campaignId]);
 
-  const fetchPages = async () => {
+  const fetchPage = async () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
         .from('insight_pages')
         .select('*')
-        .order('campaign_id');
+        .eq('campaign_id', campaignId)
+        .maybeSingle();
 
       if (error) throw error;
-      setPages(data || []);
+      setInsightPage(data);
     } catch (err) {
-      console.error('Error fetching insight pages:', err);
-      setMessage({ type: 'error', text: 'Error loading insight pages' });
+      console.error('Error fetching insight page:', err);
+      setMessage({ type: 'error', text: 'Error loading insight page' });
     } finally {
       setLoading(false);
     }
+  };
+
+  const openEditor = (page) => {
+    setFormData({
+      id: page?.id || null,
+      title: page?.title || 'Insights & Performance',
+      subtitle: page?.subtitle || '',
+      content_blocks: page?.content_blocks || []
+    });
+    setEditing(true);
+    setMessage(null);
   };
 
   const handleSubmit = async (e) => {
@@ -41,31 +274,32 @@ export default function InsightPagesAdmin() {
 
     try {
       const payload = {
-        title: editingPage.title,
-        subtitle: editingPage.subtitle,
-        content_blocks: editingPage.content_blocks || [],
+        title: formData.title,
+        subtitle: formData.subtitle,
+        content_blocks: formData.content_blocks || [],
         updated_at: new Date().toISOString()
       };
 
-      if (editingPage.id) {
+      if (formData.id) {
         const { error } = await supabase
           .from('insight_pages')
           .update(payload)
-          .eq('id', editingPage.id);
+          .eq('id', formData.id);
 
         if (error) throw error;
         setMessage({ type: 'success', text: 'Insight page updated!' });
       } else {
         const { error } = await supabase
           .from('insight_pages')
-          .insert({ ...payload, campaign_id: editingPage.campaign_id });
+          .insert({ ...payload, campaign_id: campaignId });
 
         if (error) throw error;
         setMessage({ type: 'success', text: 'Insight page created!' });
       }
 
-      setEditingPage(null);
-      fetchPages();
+      setEditing(false);
+      setFormData(null);
+      fetchPage();
     } catch (err) {
       console.error('Error saving insight page:', err);
       setMessage({ type: 'error', text: 'Error saving: ' + err.message });
@@ -74,58 +308,82 @@ export default function InsightPagesAdmin() {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
+    if (!insightPage?.id) return;
     if (!confirm('Are you sure you want to delete this insight page?')) return;
 
     try {
       const { error } = await supabase
         .from('insight_pages')
         .delete()
-        .eq('id', id);
+        .eq('id', insightPage.id);
 
       if (error) throw error;
       setMessage({ type: 'success', text: 'Insight page deleted!' });
-      fetchPages();
+      setInsightPage(null);
+      setEditing(false);
+      setFormData(null);
     } catch (err) {
       console.error('Error deleting insight page:', err);
       setMessage({ type: 'error', text: 'Error deleting: ' + err.message });
     }
   };
 
-  const addBlock = () => {
-    const blocks = editingPage.content_blocks || [];
-    if (blocks.length >= 4) {
-      setMessage({ type: 'error', text: 'Maximum 4 content blocks allowed.' });
-      return;
-    }
-    setEditingPage({
-      ...editingPage,
-      content_blocks: [...blocks, { ...EMPTY_BLOCK }]
+  /* ─── Block Management ─── */
+
+  const addBlock = (type) => {
+    const blocks = formData.content_blocks || [];
+    setFormData({
+      ...formData,
+      content_blocks: [...blocks, getEmptyBlock(type)]
     });
+    setShowTypeMenu(false);
   };
 
   const updateBlock = (index, field, value) => {
-    const blocks = [...(editingPage.content_blocks || [])];
+    const blocks = [...(formData.content_blocks || [])];
     blocks[index] = { ...blocks[index], [field]: value };
-    setEditingPage({ ...editingPage, content_blocks: blocks });
+    setFormData({ ...formData, content_blocks: blocks });
   };
 
   const removeBlock = (index) => {
-    const blocks = [...(editingPage.content_blocks || [])];
+    const blocks = [...(formData.content_blocks || [])];
     blocks.splice(index, 1);
-    setEditingPage({ ...editingPage, content_blocks: blocks });
+    setFormData({ ...formData, content_blocks: blocks });
   };
 
-  if (loading) {
-    return <div className="admin-loading">Loading insight pages...</div>;
+  const moveBlock = (index, direction) => {
+    const blocks = [...(formData.content_blocks || [])];
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= blocks.length) return;
+    [blocks[index], blocks[newIndex]] = [blocks[newIndex], blocks[index]];
+    setFormData({ ...formData, content_blocks: blocks });
+  };
+
+  /* ─── Render ─── */
+
+  if (!campaignId) {
+    return (
+      <div className="admin-empty-state">
+        <h3>Select a campaign</h3>
+        <p>Choose a campaign from the dropdown above to manage its insight page.</p>
+      </div>
+    );
   }
+
+  if (loading) {
+    return <div className="admin-loading">Loading insight page...</div>;
+  }
+
+  const blockCount = (formData?.content_blocks || []).length;
 
   return (
     <div className="insight-pages-admin-section">
       <div className="admin-section-header">
-        <h2>Insight Pages Management</h2>
+        <h2>Insight Page</h2>
         <p className="section-description">
-          Manage insight page content blocks for each campaign. Up to 4 blocks per page.
+          Compose the insight page using different component types. Add any combination of headlines, text, images, stats, and cards.
+          When components are added, they replace the default bento grid on the public page.
         </p>
       </div>
 
@@ -135,78 +393,58 @@ export default function InsightPagesAdmin() {
         </div>
       )}
 
-      <div className="pages-list">
-        {pages.length === 0 ? (
-          <div className="admin-empty-state">
-            <h3>No insight pages yet</h3>
-            <p>Add your first insight page to get started.</p>
-          </div>
-        ) : (
-          <ul className="admin-list">
-            {pages.map((page) => (
-              <li key={page.id} className="admin-list-item">
+      {!editing && (
+        <div className="pages-list">
+          {insightPage ? (
+            <div className="admin-list">
+              <div className="admin-list-item">
                 <div className="admin-list-item-content">
-                  <div className="admin-list-item-title">{page.title}</div>
+                  <div className="admin-list-item-title">{insightPage.title}</div>
                   <div className="admin-list-item-meta">
-                    Campaign: {page.campaign_id}
-                    {' · '}
-                    {(page.content_blocks || []).length} content block(s)
+                    {insightPage.subtitle && <>{insightPage.subtitle} · </>}
+                    {(insightPage.content_blocks || []).length} component(s)
                   </div>
                 </div>
                 <div className="admin-list-item-actions">
-                  <button className="btn-secondary" onClick={() => setEditingPage({
-                    ...page,
-                    content_blocks: page.content_blocks || []
-                  })}>
+                  <button className="btn-secondary" onClick={() => openEditor(insightPage)}>
                     Edit
                   </button>
-                  <button className="btn-secondary" onClick={() => handleDelete(page.id)}>
+                  <button className="btn-secondary" onClick={handleDelete}>
                     Delete
                   </button>
                 </div>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <button
-          className="btn-primary btn-mt"
-          onClick={() => setEditingPage({
-            campaign_id: '',
-            title: 'Insights & Performance',
-            subtitle: '',
-            content_blocks: []
-          })}
-        >
-          Add New Insight Page
-        </button>
-      </div>
-
-      {editingPage && (
-        <div className="modal-overlay" onClick={() => setEditingPage(null)}>
-          <div className="modal-content modal-content-wide" onClick={(e) => e.stopPropagation()}>
-            <h3>{editingPage.id ? 'Edit Insight Page' : 'Add New Insight Page'}</h3>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="page-campaign-id">Campaign ID *</label>
-                <input
-                  type="text"
-                  id="page-campaign-id"
-                  value={editingPage.campaign_id}
-                  onChange={(e) => setEditingPage({ ...editingPage, campaign_id: e.target.value })}
-                  required
-                  disabled={!!editingPage.id}
-                  placeholder="e.g., campaign-value-club-2026"
-                />
               </div>
+            </div>
+          ) : (
+            <div className="admin-empty-state">
+              <h3>No insight page yet</h3>
+              <p>Create an insight page for this campaign to get started.</p>
+            </div>
+          )}
 
+          {!insightPage && (
+            <button
+              className="btn-primary btn-mt"
+              onClick={() => openEditor(null)}
+            >
+              Create Insight Page
+            </button>
+          )}
+        </div>
+      )}
+
+      {editing && formData && (
+        <div className="modal-overlay" onClick={() => { setEditing(false); setFormData(null); setShowTypeMenu(false); }}>
+          <div className="modal-content modal-content-wide" onClick={(e) => e.stopPropagation()}>
+            <h3>{formData.id ? 'Edit Insight Page' : 'Create Insight Page'}</h3>
+            <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="page-title">Page Title *</label>
                 <input
                   type="text"
                   id="page-title"
-                  value={editingPage.title}
-                  onChange={(e) => setEditingPage({ ...editingPage, title: e.target.value })}
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   required
                   placeholder="e.g., Insights & Performance"
                 />
@@ -216,8 +454,8 @@ export default function InsightPagesAdmin() {
                 <label htmlFor="page-subtitle">Subtitle</label>
                 <textarea
                   id="page-subtitle"
-                  value={editingPage.subtitle || ''}
-                  onChange={(e) => setEditingPage({ ...editingPage, subtitle: e.target.value })}
+                  value={formData.subtitle || ''}
+                  onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
                   rows="2"
                   placeholder="Brief description"
                 />
@@ -226,61 +464,79 @@ export default function InsightPagesAdmin() {
               {/* Content Blocks */}
               <div className="content-blocks-section">
                 <div className="content-blocks-header">
-                  <h4>
-                    Content Blocks ({(editingPage.content_blocks || []).length}/4)
-                  </h4>
-                  <button
-                    type="button"
-                    className="btn-secondary"
-                    onClick={addBlock}
-                    disabled={(editingPage.content_blocks || []).length >= 4}
-                  >
-                    + Add Block
-                  </button>
+                  <h4>Components ({blockCount})</h4>
+                  <div className="add-block-wrapper">
+                    <button
+                      type="button"
+                      className="btn-secondary"
+                      onClick={() => setShowTypeMenu(!showTypeMenu)}
+                    >
+                      + Add Component
+                    </button>
+                    {showTypeMenu && (
+                      <div className="type-menu">
+                        {BLOCK_TYPES.map((bt) => (
+                          <button
+                            key={bt.value}
+                            type="button"
+                            className="type-menu-item"
+                            onClick={() => addBlock(bt.value)}
+                          >
+                            <span className="type-menu-label">{bt.label}</span>
+                            <span className="type-menu-desc">{bt.description}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                {(editingPage.content_blocks || []).map((block, i) => (
+                {(formData.content_blocks || []).map((block, i) => (
                   <div key={i} className="content-block-editor">
                     <div className="block-editor-header">
-                      <span className="block-editor-label">Block {i + 1}</span>
-                      <button type="button" className="btn-secondary btn-remove-block" onClick={() => removeBlock(i)}>
-                        Remove
-                      </button>
+                      <div className="block-editor-title-area">
+                        <span className="block-editor-label">
+                          {i + 1}. {BLOCK_TYPE_LABELS[block.type] || 'Unknown'}
+                        </span>
+                        <span className="block-type-badge">{block.type}</span>
+                      </div>
+                      <div className="block-editor-actions">
+                        <button
+                          type="button"
+                          className="btn-secondary btn-icon"
+                          onClick={() => moveBlock(i, -1)}
+                          disabled={i === 0}
+                          title="Move up"
+                        >
+                          ↑
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-secondary btn-icon"
+                          onClick={() => moveBlock(i, 1)}
+                          disabled={i === blockCount - 1}
+                          title="Move down"
+                        >
+                          ↓
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-secondary btn-remove-block"
+                          onClick={() => removeBlock(i)}
+                        >
+                          Remove
+                        </button>
+                      </div>
                     </div>
 
-                    <div className="form-group">
-                      <label>Title</label>
-                      <input
-                        type="text"
-                        value={block.title || ''}
-                        onChange={(e) => updateBlock(i, 'title', e.target.value)}
-                        placeholder="Block heading"
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label>Body</label>
-                      <textarea
-                        value={block.body || ''}
-                        onChange={(e) => updateBlock(i, 'body', e.target.value)}
-                        rows="3"
-                        placeholder="Block content text..."
-                      />
-                    </div>
-
-                    <ImageUpload
-                      label="Block Image (optional)"
-                      value={block.image_url || ''}
-                      onChange={(url) => updateBlock(i, 'image_url', url)}
-                      placeholder="Paste image URL or upload"
-                      folder="insights"
-                    />
+                    <BlockEditor block={block} index={i} updateBlock={updateBlock} />
                   </div>
                 ))}
 
-                {(editingPage.content_blocks || []).length === 0 && (
+                {blockCount === 0 && (
                   <p className="content-blocks-empty">
-                    No content blocks yet. Add up to 4 blocks with title, text, and optional image.
+                    No components yet. Click "+ Add Component" to start building the page.
+                    Components replace the default bento grid on the public page.
                   </p>
                 )}
               </div>
@@ -289,7 +545,7 @@ export default function InsightPagesAdmin() {
                 <button type="submit" className="btn-primary" disabled={saving}>
                   {saving ? 'Saving...' : 'Save Page'}
                 </button>
-                <button type="button" className="btn-secondary" onClick={() => setEditingPage(null)}>
+                <button type="button" className="btn-secondary" onClick={() => { setEditing(false); setFormData(null); setShowTypeMenu(false); }}>
                   Cancel
                 </button>
               </div>

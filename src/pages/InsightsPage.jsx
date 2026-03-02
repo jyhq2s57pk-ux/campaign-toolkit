@@ -8,6 +8,93 @@ import { api } from '../lib/api';
 // Imported Images
 import mapBg from '../assets/omni/gen/map-bg.png';
 
+/* ─── Block Type Sub-Components ─── */
+
+function BodyCopyBlock({ block }) {
+    return (
+        <div className="block-body-copy">
+            {block.title && <h3 className="block-body-copy-title">{block.title}</h3>}
+            {block.body && (
+                <p style={{ whiteSpace: 'pre-line' }}>{block.body}</p>
+            )}
+        </div>
+    );
+}
+
+function SectionHeadlineBlock({ block }) {
+    return (
+        <div className="block-section-headline">
+            {block.line1 && <div className="headline-line1">{block.line1}</div>}
+            {block.line2 && <div className="headline-line2">{block.line2}</div>}
+        </div>
+    );
+}
+
+function ImageTextCardBlock({ block }) {
+    return (
+        <div className="block-image-text-card">
+            {block.image_url && (
+                <div className="itc-image">
+                    <img src={block.image_url} alt={block.title || ''} />
+                </div>
+            )}
+            <div className="itc-content">
+                {block.label && <span className="itc-label">{block.label}</span>}
+                {block.title && <h3 className="itc-title">{block.title}</h3>}
+                {block.body && <p className="itc-body">{block.body}</p>}
+            </div>
+        </div>
+    );
+}
+
+function StatsBlock({ block }) {
+    const items = block.items || [];
+    return (
+        <div className="block-stats">
+            <div className="stats-left">
+                {block.title && <h3 className="stats-title">{block.title}</h3>}
+            </div>
+            <div className="stats-right">
+                {items.map((item, idx) => (
+                    <div key={idx} className="stats-item">
+                        {item.number && <div className="stats-number">{item.number}</div>}
+                        {item.description && <div className="stats-description">{item.description}</div>}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function DoubleImageBlock({ block }) {
+    return (
+        <div className="block-double-image">
+            <div className="double-image-row">
+                {block.image1_url && <img src={block.image1_url} alt="" className="double-image-img" />}
+                {block.image2_url && <img src={block.image2_url} alt="" className="double-image-img" />}
+            </div>
+            {block.caption && <p className="double-image-caption">{block.caption}</p>}
+        </div>
+    );
+}
+
+/* ─── Block Renderer (type switch) ─── */
+
+function BlockRenderer({ block }) {
+    switch (block.type) {
+        case 'body_copy':        return <BodyCopyBlock block={block} />;
+        case 'section_headline': return <SectionHeadlineBlock block={block} />;
+        case 'image_text_card':  return <ImageTextCardBlock block={block} />;
+        case 'stats':            return <StatsBlock block={block} />;
+        case 'double_image':     return <DoubleImageBlock block={block} />;
+        default:
+            // Backwards compat: legacy blocks without type → body_copy
+            return <BodyCopyBlock block={block} />;
+    }
+}
+
+/* ─── Main Page ─── */
+
 export default function InsightsPage() {
     const [searchParams] = useSearchParams();
     const campaignId = searchParams.get('campaignId');
@@ -18,6 +105,7 @@ export default function InsightsPage() {
         content_blocks: []
     });
     const [modules, setModules] = useState({});
+    const [campaignColor, setCampaignColor] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,6 +119,7 @@ export default function InsightsPage() {
 
             if (campaign) {
                 if (campaign.modules) setModules(campaign.modules);
+                if (campaign.primary_color) setCampaignColor(campaign.primary_color);
 
                 if (campaign.id) {
                     const insightPage = await api.getInsightPage(campaign.id);
@@ -65,29 +154,18 @@ export default function InsightsPage() {
 
                         {/* Dynamic Content Blocks from CMS */}
                         {hasBlocks && (
-                            <div className="insight-blocks">
+                            <div
+                                className="insight-blocks"
+                                style={campaignColor ? { '--campaign-color': campaignColor } : undefined}
+                            >
                                 {pageData.content_blocks.map((block, i) => (
-                                    <div key={i} className={`insight-block ${block.image_url ? 'has-image' : ''}`}>
-                                        {block.image_url && (
-                                            <div className="insight-block-image">
-                                                <img src={block.image_url} alt={block.title || ''} />
-                                            </div>
-                                        )}
-                                        <div className="insight-block-content">
-                                            {block.title && <h3 className="insight-block-title">{block.title}</h3>}
-                                            {block.body && (
-                                                <div className="insight-block-body" style={{ whiteSpace: 'pre-line' }}>
-                                                    {block.body}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
+                                    <BlockRenderer key={i} block={block} />
                                 ))}
                             </div>
                         )}
 
-                        {/* Fallback: Bento Grid (shown when no CMS blocks or as supplementary) */}
-                        {modules.insights_bento !== false && (
+                        {/* Bento Grid: shown as fallback when no content blocks exist */}
+                        {!hasBlocks && modules.insights_bento !== false && (
                         <div className="bento-grid">
                             {/* Card 1: Top Routes Map */}
                             <div className="bento-card card-large map-card glass">
@@ -143,8 +221,8 @@ export default function InsightsPage() {
                         </div>
                         )}
 
-                        {/* Charts Section */}
-                        {modules.insights_charts !== false && (
+                        {/* Charts Section: shown as fallback when no content blocks exist */}
+                        {!hasBlocks && modules.insights_charts !== false && (
                         <div className="charts-container">
                             <div className="chart-card glass">
                                 <h3>Avolta LY PAX by month (EU)</h3>

@@ -86,7 +86,9 @@ export default function OmnichannelPage() {
                 {/* Page Header — matching live site design */}
                 <section className="page-header">
                     <h1>Omnichannel</h1>
-                    <p>A 360° activation strategy designed to engage, captivate, and inspire passengers around the world.</p>
+                    {modules.omnichannel_hero !== false && (
+                        <p>A 360° activation strategy designed to engage, captivate, and inspire passengers around the world.</p>
+                    )}
                 </section>
 
                 <div className="inner-content-wrapper">

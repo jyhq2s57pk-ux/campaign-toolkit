@@ -569,6 +569,150 @@
   padding: 1rem;
 }
 
+/* Block Editor Title Area (type label + badge) */
+.block-editor-title-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.block-type-badge {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(143, 83, 240, 0.15);
+  color: #8F53F0;
+  font-family: monospace;
+}
+
+.block-editor-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-icon {
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  min-width: 30px;
+  text-align: center;
+}
+
+/* Add Component Type Menu */
+.add-block-wrapper {
+  position: relative;
+}
+
+.type-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 20;
+  margin-top: 4px;
+  background: var(--surface-elevated, #111);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 4px;
+  min-width: 220px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.type-menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 6px;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.type-menu-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.type-menu-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.type-menu-desc {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* Stats Editor */
+.stats-items-editor {
+  margin-top: 0.5rem;
+}
+
+.stats-items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.stats-items-header label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.btn-sm {
+  padding: 4px 10px;
+  font-size: 0.75rem;
+}
+
+.stats-item-editor {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+}
+
+.stats-item-fields {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+}
+
+.form-group-inline {
+  flex: 1;
+  margin-bottom: 0 !important;
+}
+
+.btn-remove-stat {
+  padding: 4px 8px;
+  font-size: 1rem;
+  line-height: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  align-self: center;
+}
+
+.btn-remove-stat:hover {
+  color: #ef4444;
+}
+
+/* Double Image Uploads */
+.double-image-uploads {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
 .modal-content-wide {
   max-width: 700px;
   max-height: 90vh;
