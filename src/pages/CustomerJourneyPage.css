@@ -59,35 +59,17 @@
 }
 
 /* =====================================================
-   Touchpoint Filter Strip (sticky under subnav)
+   Touchpoint Filter (inline under section heading)
    ===================================================== */
-.touchpoint-filter-strip {
-  position: sticky;
-  top: 50px;
-  z-index: 100;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  padding: 5px 0 2px;
-}
-
-/* Filter tabs are flex-based and auto-scroll horizontally */
-
-@media (max-width: 768px) {
-  .touchpoint-filter-strip {
-    padding: 10px 0 2px;
-    margin-left: -20px;
-    margin-right: -20px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+.touchpoint-filter-inline {
+  margin-bottom: 16px;
 }
 
 /* =====================================================
    Section Headers
    ===================================================== */
 .journey-section-header {
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 }
 
 .journey-section-header h2 {
