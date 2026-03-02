@@ -18,7 +18,8 @@
 
 /* Omnichannel-specific filter tabs override */
 .omnichannel-main .filter-tabs {
-    margin-top: 16px;
+    margin-top: 4px;
+    margin-bottom: 24px;
 }
 
 /* =====================================================
@@ -30,7 +31,7 @@
     font-family: var(--font-body, 'Saans', sans-serif);
     font-weight: 400;
     line-height: normal;
-    margin: 0 0 8px;
+    margin: 0;
     text-align: center;
     width: 100%;
 }

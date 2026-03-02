@@ -43,15 +43,6 @@
   padding: 24px 0;
 }
 
-/* Tighter page-header spacing for journey page */
-.journey-page .page-header {
-  padding-bottom: 16px;
-}
-
-.journey-page .page-header h1 {
-  margin-bottom: 0;
-}
-
 .journey-content {
   width: 100%;
 }
