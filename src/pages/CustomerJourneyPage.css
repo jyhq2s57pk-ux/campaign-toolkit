@@ -71,9 +71,7 @@
   padding: 16px 0 4px;
 }
 
-.touchpoint-filter-strip .filter-tabs {
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-}
+/* Filter tabs are flex-based and auto-scroll horizontally */
 
 @media (max-width: 768px) {
   .touchpoint-filter-strip {
