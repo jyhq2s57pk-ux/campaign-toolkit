@@ -39,8 +39,10 @@ function ImageTextCardBlock({ block }) {
                 </div>
             )}
             <div className="itc-content">
-                {block.label && <span className="itc-label">{block.label}</span>}
-                {block.title && <h3 className="itc-title">{block.title}</h3>}
+                <div className="itc-scope">
+                    {block.label && <span className="itc-label">{block.label}</span>}
+                    {block.title && <h3 className="itc-title">{block.title}</h3>}
+                </div>
                 {block.body && <p className="itc-body">{block.body}</p>}
             </div>
         </div>

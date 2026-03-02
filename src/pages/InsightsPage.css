@@ -464,14 +464,22 @@
 .insight-blocks {
     display: flex;
     flex-direction: column;
-    gap: 0;
-    margin-bottom: 16px;
+    gap: 48px;
+    padding-top: 32px;
+    padding-bottom: 64px;
+}
+
+@media (min-width: 768px) {
+    .insight-blocks {
+        gap: 88px;
+        padding-top: 56px;
+        padding-bottom: 112px;
+    }
 }
 
 /* ─── Block Type: Body Copy ─── */
 .block-body-copy {
     max-width: 800px;
-    padding: 16px 0;
 }
 
 .block-body-copy-title {
@@ -491,7 +499,13 @@
 /* ─── Block Type: Section Headline ─── */
 .block-section-headline {
     text-align: center;
-    padding: 40px 0 48px;
+    padding: 16px 0 24px;
+}
+
+@media (min-width: 768px) {
+    .block-section-headline {
+        padding: 40px 0 48px;
+    }
 }
 
 .headline-line1 {
@@ -526,6 +540,7 @@
         flex-direction: row;
         gap: 40px;
         align-items: center;
+        padding: 32px 74px 32px 32px;
     }
 }
 
@@ -553,9 +568,15 @@
 .itc-content {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 20px;
     flex: 1;
     min-width: 0;
+}
+
+.itc-scope {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .itc-label {
@@ -588,7 +609,6 @@
     display: flex;
     flex-direction: column;
     gap: 32px;
-    padding: 24px 0;
 }
 
 @media (min-width: 768px) {
@@ -604,7 +624,7 @@
 
 @media (min-width: 768px) {
     .stats-left {
-        max-width: 325px;
+        width: 452px;
     }
 }
 
@@ -615,22 +635,20 @@
     color: #fff;
     line-height: 1.2;
     margin: 0;
+    max-width: 325px;
 }
 
 .stats-right {
     flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 20px;
     min-width: 0;
 }
 
 .stats-item {
-    padding: 24px 0;
+    padding-bottom: 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.stats-item:first-child {
-    padding-top: 0;
 }
 
 .stats-item:last-child {
@@ -643,21 +661,20 @@
     font-size: clamp(64px, 6vw, 105px);
     font-weight: 600;
     color: var(--campaign-color, var(--accent-purple));
-    line-height: 1;
+    line-height: 1.1;
     letter-spacing: -0.05em;
-    margin-bottom: 8px;
 }
 
 .stats-description {
     font-size: 16px;
     font-weight: 400;
     color: #fff;
-    line-height: 1.5;
+    line-height: 1.4;
 }
 
 /* ─── Block Type: Double Image ─── */
 .block-double-image {
-    padding: 0 0 40px;
+    /* no padding — parent .insight-blocks gap handles inter-block spacing */
 }
 
 .double-image-row {
@@ -692,7 +709,7 @@
     font-size: 15px;
     font-weight: 400;
     color: #fff;
-    line-height: 1.5;
+    line-height: 1.4;
     max-width: 432px;
-    margin: 16px 0 0;
+    margin: 32px 0 0;
 }
