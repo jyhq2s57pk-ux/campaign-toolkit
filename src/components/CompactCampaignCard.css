@@ -4,11 +4,15 @@
 
 /* Wrapper (link or button) */
 .campaign-card__wrapper {
-    display: block;
+    display: flex;
     text-decoration: none;
     color: inherit;
     border-radius: 40px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.campaign-card__wrapper > .campaign-card {
+    flex: 1;
 }
 
 .campaign-card__wrapper--button {
