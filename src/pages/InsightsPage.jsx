@@ -108,9 +108,11 @@ export default function InsightsPage() {
     });
     const [modules, setModules] = useState({});
     const [campaignColor, setCampaignColor] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             // Get campaign — prefer URL param, fall back to first campaign
             let campaign;
             if (campaignId) {
@@ -134,6 +136,7 @@ export default function InsightsPage() {
                     }
                 }
             }
+            setLoading(false);
         };
         fetchData();
     }, [campaignId]);
@@ -167,7 +170,7 @@ export default function InsightsPage() {
                         )}
 
                         {/* Bento Grid: shown as fallback when no content blocks exist */}
-                        {!hasBlocks && modules.insights_bento !== false && (
+                        {!loading && !hasBlocks && modules.insights_bento !== false && (
                         <div className="bento-grid">
                             {/* Card 1: Top Routes Map */}
                             <div className="bento-card card-large map-card glass">
@@ -224,7 +227,7 @@ export default function InsightsPage() {
                         )}
 
                         {/* Charts Section: shown as fallback when no content blocks exist */}
-                        {!hasBlocks && modules.insights_charts !== false && (
+                        {!loading && !hasBlocks && modules.insights_charts !== false && (
                         <div className="charts-container">
                             <div className="chart-card glass">
                                 <h3>Avolta LY PAX by month (EU)</h3>
