@@ -521,7 +521,7 @@ export default function AdminPage() {
                     {/* CSV Preview Modal */}
                     {showPreview && csvPreview && (
                       <div className="modal-overlay" onClick={handleCancelImport}>
-                        <div className="modal-content" style={{ maxWidth: '800px' }} onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                           <h3>CSV Import Preview</h3>
 
                           <div className="admin-message info">

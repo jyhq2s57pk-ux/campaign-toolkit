@@ -435,7 +435,7 @@ export default function InsightPagesAdmin({ campaignId }) {
 
       {editing && formData && (
         <div className="modal-overlay" onClick={() => { setEditing(false); setFormData(null); setShowTypeMenu(false); }}>
-          <div className="modal-content modal-content-wide" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3>{formData.id ? 'Edit Insight Page' : 'Create Insight Page'}</h3>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
