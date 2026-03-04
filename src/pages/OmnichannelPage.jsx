@@ -94,11 +94,13 @@ export default function OmnichannelPage() {
                 <div className="inner-content-wrapper">
                     <p className="omni-subheading">Activation ideas</p>
 
-                    <FilterTabs
-                        tabs={filterTabs}
-                        activeTab={activeFilter}
-                        onTabChange={setActiveFilter}
-                    />
+                    {channels.length > 0 && (
+                        <FilterTabs
+                            tabs={filterTabs}
+                            activeTab={activeFilter}
+                            onTabChange={setActiveFilter}
+                        />
+                    )}
 
                     {loading ? (
                         <div className="activation-loading">Loading ideas...</div>

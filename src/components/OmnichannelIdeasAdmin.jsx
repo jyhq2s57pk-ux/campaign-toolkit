@@ -3,18 +3,88 @@ import { supabase } from '../lib/supabase';
 import ImageUpload from './ImageUpload';
 import './AdminComponents.css';
 
-const CHANNEL_OPTIONS = ['Web', 'App', 'Email', 'Social', 'Paid Social', 'Loyalty', 'In-Store'];
-
 export default function OmnichannelIdeasAdmin() {
   const [ideas, setIdeas] = useState([]);
+  const [channelOptions, setChannelOptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState(null);
   const [editingIdea, setEditingIdea] = useState(null);
+  const [newChannel, setNewChannel] = useState('');
+  const [editingChannel, setEditingChannel] = useState(null);
 
   useEffect(() => {
     fetchIdeas();
+    fetchChannels();
   }, []);
+
+  const fetchChannels = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('omnichannel')
+        .select('*')
+        .order('id');
+
+      if (error) throw error;
+      setChannelOptions(data || []);
+    } catch (err) {
+      console.error('Error fetching channels:', err);
+    }
+  };
+
+  const handleAddChannel = async () => {
+    if (!newChannel.trim()) return;
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from('omnichannel')
+        .insert({ channel: newChannel.trim(), description: '' });
+
+      if (error) throw error;
+      setNewChannel('');
+      setMessage({ type: 'success', text: `Channel "${newChannel.trim()}" added!` });
+      fetchChannels();
+    } catch (err) {
+      setMessage({ type: 'error', text: 'Error adding channel: ' + err.message });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleUpdateChannel = async (ch) => {
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from('omnichannel')
+        .update({ channel: ch.channel, description: ch.description })
+        .eq('id', ch.id);
+
+      if (error) throw error;
+      setEditingChannel(null);
+      setMessage({ type: 'success', text: 'Channel updated!' });
+      fetchChannels();
+    } catch (err) {
+      setMessage({ type: 'error', text: 'Error updating channel: ' + err.message });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteChannel = async (id, name) => {
+    if (!confirm(`Delete channel "${name}"? Ideas using this channel will keep it in their data but it won't appear as a filter.`)) return;
+    try {
+      const { error } = await supabase
+        .from('omnichannel')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      setMessage({ type: 'success', text: `Channel "${name}" deleted!` });
+      fetchChannels();
+    } catch (err) {
+      setMessage({ type: 'error', text: 'Error deleting channel: ' + err.message });
+    }
+  };
 
   const fetchIdeas = async () => {
     setLoading(true);
@@ -186,6 +256,67 @@ export default function OmnichannelIdeasAdmin() {
         </div>
       )}
 
+      {/* Channels Management */}
+      <div style={{ marginBottom: '2rem', padding: '1.5rem', background: 'var(--surface-card)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', maxWidth: '480px' }}>
+        <h3 style={{ margin: '0 0 1rem', fontSize: '1.1rem' }}>Channels</h3>
+        <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: '0 0 1rem' }}>
+          Manage the filter tabs on the Omnichannel page. Remove all to hide filtering.
+        </p>
+
+        {channelOptions.length > 0 && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '1rem' }}>
+            {channelOptions.map((ch) => (
+              <div key={ch.id} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                {editingChannel?.id === ch.id ? (
+                  <>
+                    <input
+                      type="text"
+                      value={editingChannel.channel}
+                      onChange={(e) => setEditingChannel({ ...editingChannel, channel: e.target.value })}
+                      style={{ flex: 1 }}
+                    />
+                    <button className="btn-primary" style={{ padding: '6px 12px' }} onClick={() => handleUpdateChannel(editingChannel)} disabled={saving}>
+                      Save
+                    </button>
+                    <button className="btn-secondary" style={{ padding: '6px 12px' }} onClick={() => setEditingChannel(null)}>
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span style={{ padding: '6px 12px', background: 'var(--accent-purple)', borderRadius: '8px', fontSize: '13px', color: '#fff', whiteSpace: 'nowrap' }}>
+                      {ch.channel}
+                    </span>
+                    <span style={{ marginLeft: 'auto', display: 'flex', gap: '8px' }}>
+                      <button className="btn-secondary" style={{ padding: '4px 10px', fontSize: '12px' }} onClick={() => setEditingChannel({ ...ch })}>
+                        Edit
+                      </button>
+                      <button className="btn-secondary" style={{ padding: '4px 10px', fontSize: '12px' }} onClick={() => handleDeleteChannel(ch.id, ch.channel)}>
+                        Delete
+                      </button>
+                    </span>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <input
+            type="text"
+            value={newChannel}
+            onChange={(e) => setNewChannel(e.target.value)}
+            placeholder="New channel name"
+            style={{ flex: 1 }}
+            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddChannel())}
+          />
+          <button className="btn-primary" style={{ padding: '6px 16px' }} onClick={handleAddChannel} disabled={saving || !newChannel.trim()}>
+            Add Channel
+          </button>
+        </div>
+      </div>
+
       <div className="ideas-list">
         {ideas.length === 0 ? (
           <div className="admin-empty-state">
@@ -279,23 +410,25 @@ export default function OmnichannelIdeasAdmin() {
                 />
               </div>
 
-              <div className="form-group">
-                <label>Channels</label>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '4px' }}>
-                  {CHANNEL_OPTIONS.map((channel) => (
-                    <label key={channel} style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', padding: '4px 8px', borderRadius: '8px', background: editingIdea.channels?.includes(channel) ? 'var(--accent-purple)' : 'var(--surface-card)', color: '#fff', fontSize: '13px' }}>
-                      <input
-                        type="checkbox"
-                        checked={editingIdea.channels?.includes(channel) || false}
-                        onChange={() => handleChannelToggle(channel)}
-                        style={{ display: 'none' }}
-                      />
-                      {channel}
-                    </label>
-                  ))}
+              {channelOptions.length > 0 && (
+                <div className="form-group">
+                  <label>Channels</label>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '4px' }}>
+                    {channelOptions.map((ch) => (
+                      <label key={ch.id} style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', padding: '4px 8px', borderRadius: '8px', background: editingIdea.channels?.includes(ch.channel) ? 'var(--accent-purple)' : 'var(--surface-card)', color: '#fff', fontSize: '13px' }}>
+                        <input
+                          type="checkbox"
+                          checked={editingIdea.channels?.includes(ch.channel) || false}
+                          onChange={() => handleChannelToggle(ch.channel)}
+                          style={{ display: 'none' }}
+                        />
+                        {ch.channel}
+                      </label>
+                    ))}
+                  </div>
+                  <small className="form-help">Select which channels this idea applies to</small>
                 </div>
-                <small className="form-help">Select which channels this idea applies to</small>
-              </div>
+              )}
 
               <div className="form-group">
                 <label htmlFor="idea-headline">Modal Headline (purple text)</label>
