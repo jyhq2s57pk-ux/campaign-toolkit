@@ -216,12 +216,12 @@
 
   /* Make grid cleaner on mobile */
   .timeline-grid {
-    min-width: 800px;
-    /* Reduced min-width so it's not TOO long to scroll */
+    /* Let grid columns determine natural min-width */
+    grid-template-columns: 120px repeat(12, minmax(60px, 1fr));
   }
 
-  .timeline-grid {
-    grid-template-columns: 120px repeat(12, minmax(60px, 1fr));
+  .timeline-header.tier-label {
+    min-width: 80px; /* Reduce first column for mobile */
   }
 
   /* Improved tap targets for mobile */

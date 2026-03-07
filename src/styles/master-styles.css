@@ -122,8 +122,20 @@
     /* Dimensions */
     --content-max-width: 1152px;
     --container-padding: 24px;
+    --container-padding-tablet: 20px;
+    --container-padding-mobile: 16px;
     --container-max-width: 1200px;
     /* 1152px + (24px * 2) */
+
+    /* Spacing Scale (8px base) */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+    --space-3xl: 64px;
+    --space-4xl: 80px;
 
     /* Border Radius */
     --radius-xl: 24px;
@@ -134,6 +146,19 @@
     /* Animation */
     --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-medium: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive container padding */
+@media (max-width: 768px) {
+    :root {
+        --container-padding: var(--container-padding-tablet);
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --container-padding: var(--container-padding-mobile);
+    }
 }
 
 
