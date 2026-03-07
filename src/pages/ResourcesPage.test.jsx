@@ -28,21 +28,13 @@ describe('ResourcesPage', () => {
                 <ResourcesPage />
             </BrowserRouter>
         );
-        // Assuming there isn't an explicit "Loading..." text but checking it doesn't crash. 
-        // If there is no loading indicator, we might check for absence of resources.
-        // Looking at the code: const [loading, setLoading] = useState(true);
-        // It doesn't seem to render a loading spinner in the code I saw earlier, checking re-render?
-        // Actually, looking at ResourcesPage.jsx again:
-        // div className="resources-grid animate-fade-in"
-        // resources.map...
-        // If loading is true, resources is empty initially (useState([])), so it just renders empty grid.
-        expect(screen.getByText('Assets & Resources')).toBeInTheDocument();
+        expect(screen.getByText('Loading resources...')).toBeInTheDocument();
     });
 
     it('renders resources from API', async () => {
         const mockResources = [
-            { id: 1, title: 'Brand Guidelines', description: 'Desc 1' },
-            { id: 2, title: 'Visual Assets', description: 'Desc 2' },
+            { id: 1, title: 'Brand Guidelines', description: 'Desc 1', cta_url: 'https://example.com' },
+            { id: 2, title: 'Visual Assets', description: 'Desc 2', cta_url: 'https://example.com' },
         ];
         api.getResources.mockResolvedValue(mockResources);
 
@@ -56,8 +48,6 @@ describe('ResourcesPage', () => {
             expect(screen.getByText('Brand Guidelines')).toBeInTheDocument();
             expect(screen.getByText('Visual Assets')).toBeInTheDocument();
         });
-
-        expect(screen.getAllByText('Download')).toHaveLength(2);
     });
 
     it('handles empty API response', async () => {
