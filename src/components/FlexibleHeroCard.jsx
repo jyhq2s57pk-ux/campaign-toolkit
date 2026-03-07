@@ -1,4 +1,5 @@
 import React from 'react';
+import DOMPurify from 'dompurify';
 import './FlexibleHeroCard.css';
 
 export default function FlexibleHeroCard({
@@ -43,7 +44,7 @@ export default function FlexibleHeroCard({
                     <div className="detail-group description-group">
                         {detailsLabel && <span className="detail-label">{detailsLabel}</span>}
                         <div className="detail-text">
-                            <div dangerouslySetInnerHTML={{ __html: description }} />
+                            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(description) }} />
                         </div>
                     </div>
                 )}
