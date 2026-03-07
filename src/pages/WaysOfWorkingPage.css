@@ -10,7 +10,7 @@
 }
 
 .workflow-container {
-  margin-bottom: 80px;
+  margin-bottom: 60px; /* Reduced from 80px for tighter visual cohesion */
 }
 
 .workflow-steps {
@@ -89,12 +89,11 @@
 }
 
 .step-title {
-  font-size: 36px;
-  /* Heading XL */
+  font-size: clamp(24px, 3vw, 36px); /* Fluid scaling */
   font-weight: 600;
   margin-bottom: 24px;
-  /* Increased margin for balance */
   color: var(--text-primary);
+  line-height: 1.2; /* Add explicit line-height */
 }
 
 .step-desc {
@@ -124,7 +123,8 @@
 
 /* Best Practice Section */
 .best-practice-section {
-  padding-top: 40px;
+  padding-top: 48px; /* Increased from 40px for better separation */
+  margin-bottom: 40px; /* Add bottom margin for footer spacing */
 }
 
 .tips-grid {
@@ -320,13 +320,43 @@
   z-index: 1;
 }
 
+/* Better heading proportion on large screens */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .page-header h1 {
+    font-size: clamp(42px, 4vw, 52px); /* Cap at 52px instead of 60px */
+  }
+}
+
+@media (min-width: 1441px) {
+  .page-header h1 {
+    font-size: 52px; /* Fixed size instead of scaling to 60px */
+    max-width: 900px; /* Prevent excessively long lines */
+  }
+}
+
+/* Tablet responsive spacing */
+@media (max-width: 768px) {
+  .workflow-container {
+    margin-bottom: 40px; /* Further reduced on tablet/mobile */
+  }
+
+  .best-practice-section {
+    padding-top: 32px;
+  }
+
+  .step-title {
+    font-size: clamp(22px, 4vw, 28px); /* Tablet range */
+    margin-bottom: 20px;
+  }
+}
+
 @media (max-width: 480px) {
   .page-header h1 {
     word-wrap: break-word;
   }
 
   .step-title {
-    font-size: 24px;
+    font-size: 22px; /* Fixed size on mobile */
     margin-bottom: 16px;
   }
 

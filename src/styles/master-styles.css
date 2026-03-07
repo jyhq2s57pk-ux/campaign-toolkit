@@ -230,7 +230,7 @@ button {
 .btn-primary {
     background-color: var(--text-primary);
     color: var(--text-inverse);
-    padding: 12px 24px;
+    padding: 14px 28px; /* Increased from 12px 24px */
     border-radius: var(--radius-pill);
     border: 1px solid transparent;
     font-size: 14px;
@@ -241,6 +241,7 @@ button {
     align-items: center;
     justify-content: center;
     line-height: 1;
+    min-height: 44px; /* Explicit minimum for WCAG compliance */
 }
 
 .btn-primary:hover {

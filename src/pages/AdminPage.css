@@ -304,7 +304,7 @@
 }
 
 .btn-edit {
-  padding: 8px 16px;
+  padding: 12px 20px; /* Increased from 8px 16px */
   background-color: var(--surface-default);
   color: var(--text-primary);
   border: 1px solid var(--border-default);
@@ -312,6 +312,10 @@
   font-size: var(--text-13);
   cursor: pointer;
   transition: background-color 0.2s;
+  min-height: 44px; /* Explicit minimum for WCAG compliance */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-edit:hover {
@@ -319,7 +323,7 @@
 }
 
 .btn-delete {
-  padding: 8px 16px;
+  padding: 12px 20px; /* Increased from 8px 16px */
   background-color: transparent;
   color: #ef4444;
   border: 1px solid #ef4444;
@@ -327,6 +331,10 @@
   font-size: var(--text-13);
   cursor: pointer;
   transition: all 0.2s;
+  min-height: 44px; /* Explicit minimum for WCAG compliance */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-delete:hover {
@@ -400,10 +408,25 @@
     gap: 16px;
   }
 
+  .admin-title {
+    font-size: 28px; /* Reduced from var(--h-xxxl) for better mobile proportion */
+    line-height: 1.2;
+  }
+
   .admin-header-meta {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
+  }
+
+  .admin-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .admin-section-header h2 {
+    font-size: 20px; /* Reduced from 24px */
   }
 
   .admin-campaign-toolbar {

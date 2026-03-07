@@ -143,7 +143,21 @@
   /* Make it full height of the internal area if desired, or auto */
 }
 
-/* Hover effect removed */
+/* Interactive feedback states */
+.campaign-bar {
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.campaign-bar:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.campaign-bar:active {
+  transform: scale(0.98);
+  background-color: rgba(255, 255, 255, 0.05);
+}
 
 .campaign-bar-content {
   display: flex;
@@ -208,5 +222,26 @@
 
   .timeline-grid {
     grid-template-columns: 120px repeat(12, minmax(60px, 1fr));
+  }
+
+  /* Improved tap targets for mobile */
+  .campaign-bar {
+    min-height: 80px; /* Increased from 72px */
+    padding: 10px; /* Increased from 8px */
+  }
+
+  .campaign-bar-content {
+    gap: 4px; /* Increased from 2px for better readability */
+  }
+
+  .calendar-campaign-title,
+  .calendar-campaign-date {
+    font-size: 12px; /* Increased from var(--text-xs) (11px) */
+    line-height: 1.3;
+  }
+
+  /* Less dramatic press effect on mobile */
+  .campaign-bar:active {
+    transform: scale(0.99);
   }
 }
