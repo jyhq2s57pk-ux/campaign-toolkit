@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import './AdminComponents.css';
 
-export default function ResourcesAdmin() {
+export default function ResourcesAdmin({ campaignId }) {
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -16,15 +16,20 @@ export default function ResourcesAdmin() {
 
   useEffect(() => {
     fetchResources();
-  }, []);
+  }, [campaignId]);
 
   const fetchResources = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('resources')
-        .select('*')
-        .order('sort_order');
+        .select('*');
+
+      if (campaignId) {
+        query = query.eq('campaign_id', campaignId);
+      }
+
+      const { data, error } = await query.order('sort_order');
 
       if (error) throw error;
 
@@ -218,7 +223,7 @@ export default function ResourcesAdmin() {
             cta_url: '',
             sort_order: resources.length + 1,
             active: true,
-            campaign_id: null
+            campaign_id: campaignId || null
           })}
         >
           Add New Resource

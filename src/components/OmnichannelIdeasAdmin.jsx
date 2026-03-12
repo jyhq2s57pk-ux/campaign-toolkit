@@ -408,6 +408,7 @@ export default function OmnichannelIdeasAdmin() {
                   rows="4"
                   placeholder="Brief description of the activation idea..."
                 />
+                <small className="form-help">To add a link, use: [link text](https://url.com) — e.g. [View guidelines](https://figma.com/...)</small>
               </div>
 
               {channelOptions.length > 0 && (
@@ -527,6 +528,7 @@ export default function OmnichannelIdeasAdmin() {
                 >
                   + Add Step
                 </button>
+                <small className="form-help">Steps support links too: [link text](https://url.com)</small>
               </div>
 
               <div className="form-group">

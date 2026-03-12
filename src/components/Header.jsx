@@ -49,7 +49,7 @@ export default function Header() {
   const campaignNavLinks = [
     { name: 'Insights', path: '/insights' },
     { name: 'Touchpoints', path: '/customer-journey' },
-    { name: 'Activate', path: '/ways-of-working' },
+    { name: 'Ways of working', path: '/ways-of-working' },
     { name: 'Omnichannel', path: '/omnichannel' },
     { name: 'Resources', path: '/resources', moduleKey: 'page_resources' },
     { name: 'Calendar', path: '/calendar', moduleKey: 'page_calendar' },

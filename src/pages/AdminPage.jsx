@@ -470,7 +470,7 @@ export default function AdminPage() {
               {activeTab === 'journey' && <JourneyAdmin campaignId={campaignId} />}
 
               {/* Resources Tab */}
-              {activeTab === 'resources' && <ResourcesAdmin />}
+              {activeTab === 'resources' && <ResourcesAdmin campaignId={campaignId} />}
 
               {/* Insight Pages Tab */}
               {activeTab === 'insights' && <InsightPagesAdmin campaignId={campaignId} />}
