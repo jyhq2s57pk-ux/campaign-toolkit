@@ -238,14 +238,25 @@
     word-wrap: break-word;
   }
 
-  /* Make grid cleaner on mobile */
+  /* Widen month columns on mobile so campaign text fits within a single month */
   .timeline-grid {
-    /* Let grid columns determine natural min-width */
-    grid-template-columns: 120px repeat(12, minmax(60px, 1fr));
+    grid-template-columns: 130px repeat(12, minmax(100px, 1fr));
+    min-width: 1330px;
   }
 
   .timeline-header.tier-label {
-    min-width: 80px; /* Reduce first column for mobile */
+    min-width: 80px;
+  }
+
+  /* Compact tier cells so labels fit within the 130px column */
+  .timeline-tier-cell {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .tier-name-text,
+  .local-tier-label {
+    font-size: 13px;
   }
 
   /* Improved tap targets for mobile */

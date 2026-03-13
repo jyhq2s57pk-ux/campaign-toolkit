@@ -43,6 +43,8 @@
   padding: 24px 0;
 }
 
+/* Remove inner gutter only on small mobile screens */
+
 .journey-content {
   width: 100%;
 }
@@ -107,7 +109,7 @@
 }
 
 .accordion-item.expanded {
-  background: var(--surface-card);
+  background: var(--surface-elevated);
   border: 0.5px solid rgba(255, 255, 255, 0.15);
 }
 
@@ -125,7 +127,7 @@
 }
 
 .accordion-item:not(.expanded) .accordion-header {
-  background: var(--surface-elevated);
+  background: #252525;
   border-radius: 16px;
 }
 
@@ -142,11 +144,13 @@
 
 .accordion-title {
   font-family: var(--font-saans);
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 24px;
+  font-weight: 600;
   color: white;
   line-height: 40px;
 }
+
+/* Title size stays consistent — no change on expand */
 
 .platform-badge {
   display: inline-flex;
@@ -193,6 +197,8 @@
    ===================================================== */
 .accordion-body {
   padding: 0;
+  background: #161616;
+  border-radius: 0 0 16px 16px;
   animation: slideDown 0.3s ease;
 }
 
@@ -366,7 +372,7 @@
 .feature-header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
 }
 
 .feature-number {
@@ -393,7 +399,7 @@
 .feature-title {
   font-family: var(--font-saans);
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 500;
   color: white;
   line-height: 24px;
 }
@@ -403,11 +409,11 @@
    ===================================================== */
 .feature-description {
   font-family: var(--font-saans);
-  font-size: var(--text-13);
+  font-size: 14px;
   font-weight: 400;
-  color: var(--neutral-400);
-  line-height: 21px;
-  margin: 0;
+  color: #bebebe;
+  line-height: 23px;
+  margin: 3px 0 0 0;
 }
 
 /* Feature Badges
@@ -437,26 +443,65 @@
   .image-frame {
     max-width: 100%;
     min-width: auto;
+    background: #161616;
+    padding: 24px 40px 24px 16px;
+    /* Right padding leaves room for markers positioned inside frame edge */
   }
 
   .descriptions-container {
     max-width: 100%;
   }
 
-  /* Overlay markers inside the image instead of outside */
+  /* Position markers at the right edge of the image frame */
   .markers-container {
-    right: 8px;
+    right: -32px;
+    width: 28px;
   }
 
-  /* Show a short connecting line stub on mobile */
+  /* White background with dark numbers on mobile */
+  .number-label {
+    background: white;
+    border-color: #D4D4D4;
+  }
+
+  .number-label-text {
+    color: #1C1917;
+  }
+
+  .marker-row.active .number-label {
+    background: white;
+    border-color: #D4D4D4;
+  }
+
+  .marker-row.active .number-label-text {
+    color: #1C1917;
+  }
+
+  /* Hide connecting line on mobile */
   .marker-row svg {
-    width: 12px;
-    height: 18px;
-    opacity: 0.6;
+    display: none;
+  }
+
+  /* Reduce accordion title by 1pt */
+  .accordion-title {
+    font-size: 23px;
   }
 }
 
 @media (max-width: 600px) {
+  /* Break filter tabs out to full viewport width on small mobile */
+  .touchpoint-filter-inline {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .journey-page .inner-content-wrapper {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   .journey-page {
     padding: 16px;
   }
@@ -474,8 +519,13 @@
   }
 
   .accordion-title {
-    font-size: 16px;
+    font-size: 19px;
     line-height: 28px;
+  }
+
+  /* Keep title size consistent on mobile — no size change on expand */
+  .accordion-item.expanded .accordion-title {
+    font-size: 19px;
   }
 
   .component-count {
@@ -488,7 +538,7 @@
   }
 
   .image-frame {
-    padding: 10px 24px;
+    padding: 10px 40px 10px 16px;
   }
 
   .feature-title {
@@ -496,7 +546,7 @@
   }
 
   .feature-description {
-    font-size: var(--length-body-small);
+    font-size: 14px;
   }
 }
 
@@ -517,7 +567,7 @@
   }
 
   .image-frame {
-    padding: 8px 16px;
+    padding: 8px 40px 8px 12px;
     min-width: 0;
   }
 
