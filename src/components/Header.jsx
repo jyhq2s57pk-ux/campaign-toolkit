@@ -118,7 +118,7 @@ export default function Header() {
           </div>
 
           <button
-            className="mobile-menu-toggle"
+            className={`mobile-menu-toggle ${isMenuOpen ? 'mobile-menu-toggle--open' : ''}`}
             onClick={toggleMenu}
             aria-label="Toggle menu"
           >
@@ -133,6 +133,17 @@ export default function Header() {
 
           <div className={`header-center ${isMenuOpen ? 'open' : ''}`}>
             <nav className={`header-nav ${isMenuOpen ? 'mobile-open' : ''}`}>
+              {/* Mobile nav header: Home + campaign name */}
+              {isMenuOpen && (
+                <div className="mobile-nav-header">
+                  <Link to="/" className="nav-btn mobile-nav-home" onClick={closeMenu}>
+                    Home
+                  </Link>
+                  {campaign && (
+                    <span className="mobile-nav-campaign">{campaign.name}</span>
+                  )}
+                </div>
+              )}
               {navLinks.map((link) => (
                 <Link
                   key={link.path}

@@ -267,6 +267,13 @@
     display: block;
   }
 
+  .mobile-menu-toggle--open {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 1002;
+  }
+
   .header-nav.mobile-open {
     display: flex;
     position: fixed;
@@ -309,5 +316,22 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     width: 100%;
     box-sizing: border-box;
+  }
+
+  .mobile-nav-header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-nav-home {
+    font-weight: 600;
+  }
+
+  .mobile-nav-campaign {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    padding: 0 24px 16px;
+    font-family: var(--font-body, 'Saans', sans-serif);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 }

@@ -448,9 +448,11 @@
     right: 8px;
   }
 
-  /* Hide the connecting line SVGs on mobile */
+  /* Show a short connecting line stub on mobile */
   .marker-row svg {
-    display: none;
+    width: 12px;
+    height: 18px;
+    opacity: 0.6;
   }
 }
 
