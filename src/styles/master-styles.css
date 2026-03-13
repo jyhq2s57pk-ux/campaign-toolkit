@@ -297,3 +297,34 @@ button {
     border-color: var(--border-default);
     transform: none;
 }
+
+/* ─── Global RichText link styles ─── */
+
+.step-body-content a,
+.touchpoint-description a,
+.block-body-copy a,
+.itc-body a,
+.stats-description a,
+.uc-desc a,
+.page-description a,
+.tip-card a,
+.idea-modal__description a,
+.idea-modal__step a {
+    color: var(--accent-purple, #8F53F0);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity 0.2s ease;
+}
+
+.step-body-content a:hover,
+.touchpoint-description a:hover,
+.block-body-copy a:hover,
+.itc-body a:hover,
+.stats-description a:hover,
+.uc-desc a:hover,
+.page-description a:hover,
+.tip-card a:hover,
+.idea-modal__description a:hover,
+.idea-modal__step a:hover {
+    opacity: 0.8;
+}

@@ -1,48 +1,7 @@
 import { useEffect } from 'react';
 import Badge from './Badge';
+import RichText from './RichText';
 import './IdeaDetailModal.css';
-
-/**
- * Renders text with clickable links.
- * Supports markdown-style [text](url) and bare https:// URLs.
- */
-function RichText({ children }) {
-  if (!children || typeof children !== 'string') return children || null;
-
-  // Match [link text](url) or bare https://... URLs
-  const pattern = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<]+)/g;
-  const parts = [];
-  let lastIndex = 0;
-  let match;
-
-  while ((match = pattern.exec(children)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push(children.slice(lastIndex, match.index));
-    }
-    if (match[1] && match[2]) {
-      // Markdown-style link: [text](url)
-      parts.push(
-        <a key={match.index} href={match[2]} target="_blank" rel="noopener noreferrer">
-          {match[1]}
-        </a>
-      );
-    } else if (match[3]) {
-      // Bare URL
-      parts.push(
-        <a key={match.index} href={match[3]} target="_blank" rel="noopener noreferrer">
-          {match[3]}
-        </a>
-      );
-    }
-    lastIndex = match.index + match[0].length;
-  }
-
-  if (lastIndex < children.length) {
-    parts.push(children.slice(lastIndex));
-  }
-
-  return parts.length > 0 ? <>{parts}</> : children;
-}
 
 export default function IdeaDetailModal({ idea, onClose, imageMap = {} }) {
   useEffect(() => {

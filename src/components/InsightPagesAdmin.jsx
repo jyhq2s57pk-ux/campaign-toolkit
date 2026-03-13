@@ -38,6 +38,7 @@ function BodyCopyEditor({ block, index, updateBlock }) {
         rows="4"
         placeholder="Paragraph text..."
       />
+      <small className="form-help">Supports **bold** and links: [link text](https://url.com)</small>
     </div>
   );
 }
@@ -96,6 +97,7 @@ function ImageTextCardEditor({ block, index, updateBlock }) {
           rows="3"
           placeholder="Card description text..."
         />
+        <small className="form-help">Supports links: [link text](https://url.com)</small>
       </div>
       <ImageUpload
         label="Card Image"

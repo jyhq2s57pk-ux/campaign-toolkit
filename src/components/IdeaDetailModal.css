@@ -156,18 +156,7 @@
   word-wrap: break-word;
 }
 
-.idea-modal__description a,
-.idea-modal__step a {
-  color: var(--accent-purple, #8F53F0);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  transition: opacity 0.2s ease;
-}
-
-.idea-modal__description a:hover,
-.idea-modal__step a:hover {
-  opacity: 0.8;
-}
+/* Link styles now in master-styles.css (global RichText rules) */
 
 /* How it works block */
 .idea-modal__how-it-works {

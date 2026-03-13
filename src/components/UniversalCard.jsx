@@ -1,4 +1,5 @@
 import React from 'react';
+import RichText from './RichText';
 import './UniversalCard.css';
 
 /**
@@ -65,7 +66,7 @@ export default function UniversalCard({
                 <h3 className="uc-title">{title}</h3>
 
                 {description && (
-                    <p className="uc-desc">{description}</p>
+                    <p className="uc-desc"><RichText>{description}</RichText></p>
                 )}
             </div>
 

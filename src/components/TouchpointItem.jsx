@@ -1,5 +1,6 @@
 import NumberMarker from './NumberMarker';
 import Badge from './Badge';
+import RichText from './RichText';
 import './TouchpointItem.css';
 
 export default function TouchpointItem({
@@ -39,7 +40,7 @@ export default function TouchpointItem({
       )}
 
       {/* Description */}
-      <p className="touchpoint-description">{description}</p>
+      <p className="touchpoint-description"><RichText>{description}</RichText></p>
 
       {/* Optional indicator */}
       {isOptional && (

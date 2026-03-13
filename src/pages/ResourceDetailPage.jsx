@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import RichText from '../components/RichText';
 import { api } from '../lib/api';
 import './ResourceDetailPage.css';
 
@@ -58,7 +59,7 @@ export default function ResourceDetailPage() {
                 <div className="resource-header">
                     <h1 className="page-title">{resource.title}</h1>
                     {resource.description && (
-                        <p className="page-description">{resource.description}</p>
+                        <p className="page-description"><RichText>{resource.description}</RichText></p>
                     )}
                 </div>
 

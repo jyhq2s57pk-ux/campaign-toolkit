@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import RichText from "../components/RichText";
 import "./WaysOfWorkingPage.css";
 import ImplementationTips from "../components/ImplementationTips";
 import { api } from "../lib/api";
@@ -48,21 +49,12 @@ export default function WaysOfWorkingPage() {
     return <IconComponent />;
   };
 
-  // Helper to safely render text with **bold** formatting
-  const renderFormattedText = (text) => {
-    if (!text) return null;
-    // Split on **bold** markers and alternate between plain text and bold
-    const parts = text.split(/\*\*([^*]+)\*\*/g);
-    return parts.map((segment, idx) =>
-      idx % 2 === 1 ? <strong key={idx}>{segment}</strong> : segment
-    );
-  };
-
   // Helper to render step description safely (no dangerouslySetInnerHTML)
+  // RichText handles **bold**, [links](url), and bare URLs
   const renderStepContent = (description) => {
     if (!description) return null;
 
-    // Strip any HTML tags for safety — we only support **bold** markdown
+    // Strip any HTML tags for safety
     const cleanText = description.replace(/<[^>]*>/g, '');
 
     // Split by double line breaks into paragraphs
@@ -72,15 +64,15 @@ export default function WaysOfWorkingPage() {
       <>
         {parts.map((part, i) => {
           const trimmed = part.trim();
-          // Check for highlight markers (text starting with >) as a safe alternative
+          // Check for highlight markers (text starting with >)
           if (trimmed.startsWith('>')) {
             return (
               <div key={i} className="highlight-text">
-                {renderFormattedText(trimmed.slice(1).trim())}
+                <RichText>{trimmed.slice(1).trim()}</RichText>
               </div>
             );
           }
-          return <p key={i}>{renderFormattedText(trimmed)}</p>;
+          return <p key={i}><RichText>{trimmed}</RichText></p>;
         })}
       </>
     );
@@ -172,7 +164,7 @@ export default function WaysOfWorkingPage() {
                 {tips.map((tip, i) => (
                   <div key={i} className="tip-card glass">
                     <span className="tip-bullet">✓</span>
-                    <p>{tip}</p>
+                    <p><RichText>{tip}</RichText></p>
                   </div>
                 ))}
               </div>

@@ -268,7 +268,7 @@ export default function WaysOfWorkingAdmin({ campaignId }) {
                     placeholder="Use **bold** for emphasis and line breaks for structure..."
                   />
                   <small className="form-help">
-                    Supports markdown-style formatting: **bold**, line breaks, HTML tags
+                    Supports **bold**, line breaks, and links: [link text](https://url.com)
                   </small>
                 </div>
 
@@ -358,6 +358,7 @@ export default function WaysOfWorkingAdmin({ campaignId }) {
                     required
                     placeholder="e.g., Always define activation level first"
                   />
+                  <small className="form-help">Supports links: [link text](https://url.com)</small>
                 </div>
 
                 <div className="form-group">
@@ -395,7 +396,7 @@ export default function WaysOfWorkingAdmin({ campaignId }) {
         <ul>
           <li><strong>Workflow Steps:</strong> The 3-step process shown on Ways of Working page</li>
           <li><strong>Best Practice Tips:</strong> Checklist of tips at the bottom of the page</li>
-          <li><strong>Formatting:</strong> Use **text** for bold, line breaks for structure</li>
+          <li><strong>Formatting:</strong> Use **text** for bold, [text](url) for links, line breaks for structure</li>
         </ul>
       </div>
     </div>

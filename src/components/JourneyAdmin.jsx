@@ -613,6 +613,7 @@ export default function JourneyAdmin({ campaignId }) {
               <div className="form-group">
                 <label>Description</label>
                 <textarea value={componentFormData.description || ''} onChange={(e) => setComponentFormData({ ...componentFormData, description: e.target.value })} rows="3" placeholder="What does this touchpoint do?" />
+                <small className="form-help">Supports links: [link text](https://url.com)</small>
               </div>
               <div className="form-checkboxes">
                 <label><input type="checkbox" checked={componentFormData.tier_premium || false} onChange={(e) => setComponentFormData({ ...componentFormData, tier_premium: e.target.checked })} /> Premium</label>

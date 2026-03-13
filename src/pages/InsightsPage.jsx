@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import RichText from '../components/RichText';
 import './InsightsPage.css';
 import { api } from '../lib/api';
 
@@ -15,7 +16,7 @@ function BodyCopyBlock({ block }) {
         <div className="block-body-copy">
             {block.title && <h3 className="block-body-copy-title">{block.title}</h3>}
             {block.body && (
-                <p style={{ whiteSpace: 'pre-line' }}>{block.body}</p>
+                <p style={{ whiteSpace: 'pre-line' }}><RichText>{block.body}</RichText></p>
             )}
         </div>
     );
@@ -43,7 +44,7 @@ function ImageTextCardBlock({ block }) {
                     {block.label && <span className="itc-label">{block.label}</span>}
                     {block.title && <h3 className="itc-title">{block.title}</h3>}
                 </div>
-                {block.body && <p className="itc-body">{block.body}</p>}
+                {block.body && <p className="itc-body"><RichText>{block.body}</RichText></p>}
             </div>
         </div>
     );
@@ -60,7 +61,7 @@ function StatsBlock({ block }) {
                 {items.map((item, idx) => (
                     <div key={idx} className="stats-item">
                         {item.number && <div className="stats-number">{item.number}</div>}
-                        {item.description && <div className="stats-description">{item.description}</div>}
+                        {item.description && <div className="stats-description"><RichText>{item.description}</RichText></div>}
                     </div>
                 ))}
             </div>
