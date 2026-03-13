@@ -1,9 +1,29 @@
 import React from 'react';
 
 /**
- * Renders plain text with clickable links.
+ * Parses inline bold (**text**) within a string and returns React nodes.
+ */
+function parseInlineBold(text, keyPrefix) {
+  const boldPattern = /\*\*([^*]+)\*\*/g;
+  const parts = [];
+  let lastIdx = 0;
+  let m;
+
+  while ((m = boldPattern.exec(text)) !== null) {
+    if (m.index > lastIdx) parts.push(text.slice(lastIdx, m.index));
+    parts.push(<strong key={`${keyPrefix}-b${m.index}`}>{m[1]}</strong>);
+    lastIdx = m.index + m[0].length;
+  }
+
+  if (lastIdx < text.length) parts.push(text.slice(lastIdx));
+  return parts.length === 1 && typeof parts[0] === 'string' ? parts[0] : parts;
+}
+
+/**
+ * Renders plain text with clickable links and bold text.
  * Supports:
  *  - Markdown-style links: [link text](https://url.com)
+ *  - Bold inside links: [**bold text**](https://url.com)
  *  - Bare URLs: https://example.com
  *  - **bold** text
  *
@@ -25,10 +45,10 @@ export default function RichText({ children }) {
     }
 
     if (match[1] && match[2]) {
-      // Markdown-style link: [text](url)
+      // Markdown-style link: [text](url) — parse bold inside link text
       parts.push(
         <a key={match.index} href={match[2]} target="_blank" rel="noopener noreferrer">
-          {match[1]}
+          {parseInlineBold(match[1], match.index)}
         </a>
       );
     } else if (match[3]) {
