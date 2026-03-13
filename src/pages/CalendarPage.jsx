@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useCallback, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -91,7 +91,7 @@ export default function CalendarPage() {
   }, [events, tiers]);
 
   const tierRowInfo = useMemo(() => {
-    let currentGridRow = 2;
+    let currentGridRow = 1;
     const info = {};
 
     tiers.forEach(tier => {
@@ -113,6 +113,16 @@ export default function CalendarPage() {
     return `${startMonth + 1} / ${endMonth + 2}`;
   };
 
+  // Sync horizontal scroll between sticky header and body
+  const headerScrollRef = useRef(null);
+  const bodyScrollRef = useRef(null);
+
+  const handleBodyScroll = useCallback(() => {
+    if (headerScrollRef.current && bodyScrollRef.current) {
+      headerScrollRef.current.scrollLeft = bodyScrollRef.current.scrollLeft;
+    }
+  }, []);
+
   return (
     <div className="calendar-page">
       <Header />
@@ -125,15 +135,22 @@ export default function CalendarPage() {
         </section>
 
         <div className="inner-content-wrapper full-width">
-          <div className="calendar-grid-container glass">
-            <div className="timeline-grid">
-              {/* Header Row */}
-              <div className="timeline-header tier-label">Category</div>
-              {months.map((m) => (
-                <div key={m.key} className="timeline-header month-label">
-                  {m.short}
-                </div>
-              ))}
+          <div className="calendar-grid-wrapper glass">
+            {/* Sticky header row — syncs horizontal scroll with body */}
+            <div className="calendar-header-scroll" ref={headerScrollRef}>
+              <div className="timeline-grid timeline-grid--header">
+                <div className="timeline-header tier-label">Category</div>
+                {months.map((m) => (
+                  <div key={m.key} className="timeline-header month-label">
+                    {m.short}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Scrollable body */}
+            <div className="calendar-body-scroll" ref={bodyScrollRef} onScroll={handleBodyScroll}>
+              <div className="timeline-grid timeline-grid--body">
 
               {/* Tier Sections */}
               {tiers.map((tier) => {
@@ -201,6 +218,7 @@ export default function CalendarPage() {
                   </React.Fragment>
                 );
               })}
+              </div>
             </div>
           </div>
 

@@ -240,12 +240,17 @@
    Responsive - Mobile
    ===================================================== */
 @media (max-width: 900px) {
+  .idea-modal-overlay {
+    align-items: flex-start;
+  }
+
   .idea-modal {
     flex-direction: column;
     padding: 32px 24px 48px 24px;
     border-radius: 32px;
     gap: 32px;
-    max-height: 95vh;
+    max-height: none;
+    overflow-y: visible;
   }
 
   .idea-modal__images {

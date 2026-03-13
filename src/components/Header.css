@@ -226,11 +226,22 @@
 
 .hamburger-line {
   transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
-  transform-origin: 12px 12px;
+}
+
+.hamburger-top {
+  transform-origin: center 6px;
+}
+
+.hamburger-mid {
+  transform-origin: center 12px;
+}
+
+.hamburger-bot {
+  transform-origin: center 18px;
 }
 
 .menu-icon.open .hamburger-top {
-  transform: translate(0, 6px) rotate(45deg);
+  transform: translateY(6px) rotate(45deg);
 }
 
 .menu-icon.open .hamburger-mid {
@@ -238,7 +249,7 @@
 }
 
 .menu-icon.open .hamburger-bot {
-  transform: translate(0, -6px) rotate(-45deg);
+  transform: translateY(-6px) rotate(-45deg);
 }
 
 /* ===== Responsive — Mobile (≤1100px) ===== */
