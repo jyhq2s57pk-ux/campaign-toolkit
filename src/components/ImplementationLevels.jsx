@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import '../pages/CustomerJourneyPage.css'; // Reusing page styles for consistency
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
+import '../pages/CustomerJourneyPage.css';
 import './ImplementationLevels.css';
 
-// Duplicate icons to avoid circular dependencies or export issues
 const ChevronDown = () => (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M8 10.9998L3 5.9998L3.7 5.2998L8 9.5998L12.3 5.2998L13 5.9998L8 10.9998Z" fill="var(--theme-icon-1, #F1F1F1)" />
@@ -15,17 +15,77 @@ const ChevronUp = () => (
     </svg>
 );
 
-export default function ImplementationLevels() {
-    // Default expanded: Premium
+/**
+ * Groups touchpoints by platform for a given tier.
+ * Returns an array of { platform, items: [title, ...] } in sort order.
+ */
+function groupByPlatform(touchpoints, tierKey) {
+    const grouped = {};
+    const platformOrder = [];
+
+    for (const tp of touchpoints) {
+        if (!tp[tierKey]) continue;
+
+        const platform = tp.platform;
+        if (!grouped[platform]) {
+            grouped[platform] = [];
+            platformOrder.push(platform);
+        }
+        grouped[platform].push(tp.title);
+    }
+
+    return platformOrder.map(platform => ({
+        platform,
+        items: grouped[platform],
+    }));
+}
+
+/**
+ * Decides the grid column class based on the number of groups.
+ */
+function getGridClass(groupCount) {
+    if (groupCount >= 3) return 'three-cols';
+    return 'two-cols';
+}
+
+const LEVELS = [
+    { key: 'premium', tierKey: 'tier_premium', label: 'Premium', subtitle: 'Full visibility' },
+    { key: 'executive', tierKey: 'tier_executive', label: 'Executive', subtitle: 'Medium visibility' },
+    { key: 'standard', tierKey: 'tier_standard', label: 'Standard', subtitle: 'Regular visibility' },
+];
+
+export default function ImplementationLevels({ campaignId }) {
     const [expandedLevel, setExpandedLevel] = useState(null);
+    const [touchpoints, setTouchpoints] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchTouchpoints = async () => {
+            setLoading(true);
+            if (!supabase) { setLoading(false); return; }
+
+            let query = supabase.from('touchpoints').select('title, platform, tier_premium, tier_executive, tier_standard, sort_order');
+            if (campaignId) {
+                query = query.eq('campaign_id', campaignId);
+            }
+            const { data, error } = await query.order('sort_order', { ascending: true });
+
+            if (!error && data) {
+                setTouchpoints(data);
+            }
+            setLoading(false);
+        };
+
+        fetchTouchpoints();
+    }, [campaignId]);
 
     const toggleLevel = (level) => {
-        if (expandedLevel === level) {
-            setExpandedLevel(null);
-        } else {
-            setExpandedLevel(level);
-        }
+        setExpandedLevel(expandedLevel === level ? null : level);
     };
+
+    if (loading || touchpoints.length === 0) {
+        return null; // Don't render anything while loading or if no data
+    }
 
     return (
         <div className="implementation-levels">
@@ -34,182 +94,48 @@ export default function ImplementationLevels() {
             </div>
 
             <div className="accordion-container">
-                {/* 1. Premium */}
-                <div className={`accordion-item ${expandedLevel === 'premium' ? 'expanded' : ''} level-item level-premium`}>
-                    <div className="accordion-header level-header" onClick={() => toggleLevel('premium')}>
-                        <div className="level-badge-wrapper">
-                            <span className="badge badge--premium badge--accordion-lg">Premium</span>
-                        </div>
-                        <div className="level-title">Full visibility</div>
-                        <div className="accordion-chevron">
-                            {expandedLevel === 'premium' ? <ChevronUp /> : <ChevronDown />}
-                        </div>
-                    </div>
-                    {expandedLevel === 'premium' && (
-                        <div className="accordion-body level-body">
-                            <div className="level-grid three-cols">
-                                {/* Col 1 */}
-                                <div className="level-col">
-                                    <div className="level-group">
-                                        <h4>Home</h4>
-                                        <ul>
-                                            <li>Hero Banner</li>
-                                            <li>Most Popular Carousel</li>
-                                        </ul>
-                                    </div>
-                                    <div className="level-group">
-                                        <h4>CLP</h4>
-                                        <ul>
-                                            <li>Tailored CLP</li>
-                                            <li>CLP Hero</li>
-                                            <li>Dual Content Block</li>
-                                        </ul>
-                                    </div>
+                {LEVELS.map(({ key, tierKey, label, subtitle }) => {
+                    const groups = groupByPlatform(touchpoints, tierKey);
+                    if (groups.length === 0) return null; // Skip tiers with no touchpoints
+
+                    const isExpanded = expandedLevel === key;
+                    const gridClass = getGridClass(groups.length);
+
+                    return (
+                        <div
+                            key={key}
+                            className={`accordion-item ${isExpanded ? 'expanded' : ''} level-item level-${key}`}
+                        >
+                            <div className="accordion-header level-header" onClick={() => toggleLevel(key)}>
+                                <div className="level-badge-wrapper">
+                                    <span className={`badge badge--${key} badge--accordion-lg`}>{label}</span>
                                 </div>
-                                {/* Col 2 */}
-                                <div className="level-col">
-                                    <div className="level-group">
-                                        <h4>PLP</h4>
-                                        <ul>
-                                            <li>Tailored PLP creation</li>
-                                            <li>PLP Inline Banner</li>
-                                        </ul>
-                                    </div>
-                                    <div className="level-group">
-                                        <h4>PDP</h4>
-                                        <ul>
-                                            <li>MK Banner</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                {/* Col 3 */}
-                                <div className="level-col">
-                                    <div className="level-group">
-                                        <h4>Mega menu</h4>
-                                        <ul>
-                                            <li>Top Menu</li>
-                                            <li>Under each main category</li>
-                                            <li>Mega Menu Brands Banner</li>
-                                        </ul>
-                                    </div>
-                                    <div className="level-group">
-                                        <h4>Search</h4>
-                                        <ul>
-                                            <li>Boost SKUs</li>
-                                            <li>Search Redirections</li>
-                                            <li>Popular Searches</li>
-                                        </ul>
-                                    </div>
+                                <div className="level-title">{subtitle}</div>
+                                <div className="accordion-chevron">
+                                    {isExpanded ? <ChevronUp /> : <ChevronDown />}
                                 </div>
                             </div>
-                        </div>
-                    )}
-                </div>
-
-                {/* 2. Executive */}
-                <div className={`accordion-item ${expandedLevel === 'executive' ? 'expanded' : ''} level-item level-executive`}>
-                    <div className="accordion-header level-header" onClick={() => toggleLevel('executive')}>
-                        <div className="level-badge-wrapper">
-                            <span className="badge badge--executive badge--accordion-lg">Executive</span>
-                        </div>
-                        <div className="level-title">Medium visibility</div>
-                        <div className="accordion-chevron">
-                            {expandedLevel === 'executive' ? <ChevronUp /> : <ChevronDown />}
-                        </div>
-                    </div>
-                    {expandedLevel === 'executive' && (
-                        <div className="accordion-body level-body">
-                            <div className="level-grid two-cols">
-                                {/* Col 1 */}
-                                <div className="level-col">
-                                    <div className="level-group">
-                                        <h4>Home</h4>
-                                        <ul>
-                                            <li>Most Popular Carousel</li>
-                                            <li>What's Trending Carousel / Content Editorial Banner</li>
-                                        </ul>
-                                    </div>
-                                    <div className="level-group">
-                                        <h4>PLP</h4>
-                                        <ul>
-                                            <li>Tailored PLP creation</li>
-                                            <li>PLP Inline Banner</li>
-                                        </ul>
+                            {isExpanded && (
+                                <div className="accordion-body level-body">
+                                    <div className={`level-grid ${gridClass}`}>
+                                        {groups.map(({ platform, items }) => (
+                                            <div key={platform} className="level-col">
+                                                <div className="level-group">
+                                                    <h4>{platform}</h4>
+                                                    <ul>
+                                                        {items.map((item, idx) => (
+                                                            <li key={idx}>{item}</li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
-                                {/* Col 2 */}
-                                <div className="level-col">
-                                    <div className="level-group">
-                                        <h4>Megamenu</h4>
-                                        <ul>
-                                            <li>Under each main category</li>
-                                            <li>Mega Menu Brands Banner</li>
-                                        </ul>
-                                    </div>
-                                    <div className="level-group">
-                                        <h4>Search</h4>
-                                        <ul>
-                                            <li>Boost SKUs</li>
-                                            <li>Search Redirections</li>
-                                            <li>Popular Searches</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
+                            )}
                         </div>
-                    )}
-                </div>
-
-                {/* 3. Standard */}
-                <div className={`accordion-item ${expandedLevel === 'standard' ? 'expanded' : ''} level-item level-standard`}>
-                    <div className="accordion-header level-header" onClick={() => toggleLevel('standard')}>
-                        <div className="level-badge-wrapper">
-                            <span className="badge badge--standard badge--accordion-lg">Standard</span>
-                        </div>
-                        <div className="level-title">Regular visibility</div>
-                        <div className="accordion-chevron">
-                            {expandedLevel === 'standard' ? <ChevronUp /> : <ChevronDown />}
-                        </div>
-                    </div>
-                    {expandedLevel === 'standard' && (
-                        <div className="accordion-body level-body">
-                            <div className="level-grid two-cols">
-                                {/* Col 1 */}
-                                <div className="level-col">
-                                    <div className="level-group">
-                                        <h4>Home</h4>
-                                        <ul>
-                                            <li>What's Trending Carousel / Content Editorial Banner</li>
-                                        </ul>
-                                    </div>
-                                    <div className="level-group">
-                                        <h4>PLP</h4>
-                                        <ul>
-                                            <li>Tailored PLP creation</li>
-                                            <li>PLP Inline Banner</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                {/* Col 2 */}
-                                <div className="level-col">
-                                    <div className="level-group">
-                                        <h4>Megamenu</h4>
-                                        <ul>
-                                            <li>Mega Menu Brands Banner</li>
-                                        </ul>
-                                    </div>
-                                    <div className="level-group">
-                                        <h4>Search</h4>
-                                        <ul>
-                                            <li>Search Redirections</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-
+                    );
+                })}
             </div>
         </div>
     );

@@ -153,7 +153,7 @@ export default function CustomerJourneyPage() {
 
         <div className="inner-content-wrapper">
           {/* Activation Levels */}
-          <ImplementationLevels />
+          <ImplementationLevels campaignId={campaignId} />
 
           {/* Customer Touchpoints Section */}
           <div className="journey-content">
