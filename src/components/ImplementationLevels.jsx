@@ -16,28 +16,37 @@ const ChevronUp = () => (
 );
 
 /**
- * Groups touchpoints by platform for a given tier.
- * Returns an array of { platform, items: [title, ...] } in sort order.
+ * Groups touchpoints by activation_group (falling back to platform) for a given tier.
+ * Returns an array of { group, items: [label, ...] } sorted by activation_group_sort.
  */
-function groupByPlatform(touchpoints, tierKey) {
+function groupByActivationGroup(touchpoints, tierKey) {
     const grouped = {};
-    const platformOrder = [];
+    const groupMeta = {}; // track sort order per group
 
     for (const tp of touchpoints) {
         if (!tp[tierKey]) continue;
 
-        const platform = tp.platform;
-        if (!grouped[platform]) {
-            grouped[platform] = [];
-            platformOrder.push(platform);
+        const group = tp.activation_group || tp.platform;
+        const label = tp.activation_label || tp.title;
+        const groupSort = tp.activation_group_sort ?? 999;
+
+        if (!grouped[group]) {
+            grouped[group] = [];
+            groupMeta[group] = groupSort;
         }
-        grouped[platform].push(tp.title);
+        grouped[group].push(label);
+        // Keep the lowest sort value for the group
+        if (groupSort < groupMeta[group]) {
+            groupMeta[group] = groupSort;
+        }
     }
 
-    return platformOrder.map(platform => ({
-        platform,
-        items: grouped[platform],
-    }));
+    return Object.keys(grouped)
+        .sort((a, b) => (groupMeta[a] ?? 999) - (groupMeta[b] ?? 999))
+        .map(group => ({
+            group,
+            items: grouped[group],
+        }));
 }
 
 /**
@@ -64,7 +73,7 @@ export default function ImplementationLevels({ campaignId }) {
             setLoading(true);
             if (!supabase) { setLoading(false); return; }
 
-            let query = supabase.from('touchpoints').select('title, platform, tier_premium, tier_executive, tier_standard, sort_order');
+            let query = supabase.from('touchpoints').select('title, platform, tier_premium, tier_executive, tier_standard, sort_order, activation_group, activation_label, activation_group_sort');
             if (campaignId) {
                 query = query.eq('campaign_id', campaignId);
             }
@@ -95,7 +104,7 @@ export default function ImplementationLevels({ campaignId }) {
 
             <div className="accordion-container">
                 {LEVELS.map(({ key, tierKey, label, subtitle }) => {
-                    const groups = groupByPlatform(touchpoints, tierKey);
+                    const groups = groupByActivationGroup(touchpoints, tierKey);
                     if (groups.length === 0) return null; // Skip tiers with no touchpoints
 
                     const isExpanded = expandedLevel === key;
@@ -118,10 +127,10 @@ export default function ImplementationLevels({ campaignId }) {
                             {isExpanded && (
                                 <div className="accordion-body level-body">
                                     <div className={`level-grid ${gridClass}`}>
-                                        {groups.map(({ platform, items }) => (
-                                            <div key={platform} className="level-col">
+                                        {groups.map(({ group, items }) => (
+                                            <div key={group} className="level-col">
                                                 <div className="level-group">
-                                                    <h4>{platform}</h4>
+                                                    <h4>{group}</h4>
                                                     <ul>
                                                         {items.map((item, idx) => (
                                                             <li key={idx}>{item}</li>

@@ -33,7 +33,8 @@ export default function JourneyAdmin({ campaignId }) {
   const [showComponentForm, setShowComponentForm] = useState(false);
   const [editingComponent, setEditingComponent] = useState(null);
   const [componentFormData, setComponentFormData] = useState({
-    title: '', description: '', tier_premium: true, tier_executive: true, is_new: false, is_optional: false, marker_number: 1, sort_order: 0, marker_positions: []
+    title: '', description: '', tier_premium: true, tier_executive: true, is_new: false, is_optional: false, marker_number: 1, sort_order: 0, marker_positions: [],
+    activation_group: '', activation_label: '', activation_group_sort: 0
   });
 
   useEffect(() => { fetchAllData(); }, [campaignId]);
@@ -286,6 +287,9 @@ export default function JourneyAdmin({ campaignId }) {
       marker_positions: componentFormData.marker_positions || [],
       sort_order: componentFormData.sort_order || (pageComps.length + 1),
       campaign_id: campaignId || null,
+      activation_group: componentFormData.activation_group || null,
+      activation_label: componentFormData.activation_label || null,
+      activation_group_sort: componentFormData.activation_group_sort || null,
     };
 
     if (editingComponent) {
@@ -348,7 +352,7 @@ export default function JourneyAdmin({ campaignId }) {
 
   const resetComponentForm = () => {
     setEditingComponent(null);
-    setComponentFormData({ title: '', description: '', tier_premium: true, tier_executive: true, tier_standard: true, is_new: false, is_optional: false, marker_number: 1, sort_order: 0, marker_positions: [] });
+    setComponentFormData({ title: '', description: '', tier_premium: true, tier_executive: true, tier_standard: true, is_new: false, is_optional: false, marker_number: 1, sort_order: 0, marker_positions: [], activation_group: '', activation_label: '', activation_group_sort: 0 });
     setShowComponentForm(false);
   };
 
@@ -376,14 +380,17 @@ export default function JourneyAdmin({ campaignId }) {
       is_optional: comp.is_optional || false,
       marker_number: comp.marker_number || 1,
       sort_order: comp.sort_order || 0,
-      marker_positions: comp.marker_positions || []
+      marker_positions: comp.marker_positions || [],
+      activation_group: comp.activation_group || '',
+      activation_label: comp.activation_label || '',
+      activation_group_sort: comp.activation_group_sort || 0
     });
     setShowComponentForm(true);
   };
 
   const startAddComponent = () => {
     const pageComps = components[expandedPage] || [];
-    setComponentFormData({ title: '', description: '', tier_premium: true, tier_executive: true, is_new: false, is_optional: false, marker_number: pageComps.length + 1, sort_order: pageComps.length + 1, marker_positions: [] });
+    setComponentFormData({ title: '', description: '', tier_premium: true, tier_executive: true, is_new: false, is_optional: false, marker_number: pageComps.length + 1, sort_order: pageComps.length + 1, marker_positions: [], activation_group: '', activation_label: '', activation_group_sort: 0 });
     setShowComponentForm(true);
   };
 
@@ -621,6 +628,26 @@ export default function JourneyAdmin({ campaignId }) {
                 <label><input type="checkbox" checked={componentFormData.tier_standard !== false} onChange={(e) => setComponentFormData({ ...componentFormData, tier_standard: e.target.checked })} /> Standard</label>
                 <label><input type="checkbox" checked={componentFormData.is_new || false} onChange={(e) => setComponentFormData({ ...componentFormData, is_new: e.target.checked })} /> New</label>
                 <label><input type="checkbox" checked={componentFormData.is_optional || false} onChange={(e) => setComponentFormData({ ...componentFormData, is_optional: e.target.checked })} /> Optional</label>
+              </div>
+
+              {/* Activation Level Overrides */}
+              <div className="form-section-label">Activation Level Display</div>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Group Name</label>
+                  <input type="text" value={componentFormData.activation_group || ''} onChange={(e) => setComponentFormData({ ...componentFormData, activation_group: e.target.value })} placeholder="e.g., Club Avolta APP" />
+                  <small className="form-help">Group heading in Activation Levels. Falls back to platform name if empty.</small>
+                </div>
+                <div className="form-group">
+                  <label>Group Sort Order</label>
+                  <input type="number" value={componentFormData.activation_group_sort || ''} onChange={(e) => setComponentFormData({ ...componentFormData, activation_group_sort: parseInt(e.target.value) || 0 })} placeholder="1" min="0" />
+                  <small className="form-help">Controls group ordering (lower = first).</small>
+                </div>
+              </div>
+              <div className="form-group">
+                <label>Display Label</label>
+                <input type="text" value={componentFormData.activation_label || ''} onChange={(e) => setComponentFormData({ ...componentFormData, activation_label: e.target.value })} placeholder="e.g., Shopping Page – Hero Banner" />
+                <small className="form-help">Item label in Activation Levels. Falls back to touchpoint title if empty.</small>
               </div>
 
               {/* Marker Editor */}
