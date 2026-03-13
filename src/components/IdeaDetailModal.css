@@ -250,7 +250,17 @@
     border-radius: 32px;
     gap: 32px;
     max-height: none;
-    overflow-y: visible;
+    overflow: visible;
+    overflow-x: hidden;
+  }
+
+  .idea-modal__content {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .idea-modal__subtitle {
+    word-break: break-word;
   }
 
   .idea-modal__images {

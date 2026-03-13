@@ -135,8 +135,8 @@ export default function CalendarPage() {
         </section>
 
         <div className="inner-content-wrapper full-width">
-          <div className="calendar-grid-wrapper glass">
-            {/* Sticky header row — syncs horizontal scroll with body */}
+          <div className="calendar-outer">
+            {/* Sticky header row — sits outside the overflow container */}
             <div className="calendar-header-scroll" ref={headerScrollRef}>
               <div className="timeline-grid timeline-grid--header">
                 <div className="timeline-header tier-label">Category</div>
@@ -148,9 +148,10 @@ export default function CalendarPage() {
               </div>
             </div>
 
-            {/* Scrollable body */}
-            <div className="calendar-body-scroll" ref={bodyScrollRef} onScroll={handleBodyScroll}>
-              <div className="timeline-grid timeline-grid--body">
+            <div className="calendar-grid-wrapper">
+              {/* Scrollable body */}
+              <div className="calendar-body-scroll" ref={bodyScrollRef} onScroll={handleBodyScroll}>
+                <div className="timeline-grid timeline-grid--body">
 
               {/* Tier Sections */}
               {tiers.map((tier) => {
@@ -220,6 +221,7 @@ export default function CalendarPage() {
               })}
               </div>
             </div>
+          </div>
           </div>
 
           <div className="supporting-note glass">

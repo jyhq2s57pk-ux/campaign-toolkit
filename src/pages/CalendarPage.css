@@ -20,24 +20,32 @@
   margin: 0 auto;
 }
 
-/* Grid Wrapper — outer shell with glass styling */
-.calendar-grid-wrapper {
-  border-radius: 32px;
+/* Outer container — NO backdrop-filter (it blocks sticky) */
+.calendar-outer {
   margin-bottom: 40px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 0.5px solid rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  overflow: hidden;
 }
 
 /* Sticky header — sticks to top on page scroll */
 .calendar-header-scroll {
   position: sticky;
-  top: 0;
+  top: 53px; /* Below the sticky site header (203px tall, top: -150px → 53px visible) */
   z-index: 10;
   overflow: hidden;
+  background-color: #1a1a1a;
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
   border-bottom: 1px solid var(--border-glass);
+  border-radius: 32px 32px 0 0;
+}
+
+/* Grid body wrapper — glass styling lives here */
+.calendar-grid-wrapper {
+  overflow: hidden;
+  border-radius: 0 0 32px 32px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-top: none;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 /* Scrollable body */
