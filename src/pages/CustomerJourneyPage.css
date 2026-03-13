@@ -442,6 +442,31 @@
   .descriptions-container {
     max-width: 100%;
   }
+
+  /* Overlay markers inside the image instead of outside */
+  .markers-container {
+    right: 8px;
+  }
+
+  .number-label {
+    background: rgba(0, 0, 0, 0.75);
+    border-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(4px);
+  }
+
+  .number-label-text {
+    color: #fff;
+  }
+
+  .marker-row.active .number-label {
+    background: var(--accent-purple, #8F53F0);
+    border-color: var(--accent-purple, #8F53F0);
+  }
+
+  /* Hide the connecting line SVGs on mobile */
+  .marker-row svg {
+    display: none;
+  }
 }
 
 @media (max-width: 600px) {

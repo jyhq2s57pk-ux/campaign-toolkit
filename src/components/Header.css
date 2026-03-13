@@ -222,11 +222,23 @@
   align-items: center;
   justify-content: center;
   color: rgba(255, 255, 255, 0.85);
-  transition: transform 0.3s ease-in-out;
 }
 
-.menu-icon.open {
-  transform: rotate(45deg);
+.hamburger-line {
+  transition: transform 0.3s ease-in-out, opacity 0.2s ease-in-out;
+  transform-origin: 12px 12px;
+}
+
+.menu-icon.open .hamburger-top {
+  transform: translate(0, 6px) rotate(45deg);
+}
+
+.menu-icon.open .hamburger-mid {
+  opacity: 0;
+}
+
+.menu-icon.open .hamburger-bot {
+  transform: translate(0, -6px) rotate(-45deg);
 }
 
 /* ===== Responsive — Mobile (≤1100px) ===== */

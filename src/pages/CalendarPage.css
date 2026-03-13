@@ -48,16 +48,23 @@
   border-bottom: 1px solid var(--border-glass);
   text-transform: uppercase;
   letter-spacing: 2px;
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: #1a1a1a;
+  position: sticky;
+  top: 0;
+  z-index: 4;
 }
 
 .timeline-header.tier-label {
   grid-column: 1;
-  background-color: rgba(255, 255, 255, 0.04);
+  background-color: #1e1e1e;
+  position: sticky;
+  left: 0;
+  z-index: 5; /* Above both row and column stickies */
 }
 
 .timeline-header.month-label {
   text-align: center;
+  background-color: #1a1a1a;
 }
 
 /* Tier Cells */
@@ -68,8 +75,11 @@
   gap: 16px;
   border-bottom: 1px solid var(--border-glass);
   border-right: 1px solid var(--border-glass);
-  background-color: rgba(255, 255, 255, 0.01);
+  background-color: #161616;
   grid-column: 1;
+  position: sticky;
+  left: 0;
+  z-index: 3;
 }
 
 .tier-accent-bar {
