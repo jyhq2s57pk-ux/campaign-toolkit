@@ -7,7 +7,7 @@
     background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2) 100%);
     border: 1px solid #313131;
     /* Mobile Radius */
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     position: relative;
     /* Mobile padding */
     padding: 20px;
@@ -23,7 +23,7 @@
         /* Desktop Radius */
         border-radius: 20px;
         /* Desktop Padding */
-        padding: 24px;
+        padding: var(--space-lg);
         /* Desktop Height (if different, Figma implies flexible or specific for desktop, keeping 128 for now as cleaner base, or could be reduced if design demands, but padding override is key) */
     }
 }

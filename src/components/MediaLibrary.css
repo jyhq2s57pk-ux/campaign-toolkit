@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: center;
   z-index: 10000;
-  padding: 24px;
+  padding: var(--space-lg);
   animation: mlFadeIn 0.25s ease-out;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -20,9 +20,9 @@
 
 /* ===== Modal Container ===== */
 .media-library {
-  background: #1a1a1a;
+  background: var(--surface-card);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   max-width: 1000px;
   width: 100%;
   max-height: 85vh;
@@ -82,7 +82,7 @@
   align-items: center;
   gap: 6px;
   padding: 7px 16px;
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
   border: 1px solid rgba(255, 255, 255, 0.15);
   background: transparent;
   color: rgba(255, 255, 255, 0.7);
@@ -115,7 +115,7 @@
   margin: 0 24px;
   padding: 32px 24px;
   border: 2px dashed rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.02);
   transition: border-color 0.2s, background 0.2s;
   flex-shrink: 0;
@@ -161,7 +161,7 @@
 .media-library__toolbar {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-md);
   padding: 16px 24px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   flex-shrink: 0;
@@ -175,7 +175,7 @@
 
 .media-library__tab {
   padding: 6px 14px;
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: transparent;
   color: rgba(255, 255, 255, 0.6);
@@ -282,7 +282,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--space-md);
   padding: 16px 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   flex-shrink: 0;
@@ -310,13 +310,13 @@
 
 .media-library__actions {
   display: flex;
-  gap: 8px;
+  gap: var(--space-sm);
   flex-shrink: 0;
 }
 
 .media-library__btn {
   padding: 8px 20px;
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
   font-family: var(--font-display, 'Saans', sans-serif);
   font-size: 14px;
   font-weight: 500;
@@ -417,7 +417,7 @@
 
   .media-library__grid {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 8px;
+    gap: var(--space-sm);
   }
 
   .media-library__footer {
@@ -437,7 +437,7 @@
   }
 
   .media-library__header {
-    padding: 16px;
+    padding: var(--space-md);
   }
 
   .media-library__toolbar {

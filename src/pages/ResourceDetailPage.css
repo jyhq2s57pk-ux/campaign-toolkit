@@ -13,7 +13,7 @@
 .resource-breadcrumbs {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--space-sm);
     font-size: 14px;
     color: var(--text-muted);
     margin-bottom: 40px;
@@ -67,7 +67,7 @@
     background-color: var(--surface-card);
     /* Dark card bg */
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 24px;
+    border-radius: var(--radius-xl);
     padding: 40px;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -77,7 +77,7 @@
 
 .hero-visual-side {
     background: var(--surface-default);
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
     /* Aspect ratio or flex sizing */
     display: flex;
@@ -151,7 +151,7 @@
     font-size: 14px;
     font-weight: 600;
     padding: 12px 24px;
-    border-radius: 100px;
+    border-radius: var(--radius-pill);
     text-decoration: none;
     transition: transform 0.2s;
 }
@@ -169,7 +169,7 @@
     font-size: 14px;
     font-weight: 600;
     padding: 8px 20px;
-    border-radius: 100px;
+    border-radius: var(--radius-pill);
     text-decoration: none;
 }
 

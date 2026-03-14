@@ -22,7 +22,7 @@ export default function ResourceDetailPage() {
         return (
             <div className="resource-detail-page">
                 <Header />
-                <main className="resource-detail-main loading">
+                <main id="main-content" className="resource-detail-main loading">
                     <div className="spinner">Loading...</div>
                 </main>
                 <Footer />
@@ -34,7 +34,7 @@ export default function ResourceDetailPage() {
         return (
             <div className="resource-detail-page">
                 <Header />
-                <main className="resource-detail-main not-found">
+                <main id="main-content" className="resource-detail-main not-found">
                     <h2>Resource not found</h2>
                     <Link to="/resources" className="back-link">← Back to Resources</Link>
                 </main>
@@ -47,7 +47,7 @@ export default function ResourceDetailPage() {
         <div className="resource-detail-page">
             <Header />
 
-            <main className="resource-detail-main inner-content-wrapper">
+            <main id="main-content" className="resource-detail-main inner-content-wrapper">
                 {/* Breadcrumbs */}
                 <div className="resource-breadcrumbs">
                     <Link to="/resources">Assets and resources</Link>

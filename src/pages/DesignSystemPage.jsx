@@ -222,7 +222,7 @@ const DesignSystemPage = () => {
     return (
         <div className="ds-page">
             <Header />
-            <main className="ds-container">
+            <main id="main-content" className="ds-container">
                 <header className="ds-header">
                     <h1 className="ds-title">Design System</h1>
                     <p className="ds-subtitle">The single source of truth for Campaign Toolkit's tokens, styles, and components.</p>

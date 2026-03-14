@@ -63,7 +63,7 @@ export default function UniversalCard({
                     <div className="uc-category-text">{category}</div>
                 )}
 
-                <h3 className="uc-title">{title}</h3>
+                <h2 className="uc-title">{title}</h2>
 
                 {description && (
                     <p className="uc-desc"><RichText>{description}</RichText></p>

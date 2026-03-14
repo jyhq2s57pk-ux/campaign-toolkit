@@ -147,7 +147,7 @@ export default function InsightsPage() {
     return (
         <div className="insights-page">
             <Header />
-            <main className="insights-main">
+            <main id="main-content" className="insights-main">
                 <div className="outer-container">
                     <section className="page-header">
                         <h1>{pageData.title}</h1>

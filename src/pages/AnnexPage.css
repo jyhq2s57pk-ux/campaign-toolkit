@@ -52,7 +52,7 @@
 }
 
 .annex-section {
-    padding: 48px;
+    padding: var(--space-2xl);
     border-radius: 32px;
     /* Master Style 01 */
     background: rgba(255, 255, 255, 0.05);
@@ -93,7 +93,7 @@
 
 .specs-table th {
     text-align: left;
-    padding: 16px;
+    padding: var(--space-md);
     color: var(--text-muted);
     font-size: var(--length-body-small);
     text-transform: uppercase;

@@ -4,13 +4,13 @@ import '../pages/CustomerJourneyPage.css';
 import './ImplementationLevels.css';
 
 const ChevronDown = () => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M8 10.9998L3 5.9998L3.7 5.2998L8 9.5998L12.3 5.2998L13 5.9998L8 10.9998Z" fill="var(--theme-icon-1, #F1F1F1)" />
     </svg>
 );
 
 const ChevronUp = () => (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M8 5L13 10L12.3 10.7L8 6.4L3.7 10.7L3 10L8 5Z" fill="var(--theme-icon-1, #F1F1F1)" />
     </svg>
 );
@@ -115,7 +115,12 @@ export default function ImplementationLevels({ campaignId }) {
                             key={key}
                             className={`accordion-item ${isExpanded ? 'expanded' : ''} level-item level-${key}`}
                         >
-                            <div className="accordion-header level-header" onClick={() => toggleLevel(key)}>
+                            <button
+                                className="accordion-header level-header"
+                                onClick={() => toggleLevel(key)}
+                                aria-expanded={isExpanded}
+                                aria-controls={`level-panel-${key}`}
+                            >
                                 <div className="level-badge-wrapper">
                                     <span className={`badge badge--${key} badge--accordion-lg`}>{label}</span>
                                 </div>
@@ -123,9 +128,9 @@ export default function ImplementationLevels({ campaignId }) {
                                 <div className="accordion-chevron">
                                     {isExpanded ? <ChevronUp /> : <ChevronDown />}
                                 </div>
-                            </div>
+                            </button>
                             {isExpanded && (
-                                <div className="accordion-body level-body">
+                                <div className="accordion-body level-body" id={`level-panel-${key}`} role="region" aria-labelledby={`level-header-${key}`}>
                                     <div className={`level-grid ${gridClass}`}>
                                         {groups.map(({ group, items }) => (
                                             <div key={group} className="level-col">

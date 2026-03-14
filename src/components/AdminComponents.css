@@ -53,7 +53,7 @@
 .wow-form {
   background: var(--surface-card);
   padding: 2rem;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -321,7 +321,7 @@
 .modal-content {
   background: var(--surface-card);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   padding: 2rem;
   max-width: 960px;
   width: 100%;
@@ -350,7 +350,7 @@
 .image-upload-component {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 .image-upload-label {
@@ -465,7 +465,7 @@
 .campaign-selector-cards {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-md);
 }
 
 .campaign-selector-card-wrap {
@@ -484,7 +484,7 @@
 /* Color Input */
 .color-input-row {
   display: flex;
-  gap: 8px;
+  gap: var(--space-sm);
   align-items: center;
 }
 
@@ -573,7 +573,7 @@
 .block-editor-title-area {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 .block-type-badge {
@@ -672,7 +672,7 @@
 
 .stats-item-editor {
   display: flex;
-  gap: 8px;
+  gap: var(--space-sm);
   align-items: flex-start;
   margin-bottom: 8px;
   padding: 8px;
@@ -683,7 +683,7 @@
 .stats-item-fields {
   flex: 1;
   display: flex;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 .form-group-inline {

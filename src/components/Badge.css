@@ -15,7 +15,7 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
   white-space: nowrap;
   font-family: var(--font-body);
@@ -111,7 +111,7 @@
   background: #464646;
   color: #ffffff;
   padding: 4px 12px;
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   font-size: 13px;
   font-weight: 400;
   height: auto;
@@ -121,7 +121,7 @@
   background: #7A7A7A;
   color: #ffffff;
   padding: 4px 12px;
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   font-size: 13px;
   font-weight: 400;
   height: auto;

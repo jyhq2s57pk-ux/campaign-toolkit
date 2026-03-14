@@ -3,7 +3,7 @@
 .resource-hero-card.flexible-card {
     background-color: #161616;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 24px;
+    border-radius: var(--radius-xl);
     padding: 40px;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -13,7 +13,7 @@
 
 .flexible-card .hero-visual-side {
     background: #000;
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -92,7 +92,7 @@
     font-size: 14px;
     font-weight: 600;
     padding: 12px 24px;
-    border-radius: 100px;
+    border-radius: var(--radius-pill);
     text-decoration: none;
     transition: transform 0.2s;
 }

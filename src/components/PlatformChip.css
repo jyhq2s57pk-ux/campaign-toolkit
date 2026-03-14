@@ -1,6 +1,6 @@
 .platform-chip {
   padding: 10px 16px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   background-color: #2d2d2d;
   color: var(--text-secondary);
   border: 1px solid rgba(255, 255, 255, 0.08);

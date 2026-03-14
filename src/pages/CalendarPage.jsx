@@ -126,7 +126,7 @@ export default function CalendarPage() {
   return (
     <div className="calendar-page">
       <Header />
-      <main className="calendar-main-content">
+      <main id="main-content" className="calendar-main-content">
         <section className="page-header">
           <h1>Campaign Calendar</h1>
           <p>

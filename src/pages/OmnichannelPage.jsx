@@ -82,7 +82,7 @@ export default function OmnichannelPage() {
     return (
         <div className="omnichannel-page">
             <Header />
-            <main className="omnichannel-main">
+            <main id="main-content" className="omnichannel-main">
                 {/* Page Header — matching live site design */}
                 <section className="page-header">
                     <h1>Omnichannel</h1>

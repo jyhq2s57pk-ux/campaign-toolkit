@@ -29,7 +29,7 @@ export default function ResourcesPage() {
     return (
       <div className="resources-page">
         <Header />
-        <main className="resources-main-content">
+        <main id="main-content" className="resources-main-content">
           <div className="outer-container">
             <p>Loading resources...</p>
           </div>
@@ -43,7 +43,7 @@ export default function ResourcesPage() {
     <div className="resources-page">
       <Header />
 
-      <main className="resources-main-content">
+      <main id="main-content" className="resources-main-content">
         <div className="outer-container">
           <section className="page-header">
             <h1>Assets & Resources</h1>

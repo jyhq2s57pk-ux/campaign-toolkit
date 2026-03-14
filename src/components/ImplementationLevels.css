@@ -4,13 +4,13 @@
     margin-bottom: 32px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--space-md);
 }
 
 .implementation-header {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--space-md);
 }
 
 .implementation-header h2 {
@@ -71,7 +71,7 @@
 .level-header {
     justify-content: flex-start;
     /* Alignment changes */
-    gap: 24px;
+    gap: var(--space-lg);
 }
 
 .level-badge-wrapper {
@@ -110,7 +110,7 @@
 .level-col {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: var(--space-lg);
 }
 
 .level-group h4 {
@@ -151,7 +151,7 @@
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--space-sm);
 }
 
 .level-group li {
@@ -167,7 +167,7 @@
     .level-grid.three-cols,
     .level-grid.two-cols {
         grid-template-columns: 1fr;
-        gap: 32px;
+        gap: var(--space-xl);
     }
 
     .level-header {

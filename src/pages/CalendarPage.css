@@ -31,7 +31,7 @@
   top: 53px; /* Below the sticky site header (203px tall, top: -150px → 53px visible) */
   z-index: 10;
   overflow: hidden;
-  background-color: #1a1a1a;
+  background-color: var(--surface-card);
   border: 0.5px solid rgba(255, 255, 255, 0.15);
   border-bottom: 1px solid var(--border-glass);
   border-radius: 32px 32px 0 0;
@@ -64,31 +64,31 @@
 
 /* Headers */
 .timeline-header {
-  padding: 24px;
+  padding: var(--space-lg);
   font-size: var(--text-xs);
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 2px;
-  background-color: #1a1a1a;
+  background-color: var(--surface-card);
 }
 
 .timeline-header.tier-label {
   grid-column: 1;
-  background-color: #1e1e1e;
+  background-color: var(--surface-card);
 }
 
 .timeline-header.month-label {
   text-align: center;
-  background-color: #1a1a1a;
+  background-color: var(--surface-card);
 }
 
 /* Tier Cells */
 .timeline-tier-cell {
-  padding: 24px;
+  padding: var(--space-lg);
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-md);
   border-bottom: 1px solid var(--border-glass);
   border-right: 1px solid var(--border-glass);
   background-color: #161616;
@@ -121,7 +121,7 @@
 .local-tier-label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 .plus-icon {
@@ -145,7 +145,7 @@
 .campaign-bar {
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: var(--space-sm);
   /* Gap between strip and text */
   height: auto;
   min-height: 72px;
@@ -163,7 +163,7 @@
   content: '';
   width: 12px;
   background-color: var(--event-color);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   flex-shrink: 0;
   align-self: stretch;
   /* Make it full height of the internal area if desired, or auto */
@@ -251,7 +251,7 @@
   /* Compact tier cells so labels fit within the 130px column */
   .timeline-tier-cell {
     padding: 12px;
-    gap: 8px;
+    gap: var(--space-sm);
   }
 
   .tier-name-text,

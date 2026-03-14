@@ -34,7 +34,7 @@
 /* Tabs */
 .ds-tabs {
     display: flex;
-    gap: 32px;
+    gap: var(--space-xl);
     border-bottom: 1px solid var(--border-light);
     margin-bottom: 60px;
 }
@@ -91,20 +91,20 @@
 .ds-grid-2 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
+    gap: var(--space-lg);
 }
 
 .ds-grid-4 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 24px;
+    gap: var(--space-lg);
 }
 
 /* Token Cards */
 .token-card {
     background: var(--surface-card);
     border-radius: var(--radius-lg);
-    padding: 24px;
+    padding: var(--space-lg);
     border: 1px solid var(--border-light);
 }
 
@@ -205,6 +205,6 @@
     }
 
     .comp-preview {
-        padding: 24px;
+        padding: var(--space-lg);
     }
 }

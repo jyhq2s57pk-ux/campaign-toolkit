@@ -75,23 +75,32 @@ export default function Header() {
     : {};
 
   return (
+    <>
+    <a href="#main-content" className="skip-to-content">Skip to content</a>
     <header
       className={`header ${isAdmin ? 'admin-mode' : ''}`}
       style={headerStyle}
+      role="banner"
     >
       {/* Row 1: Topbar — logo + admin toggle */}
       <div className="header-topbar">
         <div className="header-topbar__inner">
-          <Link to="/" className="header-logo" onClick={closeMenu}>
-            <img src={logo} alt="Trading Toolkit" className="logo-image" />
+          <Link to="/" className="header-logo" onClick={closeMenu} aria-label="Trading Toolkit — Home">
+            <img src={logo} alt="" className="logo-image" />
           </Link>
           <div className="header-right">
-            <div className="admin-toggle-wrapper" onClick={toggleAdmin}>
+            <button
+              className="admin-toggle-wrapper"
+              onClick={toggleAdmin}
+              role="switch"
+              aria-checked={isAdmin}
+              aria-label="Toggle admin mode"
+            >
               <div className={`admin-toggle-switch ${isAdmin ? 'active' : ''}`}>
                 <div className="toggle-knob"></div>
               </div>
               <span className="admin-label">Admin</span>
-            </div>
+            </button>
           </div>
         </div>
       </div>
@@ -99,23 +108,27 @@ export default function Header() {
       {/* Row 2: Subnav — breadcrumbs + nav links */}
       <div className="header-subnav">
         <div className="header-subnav__inner">
-          <div className="header-breadcrumbs">
-            <Link
-              className="breadcrumb-link breadcrumb-link--home"
-              to="/"
-              onClick={closeMenu}
-            >
-              Home
-            </Link>
-            {campaign && (
-              <>
-                <span className="breadcrumb-separator">/</span>
-                <span className="breadcrumb-link breadcrumb-link--campaign">
-                  {campaign.name}
-                </span>
-              </>
-            )}
-          </div>
+          <nav aria-label="Breadcrumb" className="header-breadcrumbs">
+            <ol className="breadcrumb-list">
+              <li>
+                <Link
+                  className="breadcrumb-link breadcrumb-link--home"
+                  to="/"
+                  onClick={closeMenu}
+                >
+                  Home
+                </Link>
+              </li>
+              {campaign && (
+                <li>
+                  <span className="breadcrumb-separator" aria-hidden="true">/</span>
+                  <span className="breadcrumb-link breadcrumb-link--campaign" aria-current="page">
+                    {campaign.name}
+                  </span>
+                </li>
+              )}
+            </ol>
+          </nav>
 
           <button
             className={`mobile-menu-toggle ${isMenuOpen ? 'mobile-menu-toggle--open' : ''}`}
@@ -123,7 +136,7 @@ export default function Header() {
             aria-label="Toggle menu"
           >
             <div className={`menu-icon ${isMenuOpen ? 'open' : ''}`}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <line className="hamburger-line hamburger-top" x1="4" y1="6" x2="20" y2="6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 <line className="hamburger-line hamburger-mid" x1="4" y1="12" x2="20" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                 <line className="hamburger-line hamburger-bot" x1="4" y1="18" x2="20" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -156,16 +169,23 @@ export default function Header() {
               ))}
 
               {/* Mobile-only Admin Toggle */}
-              <div className="mobile-admin-wrapper" onClick={toggleAdmin}>
+              <button
+                className="mobile-admin-wrapper"
+                onClick={toggleAdmin}
+                role="switch"
+                aria-checked={isAdmin}
+                aria-label="Toggle admin mode"
+              >
                 <div className={`admin-toggle-switch ${isAdmin ? 'active' : ''}`}>
                   <div className="toggle-knob"></div>
                 </div>
                 <span className="admin-label">Admin</span>
-              </div>
+              </button>
             </nav>
           </div>
         </div>
       </div>
     </header>
+    </>
   );
 }

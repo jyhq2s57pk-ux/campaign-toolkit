@@ -31,22 +31,34 @@ export default function Footer() {
 
             {/* Desktop Admin Login Button */}
             <div className="footer-desktop-admin">
-              <div className="admin-toggle-wrapper-footer" onClick={toggleAdmin}>
+              <button
+                className="admin-toggle-wrapper-footer"
+                onClick={toggleAdmin}
+                role="switch"
+                aria-checked={isAdmin}
+                aria-label="Toggle admin mode"
+              >
                 <div className={`admin-toggle-switch-footer ${isAdmin ? 'active' : ''}`}>
                   <div className="toggle-knob-footer"></div>
                 </div>
                 <span className="admin-label-footer">Admin</span>
-              </div>
+              </button>
             </div>
 
             {/* Mobile Admin Toggle (shown via CSS media query) */}
             <div className="footer-mobile-admin">
-              <div className="admin-toggle-wrapper-footer" onClick={toggleAdmin}>
+              <button
+                className="admin-toggle-wrapper-footer"
+                onClick={toggleAdmin}
+                role="switch"
+                aria-checked={isAdmin}
+                aria-label="Toggle admin mode"
+              >
                 <div className={`admin-toggle-switch-footer ${isAdmin ? 'active' : ''}`}>
                   <div className="toggle-knob-footer"></div>
                 </div>
                 <span className="admin-label-footer">Admin</span>
-              </div>
+              </button>
             </div>
 
           </div>

@@ -20,12 +20,12 @@
   justify-content: center;
   flex: 0 0 auto;
   padding: 14px 20px;
-  border-radius: 12px;
-  border: 1px solid rgb(58, 58, 58);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   background: transparent;
-  color: rgb(255, 255, 255);
-  font-family: var(--font-display, 'Saans', sans-serif);
-  font-size: 16px;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: var(--length-body-large);
   font-weight: 500;
   line-height: 1.33;
   cursor: pointer;
@@ -39,22 +39,28 @@
   border-color: rgb(85, 85, 85);
 }
 
+.filter-tabs__tab:focus-visible {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--accent-purple);
+  box-shadow: var(--focus-ring);
+}
+
 .filter-tabs__tab--active {
-  background: rgb(245, 243, 237);
-  color: rgb(0, 0, 0);
-  border-color: rgb(58, 58, 58);
+  background: var(--text-primary);
+  color: var(--text-inverse);
+  border-color: transparent;
 }
 
 .filter-tabs__tab--active:hover {
-  background: rgb(234, 231, 223);
-  color: rgb(0, 0, 0);
+  background: #e5e5e5;
+  color: var(--text-inverse);
 }
 
 /* ===== Responsive — tighter spacing on mobile ===== */
 
 @media (max-width: 768px) {
   .filter-tabs {
-    gap: 8px;
+    gap: var(--space-sm);
     padding-bottom: 8px;
   }
 

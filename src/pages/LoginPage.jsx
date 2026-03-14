@@ -36,7 +36,7 @@ export default function LoginPage() {
     <div className="login-page">
       <Header />
 
-      <main className="login-main">
+      <main id="main-content" className="login-main">
         <div className="login-container">
           <div className="login-card">
             <h1>Admin Login</h1>

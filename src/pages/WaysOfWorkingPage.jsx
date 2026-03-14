@@ -106,7 +106,7 @@ export default function WaysOfWorkingPage() {
     return (
       <div className="ways-page">
         <Header />
-        <main className="ways-main-content">
+        <main id="main-content" className="ways-main-content">
           <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
             Loading ways of working...
           </div>
@@ -120,7 +120,7 @@ export default function WaysOfWorkingPage() {
     <div className="ways-page">
       <Header />
 
-      <main className="ways-main-content">
+      <main id="main-content" className="ways-main-content">
         <div className="outer-container">
           <section className="page-header">
             <h1>

@@ -1,6 +1,6 @@
 .screenshot-placeholder {
   background-color: #3a3a3a;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   position: relative;
   overflow: hidden;
   width: 100%;

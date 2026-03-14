@@ -24,7 +24,7 @@ export default function HomePage() {
     <div className="home-page">
       <Header />
 
-      <main className="home-main">
+      <main id="main-content" className="home-main">
         {/* Homepage Title Image */}
         <div className="homepage-title-container">
           <img src={homePageTitle} alt="Campaign Toolkit" className="homepage-title-img" />

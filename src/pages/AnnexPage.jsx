@@ -14,7 +14,7 @@ export default function AnnexPage() {
     return (
         <div className="annex-page">
             <Header />
-            <main className="annex-main">
+            <main id="main-content" className="annex-main">
                 <div className="outer-container">
                     <section className="page-header">
                         <h1>Annex & Reference</h1>

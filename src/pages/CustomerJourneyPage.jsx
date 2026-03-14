@@ -9,11 +9,11 @@ import './CustomerJourneyPage.css';
 import ImplementationLevels from '../components/ImplementationLevels';
 import Badge from '../components/Badge';
 
-const ChevronDown = () => (<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 10.9998L3 5.9998L3.7 5.2998L8 9.5998L12.3 5.2998L13 5.9998L8 10.9998Z" fill="var(--theme-icon-1, #F1F1F1)" /></svg>);
-const ChevronUp = () => (<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 5L13 10L12.3 10.7L8 6.4L3.7 10.7L3 10L8 5Z" fill="var(--theme-icon-1, #F1F1F1)" /></svg>);
-const MarkerLine = () => (<svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.375 9L0.375001 9" stroke="#D6D6D6" strokeWidth="0.75" strokeLinecap="round" /></svg>);
+const ChevronDown = () => (<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 10.9998L3 5.9998L3.7 5.2998L8 9.5998L12.3 5.2998L13 5.9998L8 10.9998Z" fill="var(--theme-icon-1, #F1F1F1)" /></svg>);
+const ChevronUp = () => (<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M8 5L13 10L12.3 10.7L8 6.4L3.7 10.7L3 10L8 5Z" fill="var(--theme-icon-1, #F1F1F1)" /></svg>);
+const MarkerLine = () => (<svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M21.375 9L0.375001 9" stroke="#D6D6D6" strokeWidth="0.75" strokeLinecap="round" /></svg>);
 const PLATFORM_COLORS = { 'Web': { bg: 'rgba(232, 92, 74, 0.15)', text: '#E85C4A', border: '#E85C4A' }, 'App': { bg: 'rgba(139, 92, 246, 0.15)', text: '#8B5CF6', border: '#8B5CF6' }, 'Email': { bg: 'rgba(59, 130, 246, 0.15)', text: '#3B82F6', border: '#3B82F6' }, 'Social': { bg: 'rgba(236, 72, 153, 0.15)', text: '#EC4899', border: '#EC4899' }, 'In-Store': { bg: 'rgba(34, 197, 94, 0.15)', text: '#22C55E', border: '#22C55E' } };
-const ChevronRight = () => (<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>);
+const ChevronRight = () => (<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>);
 
 export default function CustomerJourneyPage() {
   const [searchParams] = useSearchParams();
@@ -143,7 +143,7 @@ export default function CustomerJourneyPage() {
   return (
     <div className="page-wrapper">
       <Header />
-      <main className="journey-page">
+      <main id="main-content" className="journey-page">
         {/* Page Title */}
         <div className="outer-container">
           <section className="page-header">
@@ -186,7 +186,12 @@ export default function CustomerJourneyPage() {
                       ref={el => sectionRefs.current[page.id] = el}
                       className={'accordion-item ' + (isExp ? 'expanded' : '')}
                     >
-                      <div className="accordion-header" onClick={() => handlePageClick(page)}>
+                      <button
+                        className="accordion-header"
+                        onClick={() => handlePageClick(page)}
+                        aria-expanded={isExp}
+                        aria-controls={`panel-${page.id}`}
+                      >
                         <div className="accordion-title-area">
                           <div className="accordion-title">{page.title}</div>
                           <div className="platform-badge platform-badge-colored" style={getPlatformStyle(page.platform_type)}>
@@ -197,10 +202,10 @@ export default function CustomerJourneyPage() {
                           <span className="component-count">{cc} Touchpoints</span>
                           <div className="accordion-chevron">{isExp ? <ChevronUp /> : <ChevronDown />}</div>
                         </div>
-                      </div>
+                      </button>
 
                       {isExp && (
-                        <div className="accordion-body">
+                        <div className="accordion-body" id={`panel-${page.id}`} role="region" aria-label={page.title}>
                           <div className="content-layout">
                             <div className="image-frame" ref={screenshotRef}>
                               {page.screenshot_url ? (

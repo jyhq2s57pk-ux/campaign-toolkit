@@ -59,7 +59,7 @@
 .activation-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    gap: var(--space-lg);
 }
 
 @media (max-width: 1024px) {
@@ -72,7 +72,7 @@
 @media (max-width: 480px) {
     .activation-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: var(--space-md);
     }
 }
 

@@ -16,7 +16,7 @@
 .workflow-steps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: var(--space-lg);
 }
 
 /* Make the 3rd card (Content Team) PURPLE styles but NO SPAN */
@@ -56,8 +56,8 @@
 .workflow-step-card {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 32px;
+  gap: var(--space-lg);
+  padding: var(--space-xl);
   border-radius: 32px;
   /* Master Style 01 */
   position: relative;
@@ -107,7 +107,7 @@
 .step-tasks {
   list-style: none;
   display: flex;
-  gap: 8px;
+  gap: var(--space-sm);
   flex-wrap: wrap;
   margin-top: auto;
 }
@@ -115,7 +115,7 @@
 .step-tasks li {
   background: rgba(255, 255, 255, 0.05);
   padding: 8px 12px;
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
   font-size: var(--length-body-small);
   color: var(--text-muted);
   border: 1px solid var(--border-glass);
@@ -161,7 +161,7 @@
 @media (max-width: 1024px) {
   .workflow-steps {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: var(--space-2xl);
     /* Increase gap to make room for arrow */
   }
 
@@ -213,7 +213,7 @@
 .step-body-content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-md);
   font-size: 14px;
   line-height: 1.5;
   color: var(--text-secondary);
@@ -261,7 +261,7 @@
 .header-title-row {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-md);
   margin-bottom: 24px;
 }
 
@@ -361,6 +361,6 @@
   }
 
   .workflow-step-card {
-    padding: 24px;
+    padding: var(--space-lg);
   }
 }

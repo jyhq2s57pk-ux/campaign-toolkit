@@ -23,8 +23,8 @@
 
     /* Text Colors */
     --text-primary: #ffffff;
-    --text-secondary: #a1a1a6;
-    --text-muted: #666666;
+    --text-secondary: #b0b0b5;
+    --text-muted: #8a8a8a;
     --text-inverse: #000000;
 
     /* Brand Accents */
@@ -62,6 +62,9 @@
     --badge-default-text: #D8D8D8;
     --badge-default-bg: #262626;
 
+    /* Interactive surfaces */
+    --surface-card-hover: #222222;
+
     /* Borders */
     --border-default: rgba(255, 255, 255, 0.08);
     --border-light: rgba(255, 255, 255, 0.05);
@@ -69,12 +72,15 @@
     --border-glass: rgba(255, 255, 255, 0.1);
     /* Glass borders */
 
+    /* Focus */
+    --focus-ring: 0 0 0 2px var(--surface-default), 0 0 0 4px var(--accent-purple);
+
 
     /* 2. TYPOGRAPHY
      -------------------------------------------------------------------------- */
-    --font-display: 'Saans', sans-serif;
-    --font-body: 'Saans', sans-serif;
-    --font-mono: 'Courier New', monospace;
+    --font-display: 'Saans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    --font-body: 'Saans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    --font-mono: 'Courier New', 'Cascadia Code', 'Fira Code', monospace;
 
     /* Font Sizes - Headings (Fluid Scaling: Desktop 1440px -> Mobile 375px) */
     /* Formula: calc(Min + (Max - Min) * ((100vw - 375px) / (1440 - 375))) */
@@ -327,4 +333,69 @@ button {
 .idea-modal__description a:hover,
 .idea-modal__step a:hover {
     opacity: 0.8;
+}
+
+
+/* 5. ACCESSIBILITY
+   ============================================================================= */
+
+/* --- Skip to Content Link --- */
+.skip-to-content {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    z-index: 10000;
+    padding: 14px 28px;
+    background: var(--text-primary);
+    color: var(--text-inverse);
+    font-size: var(--length-body-default);
+    font-weight: 500;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+}
+
+.skip-to-content:focus {
+    position: fixed;
+    left: var(--space-lg);
+    top: var(--space-lg);
+    width: auto;
+    height: auto;
+    box-shadow: var(--focus-ring);
+}
+
+/* --- Global Focus-Visible Styles --- */
+:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+/* Remove default focus for mouse users */
+:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+}
+
+/* --- Reduced Motion --- */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

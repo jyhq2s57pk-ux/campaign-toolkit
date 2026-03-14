@@ -341,7 +341,7 @@ export default function AdminPage() {
     <div className="admin-page-wrapper">
       <Header />
 
-      <main style={{ paddingTop: '56px' }}>
+      <main id="main-content" style={{ paddingTop: '56px' }}>
         <div className="admin-container inner-content-wrapper">
           {/* Page Header — Figma 883:39169 */}
           <div className="admin-header">

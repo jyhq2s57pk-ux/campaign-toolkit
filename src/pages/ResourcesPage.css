@@ -18,10 +18,10 @@
 .category-nav {
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: var(--space-sm);
   background: var(--surface-glass);
   padding: 8px;
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
   width: fit-content;
   margin: 0 auto;
   border: 1px solid var(--border-glass);
@@ -29,7 +29,7 @@
 
 .category-btn {
   padding: 10px 24px;
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
   border: none;
   background: none;
   color: var(--text-secondary);
@@ -51,7 +51,7 @@
 .resources-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
+  gap: var(--space-lg);
 }
 
 @media (max-width: 480px) {
@@ -66,8 +66,8 @@
 */
 
 .access-note {
-  padding: 32px;
-  border-radius: var(--card-radius);
+  padding: var(--space-xl);
+  border-radius: var(--radius-xl);
   text-align: center;
 }
 
@@ -95,7 +95,7 @@
 
 
   .resources-container {
-    gap: 24px;
+    gap: var(--space-lg);
   }
 
   /* UniversalCard title size override for mobile if needed, 

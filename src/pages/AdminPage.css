@@ -17,7 +17,7 @@
 .admin-header {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-lg);
   margin-bottom: 24px;
   padding: 0 24px;
 }
@@ -51,7 +51,7 @@
   justify-content: center;
   height: 40px;
   padding: 0 25px;
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
   border: 1px solid rgba(255, 255, 255, 0.05);
   background: transparent;
   color: white;
@@ -70,9 +70,9 @@
 
 /* Campaign Toolbar — Figma 883:40739 */
 .admin-campaign-toolbar {
-  background: #1a1a1a;
+  background: var(--surface-card);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   padding: 25px;
   display: flex;
   align-items: center;
@@ -155,7 +155,7 @@
   gap: 6px;
   height: 40px;
   padding: 0 20px;
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
   border: 1px solid rgba(255, 255, 255, 0.15);
   background: transparent;
   color: rgba(255, 255, 255, 0.75);
@@ -180,7 +180,7 @@
   justify-content: center;
   height: 40px;
   padding: 0 25px;
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
   border: 1px solid transparent;
   background: white;
   color: black;
@@ -228,8 +228,8 @@
 .admin-form-card {
   background-color: var(--surface-elevated);
   border: 1px solid var(--border-light);
-  border-radius: 12px;
-  padding: 32px;
+  border-radius: var(--radius-md);
+  padding: var(--space-xl);
   margin-bottom: 40px;
 }
 
@@ -249,7 +249,7 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 .form-group label {
@@ -277,14 +277,14 @@
 
 .form-checkboxes {
   display: flex;
-  gap: 24px;
+  gap: var(--space-lg);
   margin: 20px 0;
 }
 
 .form-checkboxes label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   color: var(--text-secondary);
   font-size: 14px;
   cursor: pointer;
@@ -350,8 +350,8 @@
 .calendar-admin-card {
   background-color: var(--surface-elevated);
   border: 1px solid var(--border-light);
-  border-radius: 12px;
-  padding: 32px;
+  border-radius: var(--radius-md);
+  padding: var(--space-xl);
 }
 
 .calendar-admin-info {
@@ -405,7 +405,7 @@
 
   .admin-header {
     padding: 0 16px;
-    gap: 16px;
+    gap: var(--space-md);
   }
 
   .admin-title {
@@ -422,7 +422,7 @@
   .admin-section-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: var(--space-md);
   }
 
   .admin-section-header h2 {
@@ -432,7 +432,7 @@
   .admin-campaign-toolbar {
     flex-direction: column;
     align-items: stretch;
-    gap: 16px;
+    gap: var(--space-md);
     padding: 20px;
   }
 
@@ -448,7 +448,7 @@
 
   .admin-campaign-toolbar-right {
     flex-direction: row;
-    gap: 8px;
+    gap: var(--space-sm);
   }
 
   .admin-media-library-btn,
