@@ -13,6 +13,7 @@ import AnnexPage from './pages/AnnexPage';
 import AdminPage from './pages/AdminPage';
 import LoginPage from './pages/LoginPage';
 import DesignSystemPage from './pages/DesignSystemPage';
+import FigmaCapture from './pages/FigmaCapture';
 import './App.css';
 
 import ScrollToTop from './components/ScrollToTop';
@@ -42,6 +43,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/figma-capture" element={<FigmaCapture />} />
           <Route path="/design-system" element={<DesignSystemPage />} />
           {/* Redirect legacy routes to new Design System */}
           <Route path="/style-gallery" element={<DesignSystemPage />} />
