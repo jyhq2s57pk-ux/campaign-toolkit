@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import FilterTabs from '../components/FilterTabs';
-import ActivationCard from '../components/ActivationCard';
+import ContentCard from '../components/ContentCard';
 import IdeaDetailModal from '../components/IdeaDetailModal';
 import { api } from '../lib/api';
 import './OmnichannelPage.css';
@@ -108,7 +108,7 @@ export default function OmnichannelPage() {
                         <>
                             <div className="activation-grid">
                                 {filteredIdeas.map((idea) => (
-                                    <ActivationCard
+                                    <ContentCard
                                         key={idea.id}
                                         title={idea.title}
                                         imageUrl={resolveImage(idea.image_url)}
