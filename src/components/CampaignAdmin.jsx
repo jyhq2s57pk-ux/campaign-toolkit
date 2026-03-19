@@ -22,15 +22,23 @@ const EMPTY_FORM = {
 };
 
 const DEFAULT_MODULES = {
+  page_insights: true,
+  page_touchpoints: true,
+  page_ways_of_working: true,
+  page_omnichannel: true,
+  page_calendar: true,
+  page_resources: true,
   omnichannel_hero: true,
   insights_charts: true,
   insights_bento: true,
   ways_of_working_tips: true,
-  page_calendar: true,
-  page_resources: true
 };
 
 const MODULE_LABELS = {
+  page_insights: { label: 'Insights Page', group: 'Pages' },
+  page_touchpoints: { label: 'Touchpoints Page', group: 'Pages' },
+  page_ways_of_working: { label: 'Ways of Working Page', group: 'Pages' },
+  page_omnichannel: { label: 'Omnichannel Page', group: 'Pages' },
   page_calendar: { label: 'Calendar Page', group: 'Pages' },
   page_resources: { label: 'Resources Page', group: 'Pages' },
   omnichannel_hero: { label: 'Omnichannel Hero Banner', group: 'Sections' },

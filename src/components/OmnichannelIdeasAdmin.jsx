@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase';
 import ImageUpload from './ImageUpload';
 import './AdminComponents.css';
 
-export default function OmnichannelIdeasAdmin() {
+export default function OmnichannelIdeasAdmin({ campaignId }) {
   const [ideas, setIdeas] = useState([]);
   const [channelOptions, setChannelOptions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +16,7 @@ export default function OmnichannelIdeasAdmin() {
   useEffect(() => {
     fetchIdeas();
     fetchChannels();
-  }, []);
+  }, [campaignId]);
 
   const fetchChannels = async () => {
     try {
@@ -89,10 +89,15 @@ export default function OmnichannelIdeasAdmin() {
   const fetchIdeas = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('omnichannel_ideas')
-        .select('*')
-        .order('sort_order');
+        .select('*');
+
+      if (campaignId) {
+        query = query.eq('campaign_id', campaignId);
+      }
+
+      const { data, error } = await query.order('sort_order');
 
       if (error) throw error;
 

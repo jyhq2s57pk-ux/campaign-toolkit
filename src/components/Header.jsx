@@ -47,10 +47,10 @@ export default function Header() {
 
   // Campaign-scoped nav links (only shown when campaignId is present)
   const campaignNavLinks = [
-    { name: 'Insights', path: '/insights' },
-    { name: 'Touchpoints', path: '/customer-journey' },
-    { name: 'Ways of working', path: '/ways-of-working' },
-    { name: 'Omnichannel', path: '/omnichannel' },
+    { name: 'Insights', path: '/insights', moduleKey: 'page_insights' },
+    { name: 'Touchpoints', path: '/customer-journey', moduleKey: 'page_touchpoints' },
+    { name: 'Ways of working', path: '/ways-of-working', moduleKey: 'page_ways_of_working' },
+    { name: 'Omnichannel', path: '/omnichannel', moduleKey: 'page_omnichannel' },
     { name: 'Resources', path: '/resources', moduleKey: 'page_resources' },
     { name: 'Calendar', path: '/calendar', moduleKey: 'page_calendar' },
   ];
