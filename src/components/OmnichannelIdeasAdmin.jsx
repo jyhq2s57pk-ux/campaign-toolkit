@@ -94,7 +94,8 @@ export default function OmnichannelIdeasAdmin({ campaignId }) {
         .select('*');
 
       if (campaignId) {
-        query = query.eq('campaign_id', campaignId);
+        // Show ideas belonging to this campaign OR unassigned (legacy) ideas
+        query = query.or(`campaign_id.eq.${campaignId},campaign_id.is.null`);
       }
 
       const { data, error } = await query.order('sort_order');
@@ -128,6 +129,7 @@ export default function OmnichannelIdeasAdmin({ campaignId }) {
       how_it_works_title: editingIdea.how_it_works_title || 'How it works',
       how_it_works_steps: editingIdea.how_it_works_steps || [],
       modal_images: editingIdea.modal_images || [],
+      campaign_id: editingIdea.campaign_id || campaignId || null,
     };
 
     try {
@@ -236,6 +238,7 @@ export default function OmnichannelIdeasAdmin({ campaignId }) {
       channels: [],
       headline: '',
       sub_headline: '',
+      campaign_id: campaignId || null,
       how_it_works_title: 'How it works',
       how_it_works_steps: [],
       modal_images: [],
