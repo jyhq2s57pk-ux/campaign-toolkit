@@ -5,11 +5,13 @@ import './AdminComponents.css';
 export default function WaysOfWorkingAdmin({ campaignId }) {
   const [steps, setSteps] = useState([]);
   const [tips, setTips] = useState([]);
+  const [implTips, setImplTips] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState(null);
   const [editingStep, setEditingStep] = useState(null);
   const [editingTip, setEditingTip] = useState(null);
+  const [editingImplTip, setEditingImplTip] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -40,8 +42,19 @@ export default function WaysOfWorkingAdmin({ campaignId }) {
 
       if (tipsError) throw tipsError;
 
+      // Fetch implementation tips — scoped to campaign
+      let implQuery = supabase
+        .from('implementation_tips')
+        .select('*');
+      if (campaignId) {
+        implQuery = implQuery.eq('campaign_id', campaignId);
+      }
+      const { data: implData, error: implError } = await implQuery.order('sort_order');
+      if (implError) console.error('Error fetching implementation tips:', implError);
+
       setSteps(processData || []);
       setTips(tipsData || []);
+      setImplTips(implData || []);
     } catch (err) {
       console.error('Error fetching ways of working:', err);
       setMessage({ type: 'error', text: 'Error loading data' });
@@ -241,8 +254,11 @@ export default function WaysOfWorkingAdmin({ campaignId }) {
         </button>
 
         {editingStep && (
-          <div className="modal-overlay" onClick={() => setEditingStep(null)}>
+          <div className="modal-overlay">
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <button className="modal-close-btn" onClick={() => setEditingStep(null)} aria-label="Close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+              </button>
               <h3>{editingStep.id ? 'Edit Step' : 'Add New Step'}</h3>
               <form onSubmit={handleStepSubmit}>
                 <div className="form-group">
@@ -268,7 +284,7 @@ export default function WaysOfWorkingAdmin({ campaignId }) {
                     placeholder="Use **bold** for emphasis and line breaks for structure..."
                   />
                   <small className="form-help">
-                    Supports **bold**, line breaks, and links: [link text](https://url.com)
+                    Supports **bold**, __underline__, line breaks, and links: [link text](https://url.com)
                   </small>
                 </div>
 
@@ -344,8 +360,11 @@ export default function WaysOfWorkingAdmin({ campaignId }) {
         </button>
 
         {editingTip && (
-          <div className="modal-overlay" onClick={() => setEditingTip(null)}>
+          <div className="modal-overlay">
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <button className="modal-close-btn" onClick={() => setEditingTip(null)} aria-label="Close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+              </button>
               <h3>{editingTip.id ? 'Edit Tip' : 'Add New Tip'}</h3>
               <form onSubmit={handleTipSubmit}>
                 <div className="form-group">
@@ -391,12 +410,133 @@ export default function WaysOfWorkingAdmin({ campaignId }) {
         )}
       </div>
 
+      {/* Implementation Tips Management */}
+      <div className="wow-admin-subsection" style={{ marginTop: '2rem' }}>
+        <h3>Implementation Tips</h3>
+        <p className="section-description">Numbered tips shown in the "Tips for making the implementation smoother" section. Leave empty to use defaults.</p>
+
+        {implTips.length > 0 ? (
+          <ul className="admin-list">
+            {implTips.map((tip) => (
+              <li key={tip.id} className="admin-list-item">
+                <div className="admin-list-item-content">
+                  <div className="admin-list-item-title">
+                    {tip.sort_order}. {tip.text?.substring(0, 80)}{tip.text?.length > 80 ? '...' : ''}
+                    {tip.is_new && <span style={{ marginLeft: '8px', fontSize: '0.75em', color: '#22c55e', background: 'rgba(34,197,94,0.15)', padding: '2px 8px', borderRadius: '4px' }}>NEW</span>}
+                  </div>
+                </div>
+                <div className="admin-list-item-actions">
+                  <button className="btn-secondary" onClick={() => setEditingImplTip({ ...tip })}>Edit</button>
+                  <button className="btn-secondary" onClick={async () => {
+                    if (!confirm('Delete this tip?')) return;
+                    await supabase.from('implementation_tips').delete().eq('id', tip.id);
+                    setMessage({ type: 'success', text: 'Tip deleted!' });
+                    fetchData();
+                  }}>Delete</button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p style={{ fontSize: '0.9em', color: 'var(--text-secondary)' }}>No custom tips. Default tips will be shown.</p>
+        )}
+
+        <button className="btn-primary" style={{ marginTop: '1rem' }} onClick={() => setEditingImplTip({
+          text: '', sort_order: implTips.length + 1, is_new: false, campaign_id: campaignId || null
+        })}>
+          Add Implementation Tip
+        </button>
+
+        {editingImplTip && (
+          <div className="modal-overlay">
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <button className="modal-close-btn" onClick={() => setEditingImplTip(null)} aria-label="Close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+              </button>
+              <h3>{editingImplTip.id ? 'Edit Implementation Tip' : 'Add Implementation Tip'}</h3>
+              <form onSubmit={async (e) => {
+                e.preventDefault();
+                setSaving(true);
+                setMessage(null);
+                try {
+                  const payload = {
+                    text: editingImplTip.text,
+                    sort_order: editingImplTip.sort_order,
+                    is_new: editingImplTip.is_new || false,
+                    campaign_id: campaignId || null
+                  };
+                  if (editingImplTip.id) {
+                    const { error } = await supabase.from('implementation_tips').update(payload).eq('id', editingImplTip.id);
+                    if (error) throw error;
+                    setMessage({ type: 'success', text: 'Tip updated!' });
+                  } else {
+                    const { error } = await supabase.from('implementation_tips').insert(payload);
+                    if (error) throw error;
+                    setMessage({ type: 'success', text: 'Tip created!' });
+                  }
+                  setEditingImplTip(null);
+                  fetchData();
+                } catch (err) {
+                  setMessage({ type: 'error', text: 'Error saving tip: ' + err.message });
+                } finally {
+                  setSaving(false);
+                }
+              }}>
+                <div className="form-group">
+                  <label htmlFor="impl-tip-text">Tip Text *</label>
+                  <textarea
+                    id="impl-tip-text"
+                    value={editingImplTip.text}
+                    onChange={(e) => setEditingImplTip({ ...editingImplTip, text: e.target.value })}
+                    required
+                    rows="3"
+                    placeholder="Enter the tip text..."
+                  />
+                  <small className="form-help">Supports **bold**, __underline__, and [links](url)</small>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="impl-tip-sort">Sort Order *</label>
+                  <input
+                    type="number"
+                    id="impl-tip-sort"
+                    value={editingImplTip.sort_order}
+                    onChange={(e) => setEditingImplTip({ ...editingImplTip, sort_order: parseInt(e.target.value) || 1 })}
+                    required
+                    min="1"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={editingImplTip.is_new || false}
+                      onChange={(e) => setEditingImplTip({ ...editingImplTip, is_new: e.target.checked })}
+                      style={{ marginRight: '0.5rem' }}
+                    />
+                    Mark as NEW
+                  </label>
+                </div>
+                <div className="form-actions">
+                  <button type="submit" className="btn-primary" disabled={saving}>
+                    {saving ? 'Saving...' : 'Save Tip'}
+                  </button>
+                  <button type="button" className="btn-secondary" onClick={() => setEditingImplTip(null)}>
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
+
       <div className="admin-info-box" style={{ marginTop: '2rem' }}>
         <h3>What gets updated?</h3>
         <ul>
           <li><strong>Workflow Steps:</strong> The 3-step process shown on Ways of Working page</li>
           <li><strong>Best Practice Tips:</strong> Checklist of tips at the bottom of the page</li>
-          <li><strong>Formatting:</strong> Use **text** for bold, [text](url) for links, line breaks for structure</li>
+          <li><strong>Implementation Tips:</strong> Numbered tips in the "Tips for making implementation smoother" section</li>
+          <li><strong>Formatting:</strong> Use **text** for bold, __text__ for underline, [text](url) for links</li>
         </ul>
       </div>
     </div>

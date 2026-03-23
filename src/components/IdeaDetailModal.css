@@ -47,9 +47,7 @@
 
 .idea-modal__image-frame {
   width: 383px;
-  height: 261px;
   min-width: 170px;
-  min-height: 116px;
   background: #252525;
   border-radius: var(--radius-xl);
   overflow: hidden;
@@ -60,8 +58,8 @@
 
 .idea-modal__image {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
 }
 
 /* =====================================================
@@ -282,7 +280,6 @@
 
   .idea-modal__image-frame {
     width: 280px;
-    height: 190px;
     min-width: 280px;
     flex-shrink: 0;
     border-radius: 20px;

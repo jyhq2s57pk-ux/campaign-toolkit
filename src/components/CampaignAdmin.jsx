@@ -95,14 +95,15 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
   };
 
   const loadCampaign = async (id) => {
-    const campaign = campaigns.find(c => c.id === id);
-    if (campaign) {
-      populateForm(campaign);
-      return;
-    }
-    // Fallback: fetch from API
+    // Always fetch fresh data to avoid stale modules/settings
     const data = await api.getCampaignById(id);
-    if (data) populateForm(data);
+    if (data) {
+      populateForm(data);
+    } else {
+      // Fallback to cached list only if API fails
+      const campaign = campaigns.find(c => c.id === id);
+      if (campaign) populateForm(campaign);
+    }
   };
 
   const populateForm = (data) => {
@@ -121,6 +122,7 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
       primary_color: data.primary_color || '#8F53F0',
       features: data.features || [],
       modules: { ...DEFAULT_MODULES, ...(data.modules || {}) },
+      module_labels: data.module_labels || {},
       is_visible: data.is_visible !== false
     });
     setShowCreateForm(false);
@@ -210,7 +212,8 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
         ...formData,
         id: saveId,
         features: formData.features || [],
-        modules: formData.modules || {}
+        modules: formData.modules || {},
+        module_labels: formData.module_labels || {}
       };
 
       if (!supabase) {
@@ -449,6 +452,8 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
                       .map(([key, { label }]) => {
                         const modules = { ...DEFAULT_MODULES, ...formData.modules };
                         const isOn = modules[key] !== false;
+                        const isPageModule = key.startsWith('page_');
+                        const customLabel = formData.module_labels?.[key];
                         return (
                           <label key={key} className="module-toggle">
                             <div
@@ -463,6 +468,21 @@ export default function CampaignAdmin({ campaignId, startInCreateMode, onCampaig
                               <div className="toggle-knob" />
                             </div>
                             <span className="module-toggle-label">{label}</span>
+                            {isPageModule && (
+                              <input
+                                type="text"
+                                value={customLabel || ''}
+                                onChange={(e) =>
+                                  setFormData(prev => ({
+                                    ...prev,
+                                    module_labels: { ...prev.module_labels, [key]: e.target.value || undefined }
+                                  }))
+                                }
+                                placeholder={label.replace(' Page', '')}
+                                className="module-label-input"
+                                style={{ marginLeft: '8px', width: '120px', fontSize: '12px', padding: '2px 6px' }}
+                              />
+                            )}
                           </label>
                         );
                       })}

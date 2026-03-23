@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import ImageUpload from './ImageUpload';
 import './AdminComponents.css';
 
 export default function ResourcesAdmin({ campaignId }) {
@@ -231,8 +232,11 @@ export default function ResourcesAdmin({ campaignId }) {
       </div>
 
       {editingResource && (
-        <div className="modal-overlay" onClick={() => setEditingResource(null)}>
+        <div className="modal-overlay">
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={() => setEditingResource(null)} aria-label="Close">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+            </button>
             <h3>{editingResource.id ? 'Edit Resource' : 'Add New Resource'}</h3>
             <form onSubmit={handleSubmit}>
               {/* BASICS */}
@@ -281,13 +285,12 @@ export default function ResourcesAdmin({ campaignId }) {
                 <h4 className="form-section-title">Presentation</h4>
 
                 <div className="form-group">
-                  <label htmlFor="resource-thumbnail">Thumbnail URL</label>
-                  <input
-                    type="text"
-                    id="resource-thumbnail"
+                  <ImageUpload
+                    label="Thumbnail Image"
                     value={editingResource.thumbnail_url || ''}
-                    onChange={(e) => setEditingResource({ ...editingResource, thumbnail_url: e.target.value })}
-                    placeholder="https://example.com/image.png or /src/assets/..."
+                    onChange={(url) => setEditingResource({ ...editingResource, thumbnail_url: url })}
+                    placeholder="Paste image URL or upload"
+                    folder="resources"
                   />
                   <small className="form-help">Optional. Image displayed on the resource card.</small>
                 </div>

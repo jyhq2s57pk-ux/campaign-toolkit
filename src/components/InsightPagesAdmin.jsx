@@ -436,8 +436,11 @@ export default function InsightPagesAdmin({ campaignId }) {
       )}
 
       {editing && formData && (
-        <div className="modal-overlay" onClick={() => { setEditing(false); setFormData(null); setShowTypeMenu(false); }}>
+        <div className="modal-overlay">
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={() => { setEditing(false); setFormData(null); setShowTypeMenu(false); }} aria-label="Close">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+            </button>
             <h3>{formData.id ? 'Edit Insight Page' : 'Create Insight Page'}</h3>
             <form onSubmit={handleSubmit}>
               <div className="form-group">

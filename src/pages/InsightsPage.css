@@ -648,9 +648,8 @@
 
 .itc-image img {
     width: 100%;
-    height: 100%;
-    aspect-ratio: 392 / 250;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
     display: block;
 }
 
@@ -784,16 +783,11 @@
     flex: 1;
     min-width: 0;
     width: 100%;
-    height: 280px;
+    height: auto;
+    max-height: 361px;
     border-radius: var(--radius-xl);
-    object-fit: cover;
+    object-fit: contain;
     display: block;
-}
-
-@media (min-width: 768px) {
-    .double-image-img {
-        height: 361px;
-    }
 }
 
 .double-image-caption {

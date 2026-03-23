@@ -77,6 +77,15 @@ export const api = {
 
     async getCampaignById(id) {
         if (!id) return null;
+        if (supabase) {
+            const { data, error } = await supabase
+                .from('campaigns')
+                .select('*')
+                .eq('id', id)
+                .single();
+            if (!error && data) return data;
+        }
+        // Fallback to mock data
         const campaigns = await this.getCampaigns({ includeHidden: true });
         return campaigns.find(c => c.id === id) || null;
     },
@@ -124,7 +133,8 @@ export const api = {
         let query = supabase.from('calendar_events').select('*');
 
         if (campaignId) {
-            query = query.eq('campaign_id', campaignId);
+            // Show events for this campaign AND global events (no campaign_id)
+            query = query.or(`campaign_id.eq.${campaignId},campaign_id.is.null`);
         }
 
         const { data, error } = await query;
@@ -217,6 +227,22 @@ export const api = {
         return { process, timeline };
     },
 
+    async getImplementationTips(campaignId) {
+        if (!supabase) return [];
+        let query = supabase
+            .from('implementation_tips')
+            .select('*');
+        if (campaignId) {
+            query = query.eq('campaign_id', campaignId);
+        }
+        const { data, error } = await query.order('sort_order');
+        if (error) {
+            console.error('Error fetching implementation tips:', error);
+            return [];
+        }
+        return data || [];
+    },
+
     async getOmnichannel() {
         if (!supabase) return [];
         const { data, error } = await supabase
@@ -244,11 +270,7 @@ export const api = {
 
             const { data, error } = await query.order('sort_order');
 
-            if (!error && data && data.length > 0) return data;
-            // If filtering by campaign returned no results, try without filter
-            if (!error && campaignId && (!data || data.length === 0)) {
-                return this.getOmnichannelIdeas();
-            }
+            if (!error) return data || [];
             if (error) console.error('Error fetching omnichannel ideas:', error);
         }
 

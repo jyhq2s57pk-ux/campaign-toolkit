@@ -561,8 +561,11 @@ export default function JourneyAdmin({ campaignId }) {
 
       {/* Page Form Modal */}
       {showPageForm && (
-        <div className="modal-overlay" onClick={resetPageForm}>
+        <div className="modal-overlay">
           <div className="modal-content modal-large" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={resetPageForm} aria-label="Close">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+            </button>
             <h2>{editingPage ? 'Edit Page' : 'Add New Page'}</h2>
             <form onSubmit={handlePageSubmit}>
               <div className="form-group">
@@ -609,8 +612,11 @@ export default function JourneyAdmin({ campaignId }) {
 
       {/* Component Form Modal with MarkerEditor */}
       {showComponentForm && (
-        <div className="modal-overlay" onClick={resetComponentForm}>
+        <div className="modal-overlay">
           <div className="modal-content modal-large" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={resetComponentForm} aria-label="Close">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+            </button>
             <h2>{editingComponent ? 'Edit Touchpoint' : 'Add Touchpoint'}</h2>
             <form onSubmit={handleComponentSubmit}>
               <div className="form-group">

@@ -62,7 +62,10 @@ export default function OmnichannelPage() {
         fetchAll();
     }, [campaignId]);
 
-    const filterTabs = ['All', ...channels.map(c => c.channel)];
+    const activeChannels = channels.filter(c =>
+        ideas.some(idea => idea.channels?.includes(c.channel))
+    );
+    const filterTabs = ['All', ...activeChannels.map(c => c.channel)];
 
     const filteredIdeas = activeFilter === 'All'
         ? ideas

@@ -102,7 +102,24 @@ export default function OmnichannelIdeasAdmin({ campaignId }) {
 
       if (error) throw error;
 
-      setIdeas(data || []);
+      // Filter out shared ideas that already have a campaign-specific clone
+      // (to avoid showing duplicates after clone-on-edit)
+      let filtered = data || [];
+      if (campaignId && filtered.length > 0) {
+        const campaignIdeaTitles = new Set(
+          filtered
+            .filter(i => i.campaign_id === campaignId)
+            .map(i => i.title)
+        );
+        filtered = filtered.filter(idea => {
+          // Keep all ideas that belong to this campaign
+          if (idea.campaign_id === campaignId) return true;
+          // For shared ideas, only show if there's no campaign-specific clone with the same title
+          return !campaignIdeaTitles.has(idea.title);
+        });
+      }
+
+      setIdeas(filtered);
     } catch (err) {
       console.error('Error fetching ideas:', err);
       setMessage({ type: 'error', text: 'Error loading ideas' });
@@ -133,7 +150,11 @@ export default function OmnichannelIdeasAdmin({ campaignId }) {
     };
 
     try {
-      if (editingIdea.id) {
+      if (editingIdea.id && isSharedIdea(editingIdea)) {
+        // Clone shared idea for this campaign instead of modifying the original
+        await cloneIdeaForCampaign(editingIdea, payload);
+        setMessage({ type: 'success', text: 'Idea copied to this campaign and saved!' });
+      } else if (editingIdea.id) {
         const { error } = await supabase
           .from('omnichannel_ideas')
           .update(payload)
@@ -179,16 +200,48 @@ export default function OmnichannelIdeasAdmin({ campaignId }) {
     }
   };
 
+  // Check if an idea belongs to a different campaign (shared/legacy)
+  const isSharedIdea = (idea) => {
+    return campaignId && idea.campaign_id !== campaignId;
+  };
+
+  // Clone a shared idea for the current campaign with optional overrides
+  const cloneIdeaForCampaign = async (idea, overrides = {}) => {
+    const { id, created_at, ...ideaData } = idea;
+    const payload = {
+      ...ideaData,
+      campaign_id: campaignId,
+      channels: idea.channels || [],
+      how_it_works_steps: idea.how_it_works_steps || [],
+      modal_images: idea.modal_images || [],
+      ...overrides,
+    };
+
+    const { data, error } = await supabase
+      .from('omnichannel_ideas')
+      .insert(payload)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  };
+
   const handleToggleActive = async (idea) => {
     try {
-      const { error } = await supabase
-        .from('omnichannel_ideas')
-        .update({ is_active: !idea.is_active })
-        .eq('id', idea.id);
+      if (isSharedIdea(idea)) {
+        // Clone the idea for this campaign with the toggled visibility
+        await cloneIdeaForCampaign(idea, { is_active: !idea.is_active });
+        setMessage({ type: 'success', text: `Idea copied to this campaign and ${!idea.is_active ? 'activated' : 'hidden'}!` });
+      } else {
+        const { error } = await supabase
+          .from('omnichannel_ideas')
+          .update({ is_active: !idea.is_active })
+          .eq('id', idea.id);
 
-      if (error) throw error;
-
-      setMessage({ type: 'success', text: `Idea ${!idea.is_active ? 'activated' : 'deactivated'}!` });
+        if (error) throw error;
+        setMessage({ type: 'success', text: `Idea ${!idea.is_active ? 'activated' : 'deactivated'}!` });
+      }
       fetchIdeas();
     } catch (err) {
       console.error('Error toggling idea:', err);
@@ -339,6 +392,7 @@ export default function OmnichannelIdeasAdmin({ campaignId }) {
                   <div className="admin-list-item-title">
                     {idea.title}
                     {!idea.is_active && <span style={{ marginLeft: '8px', fontSize: '0.8em', color: 'var(--text-secondary)' }}>(Hidden)</span>}
+                    {isSharedIdea(idea) && <span style={{ marginLeft: '8px', fontSize: '0.75em', color: '#f59e0b', background: 'rgba(245,158,11,0.15)', padding: '2px 8px', borderRadius: '4px' }}>Shared</span>}
                   </div>
                   <div className="admin-list-item-meta">
                     {idea.channels?.length > 0 && <span className="idea-tag">{idea.channels.join(', ')}</span>}
@@ -390,8 +444,11 @@ export default function OmnichannelIdeasAdmin({ campaignId }) {
       </div>
 
       {editingIdea && (
-        <div className="modal-overlay" onClick={() => setEditingIdea(null)}>
+        <div className="modal-overlay">
           <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+            <button className="modal-close-btn" onClick={() => setEditingIdea(null)} aria-label="Close">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+            </button>
             <h3>{editingIdea.id ? 'Edit Idea' : 'Add New Idea'}</h3>
             <form onSubmit={handleSubmit}>
               <div className="form-group">

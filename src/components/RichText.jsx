@@ -32,8 +32,8 @@ function parseInlineBold(text, keyPrefix) {
 export default function RichText({ children }) {
   if (!children || typeof children !== 'string') return children || null;
 
-  // Combined pattern: [text](url) | bare URL | **bold**
-  const pattern = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<]+)|\*\*([^*]+)\*\*/g;
+  // Combined pattern: [text](url) | bare URL | **bold** | __underline__
+  const pattern = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<]+)|\*\*([^*]+)\*\*|__([^_]+)__/g;
   const parts = [];
   let lastIndex = 0;
   let match;
@@ -61,6 +61,9 @@ export default function RichText({ children }) {
     } else if (match[4]) {
       // **bold**
       parts.push(<strong key={match.index}>{match[4]}</strong>);
+    } else if (match[5]) {
+      // __underline__
+      parts.push(<u key={match.index}>{match[5]}</u>);
     }
 
     lastIndex = match.index + match[0].length;

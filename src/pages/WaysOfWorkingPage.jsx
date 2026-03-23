@@ -13,6 +13,7 @@ export default function WaysOfWorkingPage() {
   const campaignId = searchParams.get('campaignId');
   const [steps, setSteps] = useState([]);
   const [tips, setTips] = useState([]);
+  const [implTips, setImplTips] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modules, setModules] = useState({});
 
@@ -34,8 +35,11 @@ export default function WaysOfWorkingPage() {
       // Map timeline data to tips (using phase field as tip text)
       const tipsData = data.timeline.map(item => item.phase);
 
+      const implTipsData = await api.getImplementationTips(campaignId);
+
       setSteps(stepsData);
       setTips(tipsData);
+      setImplTips(implTipsData);
       setLoading(false);
     };
 
@@ -156,19 +160,21 @@ export default function WaysOfWorkingPage() {
               </div>
             </div>
 
-            {modules.ways_of_working_tips !== false && <ImplementationTips />}
+            {modules.ways_of_working_tips !== false && <ImplementationTips tips={implTips} />}
 
-            <section className="best-practice-section">
-              <h2 className="section-label centered">Best Practice Tips</h2>
-              <div className="tips-grid">
-                {tips.map((tip, i) => (
-                  <div key={i} className="tip-card glass">
-                    <span className="tip-bullet">✓</span>
-                    <p><RichText>{tip}</RichText></p>
-                  </div>
-                ))}
-              </div>
-            </section>
+            {tips.length > 0 && (
+              <section className="best-practice-section">
+                <h2 className="section-label centered">Best Practice Tips</h2>
+                <div className="tips-grid">
+                  {tips.map((tip, i) => (
+                    <div key={i} className="tip-card glass">
+                      <span className="tip-bullet">✓</span>
+                      <p><RichText>{tip}</RichText></p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         </div>
       </main>

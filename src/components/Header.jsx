@@ -62,11 +62,17 @@ export default function Header() {
 
   // Build visible nav links based on context
   const modules = campaign?.modules || {};
+  const moduleLabels = campaign?.module_labels || {};
   const navLinks = campaignId
-    ? campaignNavLinks.filter(link => {
-        if (!link.moduleKey) return true;
-        return modules[link.moduleKey] !== false;
-      })
+    ? campaignNavLinks
+        .filter(link => {
+          if (!link.moduleKey) return true;
+          return modules[link.moduleKey] !== false;
+        })
+        .map(link => ({
+          ...link,
+          name: moduleLabels[link.moduleKey] || link.name
+        }))
     : globalNavLinks;
 
   // Determine header inline style for campaign color
@@ -143,6 +149,13 @@ export default function Header() {
               </svg>
             </div>
           </button>
+
+          {campaign && !isAdmin && (
+            <div className="header-campaign-info">
+              {campaign.activation_dates && <span className="campaign-info-item">📅 {campaign.activation_dates}</span>}
+              {campaign.channels && <span className="campaign-info-item">🌐 {campaign.channels}</span>}
+            </div>
+          )}
 
           <div className={`header-center ${isMenuOpen ? 'open' : ''}`}>
             <nav className={`header-nav ${isMenuOpen ? 'mobile-open' : ''}`}>
