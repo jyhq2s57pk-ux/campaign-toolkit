@@ -150,13 +150,6 @@ export default function Header() {
             </div>
           </button>
 
-          {campaign && !isAdmin && (
-            <div className="header-campaign-info">
-              {campaign.activation_dates && <span className="campaign-info-item">📅 {campaign.activation_dates}</span>}
-              {campaign.channels && <span className="campaign-info-item">🌐 {campaign.channels}</span>}
-            </div>
-          )}
-
           <div className={`header-center ${isMenuOpen ? 'open' : ''}`}>
             <nav className={`header-nav ${isMenuOpen ? 'mobile-open' : ''}`}>
               {/* Mobile nav header: Home + campaign name */}

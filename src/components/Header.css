@@ -70,26 +70,6 @@
   padding: 4px var(--container-padding, 24px);
 }
 
-/* --- Campaign Info Bar --- */
-
-.header-campaign-info {
-  display: none;
-  gap: var(--space-md);
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.75);
-  padding: 4px 0;
-}
-
-.campaign-info-item {
-  white-space: nowrap;
-}
-
-@media (min-width: 900px) {
-  .header-campaign-info {
-    display: flex;
-  }
-}
-
 /* --- Breadcrumbs --- */
 
 .header-breadcrumbs {
