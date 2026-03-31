@@ -1,0 +1,214 @@
+/* Figma Capture — clean layouts optimized for HTML-to-Figma conversion */
+
+.fc-page {
+  background: #000;
+  color: #fff;
+  padding: 64px;
+  font-family: var(--font-body, 'Saans', sans-serif);
+  min-height: 100vh;
+  width: 1440px;
+}
+
+.fc-page-title {
+  font-size: 48px;
+  font-weight: 600;
+  font-family: var(--font-display, 'Saans', sans-serif);
+  margin: 0 0 56px 0;
+  letter-spacing: -1px;
+}
+
+/* Sections */
+.fc-section {
+  margin-bottom: 56px;
+}
+
+.fc-section-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text-secondary, #B0B0B5);
+  margin: 0 0 24px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Swatches */
+.fc-swatch-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.fc-swatch {
+  width: 160px;
+}
+
+.fc-swatch-color {
+  width: 160px;
+  height: 96px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.fc-swatch-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fc-swatch-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.fc-swatch-token {
+  font-size: 11px;
+  color: var(--text-muted, #8A8A8A);
+}
+
+.fc-swatch-hex {
+  font-size: 11px;
+  color: var(--text-muted, #8A8A8A);
+}
+
+/* Typography */
+.fc-type-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.fc-type-row {
+  display: flex;
+  align-items: baseline;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  gap: 40px;
+}
+
+.fc-type-meta {
+  width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fc-type-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.fc-type-token {
+  font-size: 11px;
+  color: var(--text-muted, #8A8A8A);
+}
+
+.fc-type-size {
+  font-size: 11px;
+  color: var(--text-muted, #8A8A8A);
+}
+
+.fc-type-sample {
+  flex: 1;
+  color: #fff;
+  font-family: var(--font-display, 'Saans', sans-serif);
+  line-height: 1.2;
+}
+
+/* Spacing */
+.fc-spacing-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fc-spacing-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.fc-spacing-label {
+  width: 40px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary, #B0B0B5);
+}
+
+.fc-spacing-bar {
+  height: 24px;
+  background: var(--accent-purple, #8F53F0);
+  border-radius: 4px;
+  min-width: 4px;
+}
+
+.fc-spacing-value {
+  font-size: 12px;
+  color: var(--text-muted, #8A8A8A);
+}
+
+/* Radius */
+.fc-radius-grid {
+  display: flex;
+  gap: 32px;
+}
+
+.fc-radius-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.fc-radius-box {
+  width: 80px;
+  height: 80px;
+  border: 2px solid var(--accent-purple, #8F53F0);
+  background: transparent;
+}
+
+.fc-radius-label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.fc-radius-value {
+  font-size: 11px;
+  color: var(--text-muted, #8A8A8A);
+}
+
+/* Component layouts */
+.fc-component-row {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.fc-variant {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fc-variant-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted, #8A8A8A);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fc-card-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 352px);
+  gap: 24px;
+}
+
+.fc-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 600px;
+}

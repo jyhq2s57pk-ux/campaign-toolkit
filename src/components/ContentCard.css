@@ -1,0 +1,223 @@
+/* ContentCard — Single-structure responsive card */
+
+.content-card {
+  --cc-aspect-ratio: 352 / 441;
+  --cc-image-height: 52.8%;
+  --cc-border-radius: var(--radius-xl);
+  --cc-mobile-image-size: 80px;
+  --cc-icon-color: #F5F3ED;
+
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  background: var(--surface-card);
+  border-radius: var(--cc-border-radius);
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: var(--cc-aspect-ratio);
+  transition: background 0.2s;
+}
+
+.content-card:hover {
+  background: var(--surface-card-hover);
+}
+
+.content-card:focus-visible {
+  background: var(--surface-card-hover);
+  box-shadow: var(--focus-ring);
+}
+
+/* Image */
+.content-card__image-wrapper {
+  width: 100%;
+  height: var(--cc-image-height);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.content-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.content-card__image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--surface-card);
+}
+
+/* Body */
+.content-card__body {
+  padding: 20px 63px 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.content-card__badges {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.content-card__title {
+  color: var(--text-primary);
+  font-size: 28px;
+  font-family: var(--font-display, 'Saans', sans-serif);
+  font-weight: 500;
+  line-height: 1.3;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.content-card__description {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-family: var(--font-body, 'Saans', sans-serif);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Action button */
+.content-card__action {
+  position: absolute;
+  right: 17px;
+  bottom: 16px;
+  background: none;
+  border-radius: 50%;
+  border: none;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cc-icon-color);
+  transition: transform 0.2s;
+}
+
+.content-card__action:hover {
+  opacity: 0.8;
+}
+
+/* =====================================================
+   Responsive
+   ===================================================== */
+
+/* Tablet (769px-1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .content-card__title {
+    font-size: 24px;
+  }
+
+  .content-card__body {
+    padding: 20px 50px 14px 16px;
+  }
+
+  .content-card__action {
+    right: 14px;
+    bottom: 14px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .content-card__action svg {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Small tablet (481px-768px) */
+@media (max-width: 768px) and (min-width: 481px) {
+  .content-card {
+    --cc-border-radius: 18px;
+  }
+
+  .content-card__title {
+    font-size: 20px;
+  }
+
+  .content-card__body {
+    padding: 16px 44px 12px 14px;
+    gap: 6px;
+  }
+
+  .content-card__badges {
+    gap: 6px;
+  }
+}
+
+/* Mobile (<=480px) — switch to horizontal layout */
+@media (max-width: 480px) {
+  .content-card {
+    flex-direction: row;
+    aspect-ratio: unset;
+    max-width: none;
+    border-radius: 20px;
+    align-items: center;
+    padding-right: 16px;
+  }
+
+  .content-card__image-wrapper {
+    width: var(--cc-mobile-image-size);
+    height: auto;
+    flex-shrink: 0;
+    padding: 16px 0 16px 16px;
+  }
+
+  .content-card__image {
+    width: var(--cc-mobile-image-size);
+    height: var(--cc-mobile-image-size);
+    border-radius: 14px;
+  }
+
+  .content-card__image-placeholder {
+    width: var(--cc-mobile-image-size);
+    height: var(--cc-mobile-image-size);
+    border-radius: 14px;
+  }
+
+  .content-card__body {
+    flex: 1;
+    padding: 16px 28px 16px 16px;
+    gap: 4px;
+  }
+
+  .content-card__badges {
+    display: none;
+  }
+
+  .content-card__title {
+    font-size: 18px;
+    line-height: 26px;
+    -webkit-line-clamp: unset;
+  }
+
+  .content-card__action {
+    right: 16px;
+    bottom: 16px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .content-card__action svg {
+    width: 32px;
+    height: 32px;
+  }
+}
